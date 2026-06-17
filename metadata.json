@@ -1,0 +1,6 @@
+{
+  "name": "Premium Clothing Home Page",
+  "description": "A luxury fashion clothing e-commerce home page designed with standard, elegant typography. Features interactive quick product viewing, filterable styling categories, smooth transitions, premium aesthetic animations, search, and a slide-out shopping cart drawer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
