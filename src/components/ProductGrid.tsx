@@ -75,29 +75,29 @@ export default function ProductGrid({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-xl mx-auto mb-12 sm:mb-16">
-          <p className="text-[10px] font-mono tracking-[0.3em] uppercase text-neutral-400 mb-2">
+        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
+          <p className="text-[10px] font-mono tracking-[0.4em] uppercase text-neutral-400 mb-4">
             Aura Curation Studio
           </p>
-          <h2 className="text-2xl sm:text-3xl font-serif font-semibold tracking-wide text-neutral-900 uppercase">
+          <h2 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-neutral-900 uppercase">
             {activeCategoryName}
           </h2>
-          <div className="w-8 h-[1px] bg-neutral-900 mx-auto mt-4" />
+          <div className="w-16 h-[2px] bg-neutral-900 mx-auto mt-6" />
         </div>
 
         {/* Filters Top Bar */}
-        <div className="border-y border-neutral-100 bg-white py-4 px-4 sm:px-6 mb-8 sm:mb-12 flex flex-col md:flex-row gap-5 items-stretch md:items-center justify-between shadow-sm">
+        <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-neutral-200/60 p-2 mb-12 flex flex-col md:flex-row gap-5 items-stretch md:items-center justify-between shadow-sm">
           
           {/* Category Tabs */}
-          <div className="flex items-center overflow-x-auto no-scrollbar gap-1 -mx-4 px-4 md:mx-0 md:px-0 scroll-smooth">
+          <div className="flex items-center overflow-x-auto no-scrollbar gap-2 p-1">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 text-xs tracking-wider uppercase font-medium whitespace-nowrap transition-all border cursor-pointer ${
+                className={`px-6 py-2.5 text-xs tracking-wider uppercase font-medium whitespace-nowrap transition-all rounded-xl cursor-pointer ${
                   selectedCategory === cat.id
-                    ? "bg-neutral-950 text-white border-neutral-950"
-                    : "bg-white text-neutral-500 border-transparent hover:text-black hover:bg-neutral-50"
+                    ? "bg-neutral-900 text-white shadow-md"
+                    : "bg-transparent text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100/50"
                 }`}
                 id={`cat-tab-${cat.id}`}
               >
@@ -107,19 +107,19 @@ export default function ProductGrid({
           </div>
 
           {/* Filtering Metrics & Dropdowns */}
-          <div className="flex items-center justify-between md:justify-end gap-4 border-t border-neutral-100 pt-3 md:pt-0 md:border-0">
-            <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+          <div className="flex items-center justify-between md:justify-end gap-6 px-4 md:px-2 border-t border-neutral-100 pt-4 md:pt-0 md:border-0">
+            <div className="flex items-center gap-2 text-xs text-neutral-500 uppercase tracking-widest font-medium">
               <Grid3X3 className="h-4 w-4" />
-              <span className="font-mono">{filteredAndSortedProducts.length} Options</span>
+              <span>{filteredAndSortedProducts.length} Options</span>
             </div>
 
             {/* Sorting List dropdown */}
-            <div className="relative flex items-center gap-1.5">
-              <ArrowUpDown className="h-3.5 w-3.5 text-neutral-400" />
+            <div className="relative flex items-center gap-2">
+              <ArrowUpDown className="h-4 w-4 text-neutral-500" />
               <select
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value as SortOption)}
-                className="bg-neutral-50 border border-neutral-200 text-xs px-3 py-2 rounded focus:outline-none focus:border-black font-sans text-neutral-700 cursor-pointer"
+                className="bg-transparent text-xs uppercase tracking-wider font-medium text-neutral-900 focus:outline-none cursor-pointer hover:opacity-70 transition-opacity"
                 title="Sort Collections"
                 id="sort-selector"
               >

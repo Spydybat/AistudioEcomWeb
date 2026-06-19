@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Heart, ShoppingBag, Eye, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Product, ProductColor } from "../types";
 import { motion } from "motion/react";
 
@@ -22,6 +23,7 @@ export default function ProductCard({
   const [selectedSize, setSelectedSize] = useState<string>(product.sizes[1] || product.sizes[0]);
   const [isHovered, setIsHovered] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const navigate = useNavigate();
 
   const handleQuickAdd = () => {
     setIsAdding(true);
@@ -33,7 +35,7 @@ export default function ProductCard({
 
   return (
     <div
-      className="group flex flex-col h-full bg-white border border-neutral-100 p-2 sm:p-3 relative transition-all duration-300 hover:shadow-xl hover:border-neutral-200 select-none"
+      className="group flex flex-col h-full bg-white rounded-2xl border border-neutral-100 p-3 sm:p-4 relative transition-all duration-500 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-1 hover:border-neutral-200 select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -60,8 +62,8 @@ export default function ProductCard({
 
       {/* Product Dual Image viewport with lazy Hover animation */}
       <div 
-        onClick={() => onOpenQuickView(product)}
-        className="relative aspect-[3/4] overflow-hidden bg-neutral-50 mb-4 cursor-pointer"
+        onClick={() => navigate(`/product/${product.id}`)}
+        className="relative aspect-[3/4] overflow-hidden bg-neutral-50 rounded-xl mb-5 cursor-pointer"
       >
         {/* Primary Image */}
         <img
@@ -86,16 +88,16 @@ export default function ProductCard({
         )}
 
         {/* Hover Action Overlay */}
-        <div className="absolute inset-0 bg-neutral-950/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+        <div className="absolute inset-0 bg-neutral-950/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4 backdrop-blur-[2px]">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onOpenQuickView(product);
             }}
-            className="px-4 py-2 bg-white text-black hover:bg-neutral-900 hover:text-white font-medium tracking-widest text-[9px] uppercase transition-all duration-300 flex items-center gap-2 shadow shadow-black/10 cursor-pointer"
+            className="px-6 py-2.5 glass-dark text-white hover:bg-white hover:text-black font-medium tracking-widest text-[10px] uppercase transition-all duration-300 flex items-center gap-2 rounded-full shadow-lg hover:scale-105 cursor-pointer"
             id={`quick-view-${product.id}`}
           >
-            <Eye className="h-3 w-3" />
+            <Eye className="h-4 w-4" />
             <span>Quick View</span>
           </button>
         </div>
@@ -115,7 +117,7 @@ export default function ProductCard({
 
         {/* Product Title */}
         <h3 
-          onClick={() => onOpenQuickView(product)}
+          onClick={() => navigate(`/product/${product.id}`)}
           className="text-sm font-serif font-semibold text-neutral-950 hover:text-neutral-700 tracking-wide mb-1 select-text cursor-pointer line-clamp-1"
         >
           {product.name}
@@ -174,10 +176,10 @@ export default function ProductCard({
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}
-                  className={`text-[9.5px]/none font-sans font-medium border px-2 py-1 transition-colors select-none cursor-pointer ${
+                  className={`text-[9.5px]/none font-sans font-medium border px-2.5 py-1.5 transition-all rounded-md select-none cursor-pointer ${
                     isSelected
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-neutral-600 border-neutral-200 hover:border-black hover:text-black"
+                      ? "bg-neutral-900 text-white border-neutral-900 shadow-sm"
+                      : "bg-white text-neutral-600 border-neutral-200 hover:border-neutral-900 hover:text-neutral-900"
                   }`}
                 >
                   {size}
@@ -188,18 +190,18 @@ export default function ProductCard({
         </div>
 
         {/* Primary Action Button: Add to Bag */}
-        <div className="mt-auto pt-1">
+        <div className="mt-auto pt-4">
           <button
             onClick={handleQuickAdd}
             disabled={isAdding}
-            className={`w-full py-2.5 text-[10px] font-mono tracking-widest uppercase flex items-center justify-center gap-2 transition-all duration-300 border cursor-pointer ${
+            className={`w-full py-3 text-[10px] font-semibold tracking-widest uppercase flex items-center justify-center gap-2 transition-all duration-300 rounded-xl cursor-pointer ${
               isAdding
-                ? "bg-neutral-100 text-neutral-400 border-neutral-100 cursor-not-allowed"
-                : "bg-neutral-950 text-white border-neutral-950 hover:bg-white hover:text-black hover:shadow-md"
+                ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                : "bg-neutral-900 text-white hover:bg-neutral-800 hover:shadow-lg hover:-translate-y-0.5"
             }`}
             id={`add-to-bag-${product.id}`}
           >
-            <ShoppingBag className="h-3.5 w-3.5" />
+            <ShoppingBag className="h-4 w-4" />
             <span>{isAdding ? "Adding To Bag..." : "Add To Bag"}</span>
           </button>
         </div>

@@ -120,10 +120,10 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
           {/* Core high typography display heading */}
           <motion.h1
             key={`title-${activeSlide.id}`}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-serif font-semibold tracking-wider text-white leading-tight mb-2 sm:mb-4"
+            transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
+            className="text-5xl sm:text-7xl lg:text-8xl font-sans font-bold tracking-tight text-white leading-[1.1] mb-2 sm:mb-4 drop-shadow-2xl"
           >
             {activeSlide.title}
           </motion.h1>
@@ -132,8 +132,8 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
             key={`highlight-${activeSlide.id}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-sm sm:text-lg tracking-wider text-neutral-200 mt-1 mb-4 sm:mb-6 font-light uppercase"
+            transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
+            className="text-lg sm:text-2xl tracking-widest text-neutral-200 mt-1 mb-4 sm:mb-6 font-light uppercase drop-shadow-md"
           >
             {activeSlide.highlight}
           </motion.h3>
@@ -143,8 +143,8 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
             key={`desc-${activeSlide.id}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="text-xs sm:text-sm text-neutral-300 mb-6 sm:mb-10 font-sans font-light leading-relaxed max-w-lg"
+            transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+            className="text-sm sm:text-base text-neutral-300 mb-6 sm:mb-10 font-sans font-normal leading-relaxed max-w-xl drop-shadow"
           >
             {activeSlide.description}
           </motion.p>
@@ -160,7 +160,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
             <button
               id={`cta-btn-${activeSlide.id}`}
               onClick={() => handleCta(activeSlide.category)}
-              className="px-6 sm:px-8 py-3.5 bg-white text-black hover:bg-neutral-100 font-medium tracking-widest text-[11px] uppercase transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl cursor-pointer"
+              className="px-8 sm:px-10 py-4 bg-white text-black hover:bg-neutral-200 font-semibold tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-3 rounded-full shadow-2xl hover:scale-105 cursor-pointer"
             >
               <span>{activeSlide.ctaText}</span>
               <ArrowRight className="h-4 w-4" />
@@ -168,7 +168,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
 
             <button
               onClick={onExploreClick}
-              className="px-6 py-3.5 bg-black/30 text-white backdrop-blur hover:bg-black/50 border border-white/20 hover:border-white/50 font-medium tracking-widest text-[11px] uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer"
+              className="px-8 sm:px-10 py-4 glass-dark text-white hover:bg-white/20 font-medium tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-2 rounded-full shadow-xl hover:scale-105 cursor-pointer"
             >
               <span>View All Collection</span>
             </button>
@@ -177,17 +177,17 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
       </div>
 
       {/* Slide Navigation Triggers (Bottom Left & Right controls) */}
-      <div className="absolute bottom-6 sm:bottom-10 right-4 sm:right-10 z-20 flex space-x-2">
+      <div className="absolute bottom-6 sm:bottom-10 right-4 sm:right-10 z-20 flex space-x-3">
         <button
           onClick={handlePrev}
-          className="p-2 sm:p-3 rounded-full bg-black/40 text-neutral-300 hover:text-white border border-white/10 hover:bg-black/70 hover:border-white/20 transition-all cursor-pointer"
+          className="p-3 sm:p-4 rounded-full glass-dark text-neutral-300 hover:text-white hover:bg-neutral-800/80 hover:scale-110 transition-all cursor-pointer shadow-lg"
           title="Previous garment slide"
         >
-          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+          <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
         <button
           onClick={handleNext}
-          className="p-2 sm:p-3 rounded-full bg-black/40 text-neutral-300 hover:text-white border border-white/10 hover:bg-black/70 hover:border-white/20 transition-all cursor-pointer"
+          className="p-3 sm:p-4 rounded-full glass-dark text-neutral-300 hover:text-white hover:bg-neutral-800/80 hover:scale-110 transition-all cursor-pointer shadow-lg"
           title="Next garment slide"
         >
           <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
