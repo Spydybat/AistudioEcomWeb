@@ -89,10 +89,9 @@ export default function Footer() {
               Atelier Customer Concierge
             </h4>
             <ul className="space-y-4 font-light">
+              <li><Link to="/wishlist" className="text-neutral-400 hover:text-white transition-colors block">Wishlist</Link></li>
+              <li><Link to="/cart" className="text-neutral-400 hover:text-white transition-colors block">Shopping Bag</Link></li>
               <li><Link to="/contact" className="text-neutral-400 hover:text-white transition-colors block">Contact Concierge</Link></li>
-              <li><Link to="/contact" className="text-neutral-400 hover:text-white transition-colors block">Complimentary FedEx Courier</Link></li>
-              <li><Link to="/contact" className="text-neutral-400 hover:text-white transition-colors block">Extended 30-Day Return Desk</Link></li>
-              <li><Link to="/contact" className="text-neutral-400 hover:text-white transition-colors block">Luxury Cedar Storage Care</Link></li>
             </ul>
           </motion.div>
 

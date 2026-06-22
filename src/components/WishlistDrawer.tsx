@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { X, Heart, ShoppingBag, ArrowRight } from "lucide-react";
 import { Product, ProductColor } from "../types";
 import { motion, AnimatePresence } from "motion/react";
@@ -57,6 +58,13 @@ export default function WishlistDrawer({
                 <X className="h-6 w-6" />
               </button>
             </div>
+            <Link
+              to="/wishlist"
+              onClick={onClose}
+              className="px-6 pb-3 text-[10px] font-mono uppercase tracking-widest text-neutral-500 hover:text-neutral-900 transition-colors"
+            >
+              View full wishlist page →
+            </Link>
 
             {/* List items core */}
             <div className="flex-grow overflow-y-auto px-6 py-4">

@@ -62,6 +62,19 @@ export default function ProductsPage() {
       
       {/* Filters */}
       <div className="flex flex-col md:flex-row justify-between items-center bg-neutral-50 p-4 rounded-xl mb-8 gap-4">
+        {searchQuery && (
+          <div className="w-full md:w-auto flex items-center gap-2 px-3 py-2 bg-white border border-neutral-200 rounded-lg text-xs">
+            <span className="text-neutral-500">Search:</span>
+            <span className="font-medium text-neutral-900">&quot;{searchQuery}&quot;</span>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="text-neutral-400 hover:text-neutral-900 cursor-pointer"
+              aria-label="Clear search"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
         <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
           {CATEGORIES.map((cat) => (
             <button
@@ -99,6 +112,16 @@ export default function ProductsPage() {
               <div className="h-4 bg-neutral-200 w-1/4 rounded" />
             </div>
           ))}
+        </div>
+      ) : currentProducts.length === 0 ? (
+        <div className="text-center py-16">
+          <p className="text-neutral-500 mb-4">No products match your search or filter.</p>
+          <button
+            onClick={() => { setSearchQuery(""); setSelectedCategory("all"); }}
+            className="text-xs uppercase tracking-widest text-neutral-900 underline hover:no-underline cursor-pointer"
+          >
+            Clear filters
+          </button>
         </div>
       ) : (
         <>

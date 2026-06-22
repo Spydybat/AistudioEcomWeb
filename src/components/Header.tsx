@@ -39,6 +39,7 @@ export default function Header({
     { name: "Knitwear", categoryId: "knitwear" },
     { name: "Tailoring", categoryId: "tailoring" },
     { name: "Essentials", categoryId: "essentials" },
+    { name: "Outfit Builder", route: "/outfit-builder" },
   ];
 
   const navigate = useNavigate();
@@ -79,14 +80,25 @@ export default function Header({
           {/* Left: Global Navigation (Desktop) */}
           <nav className="hidden md:flex items-center space-x-8 text-xs font-medium uppercase tracking-widest text-neutral-600">
             {navigationItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => handleNavClick(item.categoryId)}
-                className="hover:text-black transition-colors py-1 relative group cursor-pointer"
-              >
-                {item.name}
-                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-              </button>
+              item.route ? (
+                <Link
+                  key={item.name}
+                  to={item.route}
+                  className="hover:text-black transition-colors py-1 relative group cursor-pointer"
+                >
+                  {item.name}
+                  <span className="absolute bottom-0 left-0 w-full h-[1px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                </Link>
+              ) : (
+                <button
+                  key={item.name}
+                  onClick={() => handleNavClick(item.categoryId)}
+                  className="hover:text-black transition-colors py-1 relative group cursor-pointer"
+                >
+                  {item.name}
+                  <span className="absolute bottom-0 left-0 w-full h-[1px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                </button>
+              )
             ))}
           </nav>
 
@@ -125,14 +137,18 @@ export default function Header({
               {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
             </button>
 
-            {/* Profile Placeholder (Non-functional aesthetic, but sleek) */}
-            <button className="hidden sm:inline-block p-2 rounded-full hover:bg-neutral-100 text-neutral-600 hover:text-black transition-colors">
-              <User className="h-5 w-5" />
-            </button>
+            {/* Admin Button */}
+<button
+  onClick={() => navigate("/admin/login")}
+  className="hidden sm:inline-block p-2 rounded-full hover:bg-neutral-100 text-neutral-600 hover:text-black transition-colors cursor-pointer"
+  title="Admin Panel"
+>
+  <User className="h-5 w-5" />
+</button>
 
             {/* Wishlist Icon */}
-            <button
-              onClick={onOpenWishlist}
+            <Link
+              to="/wishlist"
               className="p-2 rounded-full hover:bg-neutral-100 text-neutral-600 hover:text-red-500 transition-colors relative group"
               title="View Wishlist"
               id="wishlist-trigger"
@@ -142,16 +158,16 @@ export default function Header({
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute 0 -right-1 bg-red-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold"
+                  className="absolute top-0 -right-1 bg-red-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold"
                 >
                   {wishlistCount}
                 </motion.span>
               )}
-            </button>
+            </Link>
 
             {/* Shopping Bag / Cart Icon */}
-            <button
-              onClick={onOpenCart}
+            <Link
+              to="/cart"
               className="p-2 rounded-full hover:bg-neutral-100 text-neutral-600 hover:text-black transition-colors relative group"
               title="View Cart"
               id="cart-trigger"
@@ -162,12 +178,12 @@ export default function Header({
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   key={cartCount}
-                  className="absolute 0 -right-1 bg-neutral-900 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold"
+                  className="absolute top-0 -right-1 bg-neutral-900 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold"
                 >
                   {cartCount}
                 </motion.span>
               )}
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -193,13 +209,28 @@ export default function Header({
                   />
                   {searchQuery && (
                     <button
-                      onClick={() => setSearchQuery("")}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-black bg-neutral-100 rounded-full p-1 transition-colors"
+                      onClick={() => {
+                        setSearchQuery("");
+                        navigate("/products");
+                      }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-black bg-neutral-100 rounded-full p-1 transition-colors cursor-pointer"
                     >
                       <X className="h-5 w-5" />
                     </button>
                   )}
                 </div>
+
+                {searchQuery && (
+                  <button
+                    onClick={() => {
+                      setIsSearchOpen(false);
+                      navigate("/products");
+                    }}
+                    className="mt-4 w-full py-3 bg-neutral-900 text-white text-xs uppercase tracking-widest rounded-lg hover:bg-neutral-800 transition-colors cursor-pointer"
+                  >
+                    View all results for &quot;{searchQuery}&quot;
+                  </button>
+                )}
 
                 <div className="mt-6 flex flex-wrap gap-2 items-center text-xs text-neutral-500">
                   <span className="font-medium mr-2 uppercase tracking-wider text-neutral-400">Trending Searches:</span>
@@ -229,24 +260,38 @@ export default function Header({
             >
               <div className="px-4 pt-2 pb-6 space-y-3 flex flex-col items-stretch text-sm uppercase tracking-wider font-medium text-neutral-700">
                 {navigationItems.map((item) => (
-                  <button
-                    key={item.name}
-                    onClick={() => handleNavClick(item.categoryId)}
-                    className="text-left py-3 hover:text-black hover:pl-2 transition-all border-b border-neutral-200/50 justify-start"
-                  >
-                    {item.name}
-                  </button>
+                  item.route ? (
+                    <Link
+                      key={item.name}
+                      to={item.route}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-left py-3 hover:text-black hover:pl-2 transition-all border-b border-neutral-200/50 justify-start"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <button
+                      key={item.name}
+                      onClick={() => handleNavClick(item.categoryId)}
+                      className="text-left py-3 hover:text-black hover:pl-2 transition-all border-b border-neutral-200/50 justify-start"
+                    >
+                      {item.name}
+                    </button>
+                  )
                 ))}
                 <div className="pt-6 flex flex-col gap-3">
                   <span className="text-xs text-neutral-400 normal-case mb-2">Selected Region: US ($)</span>
                   <div className="flex gap-4">
-                    <button className="flex-1 py-3 text-center bg-white/80 border border-neutral-200 text-neutral-800 text-xs tracking-widest uppercase rounded-lg shadow-sm">
-                      My Account
-                    </button>
-                    <button className="flex-1 py-3 text-center bg-neutral-950 text-white text-xs tracking-widest uppercase rounded-lg shadow-md hover:bg-neutral-800 transition-colors">
-                      Support
-                    </button>
+                    <Link to="/wishlist" className="flex-1 py-3 text-center bg-white/80 border border-neutral-200 text-neutral-800 text-xs tracking-widest uppercase rounded-lg shadow-sm">
+                      Wishlist
+                    </Link>
+                    <Link to="/cart" className="flex-1 py-3 text-center bg-neutral-950 text-white text-xs tracking-widest uppercase rounded-lg shadow-md hover:bg-neutral-800 transition-colors">
+                      Cart
+                    </Link>
                   </div>
+                  <Link to="/admin/login" className="text-center text-[10px] text-neutral-400 uppercase tracking-widest hover:text-neutral-900 transition-colors">
+                    Admin Panel
+                  </Link>
                 </div>
               </div>
             </motion.div>

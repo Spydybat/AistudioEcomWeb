@@ -30,6 +30,7 @@ interface ShopContextType {
   handleClearCart: () => void;
   handleToggleWishlist: (product: Product) => void;
   handleAddToCartFromWishlist: (product: Product, size: string, color: ProductColor) => void;
+  handleMoveAllWishlistToCart: () => void;
 }
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
@@ -137,6 +138,31 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     handleAddToCart(product, size, color);
   };
 
+  const handleMoveAllWishlistToCart = () => {
+    if (wishlist.length === 0) return;
+    setCart((prevCart) => {
+      const updated = [...prevCart];
+      wishlist.forEach((product) => {
+        const size = product.sizes[1] || product.sizes[0];
+        const color = product.colors[0];
+        const existingIdx = updated.findIndex(
+          (item) =>
+            item.product.id === product.id &&
+            item.selectedSize === size &&
+            item.selectedColor.name === color.name
+        );
+        if (existingIdx > -1) {
+          updated[existingIdx].quantity += 1;
+        } else {
+          updated.push({ product, quantity: 1, selectedSize: size, selectedColor: color });
+        }
+      });
+      return updated;
+    });
+    setWishlist([]);
+    showToast("All wishlist items moved to your bag.");
+  };
+
   const value = {
     cart,
     wishlist,
@@ -157,6 +183,7 @@ export function ShopProvider({ children }: { children: ReactNode }) {
     handleClearCart,
     handleToggleWishlist,
     handleAddToCartFromWishlist,
+    handleMoveAllWishlistToCart,
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

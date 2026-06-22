@@ -1,4 +1,5 @@
 import { useState, FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { X, Plus, Minus, Trash2, ShoppingBag, Percent, ShieldCheck, TicketCheck } from "lucide-react";
 import { CartItem } from "../types";
 import { motion, AnimatePresence } from "motion/react";
@@ -120,6 +121,13 @@ export default function CartDrawer({
                 <X className="h-6 w-6" />
               </button>
             </div>
+            <Link
+              to="/cart"
+              onClick={onClose}
+              className="px-6 pb-3 text-[10px] font-mono uppercase tracking-widest text-neutral-500 hover:text-neutral-900 transition-colors"
+            >
+              View full bag page →
+            </Link>
 
             {/* Inner Content Switch */}
             {isCheckoutSuccess ? (

@@ -32,3 +32,33 @@ export interface Category {
   description: string;
   image: string;
 }
+
+export interface Order {
+  id: string;
+  customerName: string;
+  customerEmail: string;
+  items: number;
+  total: number;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  date: string;
+}
+
+export interface Customer {
+  id: string;
+  name: string;
+  email: string;
+  orders: number;
+  totalSpent: number;
+  joinedDate: string;
+  status: "active" | "inactive";
+}
+
+export interface Review {
+  id: string;
+  productName: string;
+  customerName: string;
+  rating: number;
+  comment: string;
+  date: string;
+  status: "published" | "pending" | "hidden";
+}
