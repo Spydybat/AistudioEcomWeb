@@ -33,7 +33,7 @@ export default function AdminSidebar() {
 
   const sidebarContent = (
   <>
-      <div className="p-6 border-b border-neutral-800">
+      <div className="p-6 border-b border-white/5">
         <h1 className="text-lg font-serif font-bold text-white tracking-widest uppercase">
           Aura Admin
         </h1>
@@ -52,8 +52,8 @@ export default function AdminSidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors ${
                 isActive
-                  ? "bg-white text-neutral-900 font-medium"
-                  : "text-neutral-400 hover:text-white hover:bg-neutral-800"
+                  ? "bg-[#2B2D31] text-white font-medium"
+                  : "text-neutral-400 hover:text-white hover:bg-[#2B2D31]"
               }`
             }
           >
@@ -63,17 +63,17 @@ export default function AdminSidebar() {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-neutral-800 space-y-2">
+      <div className="p-4 border-t border-white/5 space-y-2">
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
+          className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm text-neutral-400 hover:text-white hover:bg-[#2B2D31] transition-colors cursor-pointer"
         >
           <ChevronLeft className="h-4 w-4" />
           <span>Back to Store</span>
         </button>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm text-red-400 hover:text-red-300 hover:bg-neutral-800 transition-colors cursor-pointer"
+          className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm text-red-400 hover:text-red-300 hover:bg-[#2B2D31] transition-colors cursor-pointer"
         >
           <LogOut className="h-4 w-4" />
           <span>Logout</span>
@@ -103,7 +103,7 @@ export default function AdminSidebar() {
 
       {/* Mobile sidebar */}
       <aside
-        className={`lg:hidden fixed top-0 left-0 z-50 h-full w-64 bg-neutral-950 flex flex-col transform transition-transform duration-300 ${
+        className={`lg:hidden fixed top-0 left-0 z-50 h-full w-64 bg-[#1E1F22] flex flex-col transform transition-transform duration-300 ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -117,7 +117,7 @@ export default function AdminSidebar() {
       </aside>
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex w-64 bg-neutral-950 flex-col shrink-0 h-screen sticky top-0">
+      <aside className="hidden lg:flex w-64 bg-[#1E1F22] flex-col shrink-0 h-screen sticky top-0 border-r border-white/5">
         {sidebarContent}
       </aside>
     </>

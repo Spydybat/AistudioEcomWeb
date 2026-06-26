@@ -4,9 +4,12 @@ import { motion, AnimatePresence } from "motion/react";
 interface ProductTabsProps {
   description: string;
   details: string[];
+  specifications?: Record<string, string>;
+  warranty?: string;
+  shipping?: string;
 }
 
-export default function ProductTabs({ description, details }: ProductTabsProps) {
+export default function ProductTabs({ description, details, specifications, warranty, shipping }: ProductTabsProps) {
   const [activeTab, setActiveTab] = useState<"description" | "specifications" | "shipping">("description");
 
   const tabs = [
@@ -16,22 +19,22 @@ export default function ProductTabs({ description, details }: ProductTabsProps) 
   ] as const;
 
   return (
-    <div className="mt-16 border-t border-neutral-200 pt-10">
+    <div className="mt-16 border-t border-white/5 pt-10">
       {/* Tab Navigation */}
-      <div className="flex items-center gap-8 border-b border-neutral-200 mb-8 overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-8 border-b border-white/5 mb-8 overflow-x-auto no-scrollbar">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`pb-4 text-sm tracking-widest uppercase font-medium transition-colors relative whitespace-nowrap cursor-pointer ${
-              activeTab === tab.id ? "text-neutral-900" : "text-neutral-400 hover:text-neutral-700"
+              activeTab === tab.id ? "text-white" : "text-zinc-500 hover:text-zinc-300"
             }`}
           >
             {tab.label}
             {activeTab === tab.id && (
               <motion.div
                 layoutId="activeTabIndicator"
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-neutral-900"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500"
               />
             )}
           </button>
@@ -47,21 +50,31 @@ export default function ProductTabs({ description, details }: ProductTabsProps) 
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="text-neutral-600 font-light leading-relaxed"
+            className="text-zinc-400 font-light leading-relaxed"
           >
             {activeTab === "description" && (
               <div className="max-w-3xl space-y-4">
                 <p>{description}</p>
-                <p>Designed in our Milan studio and crafted with uncompromising attention to detail, this piece represents the pinnacle of modern luxury. Each garment undergoes a rigorous 40-point inspection process.</p>
+                <p>Selected for the Aura marketplace through a quality-first buying process, this product is evaluated for presentation, materials, usability, and after-purchase support before it reaches the catalog.</p>
               </div>
             )}
             
             {activeTab === "specifications" && (
-              <div className="max-w-3xl">
+              <div className="max-w-4xl space-y-8">
+                {specifications && (
+                  <dl className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {Object.entries(specifications).map(([label, value]) => (
+                      <div key={label} className="rounded-xl border border-white/5 bg-[#1E1F22] px-4 py-3">
+                        <dt className="text-[10px] uppercase tracking-widest text-zinc-500 font-mono">{label}</dt>
+                        <dd className="mt-1 text-sm text-zinc-300">{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {details.map((detail, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-neutral-900 mt-2 shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 shrink-0" />
                       <span>{detail}</span>
                     </li>
                   ))}
@@ -72,12 +85,12 @@ export default function ProductTabs({ description, details }: ProductTabsProps) 
             {activeTab === "shipping" && (
               <div className="max-w-3xl space-y-6">
                 <div>
-                  <h4 className="font-medium text-neutral-900 mb-2 uppercase tracking-widest text-xs">Complimentary Shipping</h4>
-                  <p>Enjoy free global express shipping on all orders via FedEx Priority. Orders placed before 2PM EST ship same day.</p>
+                  <h4 className="font-medium text-white mb-2 uppercase tracking-widest text-xs">Complimentary Shipping</h4>
+                  <p>{shipping || "Enjoy fast tracked delivery on eligible marketplace orders. Orders placed before 2PM local warehouse time usually ship same day."}</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-neutral-900 mb-2 uppercase tracking-widest text-xs">30-Day Returns</h4>
-                  <p>Returns are elegantly simple. Use the pre-paid label included in your premium cedar-lined shipping box to return unworn items within 30 days.</p>
+                  <h4 className="font-medium text-white mb-2 uppercase tracking-widest text-xs">Returns & Warranty</h4>
+                  <p>Returns are simple within 30 days for eligible unused items. {warranty || "Warranty coverage varies by product and brand."}</p>
                 </div>
               </div>
             )}

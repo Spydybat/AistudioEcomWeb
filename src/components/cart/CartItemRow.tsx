@@ -1,6 +1,7 @@
 import { Plus, Minus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CartItem } from "../../types";
+import { useCurrency } from "../../context/CurrencyContext";
 
 interface CartItemRowProps {
   item: CartItem;
@@ -17,6 +18,7 @@ export default function CartItemRow({
   onRemoveItem,
   compact = false,
 }: CartItemRowProps) {
+  const { formatPrice } = useCurrency();
   const imageSize = compact ? "w-16 h-20" : "w-24 h-28";
 
   return (
@@ -86,7 +88,7 @@ export default function CartItemRow({
             </button>
           </div>
           <span className={`font-sans font-semibold text-neutral-950 ${compact ? "text-sm" : "text-base"}`}>
-            ${(item.product.price * item.quantity).toFixed(2)}
+            {formatPrice(item.product.price * item.quantity)}
           </span>
         </div>
       </div>

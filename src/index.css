@@ -40,7 +40,7 @@ html {
 }
 
 body {
-  @apply bg-neutral-50 text-neutral-900;
+  @apply bg-[#1E1F22] text-[#DBDEE1];
 }
 
 @layer utilities {
@@ -53,18 +53,18 @@ body {
   }
   
   .glass {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+    @apply bg-[#2B2D31]/80 backdrop-blur-xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)];
   }
 
   .glass-dark {
-    @apply bg-neutral-900/80 backdrop-blur-md border border-neutral-800/50 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+    @apply bg-[#111214]/90 backdrop-blur-xl border border-white/5 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)];
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-neutral-900 via-neutral-600 to-neutral-900;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-white;
   }
   
   .text-gradient-dark {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-neutral-300 to-white;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white to-indigo-300;
   }
 }

@@ -6,19 +6,10 @@ export default function FeaturedCategories({
 }: {
   onFilterCategory: (catId: string) => void;
 }) {
-  // Let's attach some high-quality placeholder images for the categories.
-  const categoryImages = [
-    "https://images.unsplash.com/photo-1620799139507-2a76f79a2f4d?q=80&w=1000", // Tops
-    "https://images.unsplash.com/photo-1555689502-c4b22d76c56f?q=80&w=1000", // Bottoms
-    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000", // Outerwear
-    "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=1000"  // Accessories
-  ];
-
-  // We skip the "all" category which is usually index 0
-  const visualCategories = CATEGORIES.filter(c => c.id !== "all").slice(0, 4);
+  const visualCategories = CATEGORIES.filter(c => c.id !== "all" && c.featured).slice(0, 4);
 
   return (
-    <section className="py-24 sm:py-32 bg-white overflow-hidden">
+    <section className="py-24 sm:py-32 bg-[#1E1F22] overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -26,7 +17,7 @@ export default function FeaturedCategories({
           viewport={{ once: true }}
           className="text-center mb-16 sm:mb-24"
         >
-          <h2 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-neutral-900 uppercase">
+          <h2 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-white uppercase">
             Shop By Category
           </h2>
         </motion.div>
@@ -46,7 +37,7 @@ export default function FeaturedCategories({
               className="relative group aspect-square md:aspect-[4/3] rounded-[2rem] overflow-hidden cursor-pointer"
             >
               <img
-                src={categoryImages[idx % categoryImages.length]}
+                src={category.image}
                 alt={category.name}
                 className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                 referrerPolicy="no-referrer"
@@ -58,7 +49,7 @@ export default function FeaturedCategories({
                   {category.name}
                 </h3>
                 <span className="text-white/80 text-xs font-mono tracking-[0.2em] uppercase font-semibold">
-                  Explore Collection
+                  Explore Department
                 </span>
               </div>
             </motion.div>

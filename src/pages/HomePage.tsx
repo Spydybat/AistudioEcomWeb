@@ -17,6 +17,7 @@ import ProductQuickView from "../components/ProductQuickView";
 import Newsletter from "../components/Newsletter";
 import Testimonials from "../components/Testimonials";
 import TrustBadges from "../components/TrustBadges";
+import MarketplaceShowcase from "../components/MarketplaceShowcase";
 
 export default function HomePage() {
   const { 
@@ -38,8 +39,9 @@ export default function HomePage() {
     }
   };
 
-  const bestSellers = PRODUCTS.slice(0, 6);
-  const trendingProducts = PRODUCTS.slice(4, 10);
+  const bestSellers = PRODUCTS.filter((product) => product.isBestSeller).slice(0, 8);
+  const trendingProducts = PRODUCTS.filter((product) => product.isTrending).slice(0, 8);
+  const recommendations = PRODUCTS.filter((product) => product.rating >= 4.8 && !product.isBestSeller).slice(0, 8);
 
   return (
     <div>
@@ -49,6 +51,8 @@ export default function HomePage() {
         onExploreClick={handleScrollToSection} 
         onFilterCategory={setSelectedCategory} 
       />
+
+      <MarketplaceShowcase onFilterCategory={setSelectedCategory} />
 
       <FeaturedCategories onFilterCategory={setSelectedCategory} />
 
@@ -72,6 +76,17 @@ export default function HomePage() {
         wishlist={wishlist}
         onToggleWishlist={handleToggleWishlist}
         bgWhite={true}
+      />
+
+      <ProductSlider
+        title="Recommended For You"
+        subtitle="Marketplace Picks"
+        products={recommendations}
+        onAddToCart={handleAddToCart}
+        onOpenQuickView={setActiveQuickView}
+        wishlist={wishlist}
+        onToggleWishlist={handleToggleWishlist}
+        bgWhite={false}
       />
 
       <BrandEthos />

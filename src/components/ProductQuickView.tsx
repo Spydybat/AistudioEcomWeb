@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { X, Star, ShoppingBag, ShieldAlert, BadgeCheck, RotateCcw } from "lucide-react";
 import { Product, ProductColor } from "../types";
 import { motion, AnimatePresence } from "motion/react";
+import { useCurrency } from "../context/CurrencyContext";
 
 interface ProductQuickViewProps {
   product: Product | null;
@@ -14,6 +15,7 @@ export default function ProductQuickView({
   onClose,
   onAddToCart,
 }: ProductQuickViewProps) {
+  const { formatPrice } = useCurrency();
   const [selectedColor, setSelectedColor] = useState<ProductColor | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [activeImageIdx, setActiveImageIdx] = useState(0);
@@ -49,7 +51,7 @@ export default function ProductQuickView({
           animate={{ opacity: 0.5 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-neutral-950"
+          className="absolute inset-0 bg-[#111214]"
         />
 
         {/* Modal Window Sheet */}
@@ -58,22 +60,22 @@ export default function ProductQuickView({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 30 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="relative w-full max-w-4xl bg-white border border-neutral-100 overflow-hidden shadow-2xl z-10 flex flex-col md:flex-row max-h-[90vh] md:max-h-[85vh] rounded-none"
+          className="relative w-full max-w-4xl bg-[#1E1F22] border border-white/5 overflow-hidden shadow-2xl z-10 flex flex-col md:flex-row max-h-[90vh] md:max-h-[85vh] rounded-none"
         >
           {/* Close trigger button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/80 hover:bg-neutral-100 text-neutral-800 transition-colors shadow-sm cursor-pointer"
+            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-[#2B2D31]/80 hover:bg-[#2B2D31] text-zinc-300 transition-colors shadow-sm cursor-pointer"
             id="modal-close"
           >
             <X className="h-5 w-5" />
           </button>
 
           {/* Left panel: Image gallery viewer */}
-          <div className="w-full md:w-1/2 p-4 sm:p-6 bg-neutral-50 flex flex-col justify-between border-r border-neutral-100 overflow-y-auto">
+          <div className="w-full md:w-1/2 p-4 sm:p-6 bg-[#111214] flex flex-col justify-between border-r border-white/5 overflow-y-auto">
             
             {/* Main Visual Display */}
-            <div className="aspect-[3/4] bg-white overflow-hidden mb-4 relative shadow-sm border border-neutral-100">
+            <div className="aspect-[3/4] bg-[#111214] overflow-hidden mb-4 relative shadow-sm border border-white/5">
               <img
                 src={product.images[activeImageIdx]}
                 alt={product.name}
@@ -89,8 +91,8 @@ export default function ProductQuickView({
                   <button
                     key={idx}
                     onClick={() => setActiveImageIdx(idx)}
-                    className={`relative aspect-[3/4] overflow-hidden border bg-white cursor-pointer ${
-                      activeImageIdx === idx ? "border-black border-2" : "border-neutral-200 hover:border-neutral-400"
+                    className={`relative aspect-[3/4] overflow-hidden border bg-[#111214] cursor-pointer transition-all ${
+                      activeImageIdx === idx ? "border-indigo-500 border-2" : "border-transparent hover:border-white/30"
                     }`}
                   >
                     <img
@@ -109,37 +111,37 @@ export default function ProductQuickView({
           <div className="w-full md:w-1/2 p-6 sm:p-8 overflow-y-auto flex flex-col justify-between">
             <div>
               {/* Product category & social trust alignment */}
-              <div className="flex items-center justify-between mb-3 text-[10px] uppercase font-mono tracking-[0.2em] text-neutral-400">
+              <div className="flex items-center justify-between mb-3 text-[10px] uppercase font-mono tracking-[0.2em] text-zinc-500">
                 <span>{product.category} COLLECTION</span>
                 <div className="flex items-center text-yellow-500 font-medium">
                   <Star className="h-3 w-3 fill-current mr-1" />
                   <span>{product.rating}</span>
-                  <span className="text-neutral-400 ml-1">({product.reviews} reviews)</span>
+                  <span className="text-zinc-500 ml-1">({product.reviews} reviews)</span>
                 </div>
               </div>
 
               {/* Title Header */}
-              <h2 className="text-xl sm:text-2xl font-serif font-semibold text-neutral-900 uppercase tracking-wide leading-tight mb-2 selection:bg-neutral-200">
+              <h2 className="text-xl sm:text-2xl font-serif font-semibold text-white uppercase tracking-wide leading-tight mb-2 selection:bg-indigo-500/30">
                 {product.name}
               </h2>
 
               {/* Price Details */}
               <div className="flex items-center gap-3 mb-6">
-                <span className="text-lg font-sans font-medium text-neutral-900">${product.price}.00</span>
+                <span className="text-lg font-sans font-medium text-white">{formatPrice(product.price)}</span>
                 {product.originalPrice && (
-                  <span className="text-sm font-sans text-neutral-400 line-through">${product.originalPrice}.00</span>
+                  <span className="text-sm font-sans text-zinc-500 line-through">{formatPrice(product.originalPrice)}</span>
                 )}
               </div>
 
               {/* Short Description */}
-              <p className="text-xs sm:text-sm text-neutral-600 font-light leading-relaxed mb-6">
+              <p className="text-xs sm:text-sm text-zinc-400 font-light leading-relaxed mb-6">
                 {product.description}
               </p>
 
               {/* Colors selection list */}
               <div className="mb-5">
-                <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block mb-2">
-                  Color Spec: <span className="text-neutral-800 font-sans font-medium">{selectedColor.name}</span>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-2">
+                  Color Spec: <span className="text-zinc-300 font-sans font-medium">{selectedColor.name}</span>
                 </span>
                 <div className="flex items-center gap-2">
                   {product.colors.map((color) => {
@@ -150,7 +152,7 @@ export default function ProductQuickView({
                         onClick={() => setSelectedColor(color)}
                         className={`w-5 h-5 rounded-full border relative transition-transform hover:scale-110 flex items-center justify-center cursor-pointer`}
                         style={{ 
-                          borderColor: isSelected ? "#000000" : "#E5E5E5",
+                          borderColor: isSelected ? "#ffffff" : "rgba(255,255,255,0.1)",
                           borderWidth: isSelected ? "1.5px" : "1px"
                         }}
                         title={color.name}
@@ -168,10 +170,10 @@ export default function ProductQuickView({
               {/* Sizes selection list */}
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest">
-                    Select Size: <span className="text-neutral-800 font-sans font-medium">{selectedSize}</span>
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                    Select Size: <span className="text-zinc-300 font-sans font-medium">{selectedSize}</span>
                   </span>
-                  <button className="text-[10px] text-neutral-400 uppercase font-mono tracking-widest border-b border-transparent hover:border-neutral-400">
+                  <button className="text-[10px] text-zinc-500 uppercase font-mono tracking-widest border-b border-transparent hover:border-zinc-500">
                     Sizing Ledger
                   </button>
                 </div>
@@ -182,10 +184,10 @@ export default function ProductQuickView({
                       <button
                         key={size}
                         onClick={() => setSelectedSize(size)}
-                        className={`text-xs font-sans font-medium border px-3 py-2 transition-all cursor-pointer ${
+                        className={`text-xs font-sans font-medium border px-3 py-2 transition-all cursor-pointer rounded-lg ${
                           isSelected
-                            ? "bg-black text-white border-black"
-                            : "bg-white text-neutral-600 border-neutral-200 hover:border-black hover:text-black"
+                            ? "bg-indigo-500 text-white border-indigo-500"
+                            : "bg-[#2B2D31] text-zinc-400 border-white/5 hover:border-white/30 hover:text-white"
                         }`}
                       >
                         {size}
@@ -196,14 +198,14 @@ export default function ProductQuickView({
               </div>
 
               {/* Technical features / bullet logs */}
-              <div className="border-t border-neutral-100 py-5 space-y-3 bg-neutral-50 px-4 mb-6">
-                <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block">
+              <div className="border-t border-white/5 py-5 space-y-3 bg-[#111214] px-4 mb-6 rounded-xl">
+                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block">
                   Garment Blueprint & Sourcing
                 </span>
                 <ul className="space-y-2">
                   {product.details.map((detail, idx) => (
-                    <li key={idx} className="flex items-start text-[11px] text-neutral-600 font-light leading-normal">
-                      <BadgeCheck className="h-3.5 w-3.5 text-neutral-400 mr-2 shrink-0 mt-0.5" />
+                    <li key={idx} className="flex items-start text-[11px] text-zinc-400 font-light leading-normal">
+                      <BadgeCheck className="h-3.5 w-3.5 text-zinc-500 mr-2 shrink-0 mt-0.5" />
                       <span>{detail}</span>
                     </li>
                   ))}
@@ -212,15 +214,15 @@ export default function ProductQuickView({
             </div>
 
             {/* Direct Add Actions Container */}
-            <div className="border-t border-neutral-100 pt-5 mt-auto">
+            <div className="border-t border-white/5 pt-5 mt-auto">
               <div className="flex gap-4">
                 <button
                   onClick={handleAddToCart}
                   disabled={isAdding}
-                  className={`flex-1 py-4 text-xs font-mono tracking-widest uppercase flex items-center justify-center gap-2.5 transition-all duration-300 border cursor-pointer ${
+                  className={`flex-1 py-4 text-xs font-mono tracking-widest uppercase flex items-center justify-center gap-2.5 transition-all duration-300 border cursor-pointer rounded-xl ${
                     isAdding
-                      ? "bg-neutral-100 text-neutral-400 border-neutral-100 cursor-not-allowed"
-                      : "bg-neutral-950 text-white border-neutral-955 hover:bg-white hover:text-black hover:shadow-lg"
+                      ? "bg-[#2B2D31] text-zinc-600 border-white/5 cursor-not-allowed"
+                      : "bg-indigo-500 text-white border-indigo-500 hover:bg-indigo-600 hover:shadow-[0_4px_14px_rgba(88,101,242,0.4)]"
                   }`}
                   id="modal-add-to-cart"
                 >
@@ -230,13 +232,13 @@ export default function ProductQuickView({
               </div>
 
               {/* Reassurances footnotes */}
-              <div className="flex justify-around items-center mt-4 text-[10px] text-neutral-400 uppercase tracking-wider font-mono">
+              <div className="flex justify-around items-center mt-4 text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
                 <div className="flex items-center gap-1.5">
-                  <RotateCcw className="h-3.5 w-3.5 text-neutral-400" />
+                  <RotateCcw className="h-3.5 w-3.5 text-zinc-500" />
                   <span>30-Day Returns</span>
                 </div>
-                <span className="text-neutral-200">|</span>
-                <span className="text-neutral-400">GOTS Ethical Cotton</span>
+                <span className="text-zinc-700">|</span>
+                <span className="text-zinc-500">GOTS Ethical Cotton</span>
               </div>
             </div>
 

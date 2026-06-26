@@ -4,13 +4,16 @@ import App from './App.tsx';
 import './index.css';
 import { ShopProvider } from './context/ShopContext';
 import { AdminProvider } from './context/AdminContext';
+import { CurrencyProvider } from './context/CurrencyContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ShopProvider>
-      <AdminProvider>
-        <App />
-      </AdminProvider>
-    </ShopProvider>
+    <CurrencyProvider>
+      <ShopProvider>
+        <AdminProvider>
+          <App />
+        </AdminProvider>
+      </ShopProvider>
+    </CurrencyProvider>
   </StrictMode>,
 );

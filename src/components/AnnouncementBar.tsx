@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-
-const MESSAGES = [
-  "Complimentary Global Shipping on Orders Over $200",
-  "Early Access: The Cashmere Collection Vol. 4",
-  "Sign up for our newsletter to receive an exclusive gift",
-];
+import { useCurrency } from "../context/CurrencyContext";
 
 export default function AnnouncementBar() {
+  const { formatPrice } = useCurrency();
+  const MESSAGES = [
+    `Complimentary Global Shipping on Orders Over ${formatPrice(200)}`,
+    "Early Access: The Cashmere Collection Vol. 4",
+    "Sign up for our newsletter to receive an exclusive gift",
+  ];
   const [isVisible, setIsVisible] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
 

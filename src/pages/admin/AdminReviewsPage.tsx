@@ -4,9 +4,9 @@ import DataTable from "../../components/admin/DataTable";
 import { REVIEWS } from "../../data/adminData";
 
 const statusColors: Record<string, string> = {
-  published: "bg-emerald-100 text-emerald-700",
-  pending: "bg-yellow-100 text-yellow-700",
-  hidden: "bg-neutral-100 text-neutral-500",
+  published: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+  pending: "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20",
+  hidden: "bg-neutral-500/10 text-zinc-400 border border-neutral-500/20",
 };
 
 function RatingStars({ rating }: { rating: number }) {
@@ -33,8 +33,8 @@ export default function AdminReviewsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-neutral-900">Reviews</h1>
-        <p className="text-neutral-500 text-sm mt-1">{REVIEWS.length} customer reviews</p>
+        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white">Reviews</h1>
+        <p className="text-zinc-400 text-sm mt-1">{REVIEWS.length} customer reviews</p>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -44,8 +44,8 @@ export default function AdminReviewsPage() {
             onClick={() => setStatusFilter(status)}
             className={`px-4 py-2 text-xs uppercase tracking-wider rounded-lg transition-colors cursor-pointer ${
               statusFilter === status
-                ? "bg-neutral-900 text-white"
-                : "bg-white border border-neutral-200 text-neutral-600 hover:border-neutral-900"
+                ? "bg-indigo-500 text-white"
+                : "bg-[#1E1F22] border border-white/5 text-zinc-400 hover:text-white hover:border-white/20"
             }`}
           >
             {status}
@@ -55,20 +55,20 @@ export default function AdminReviewsPage() {
 
       <DataTable headers={["Product", "Customer", "Rating", "Comment", "Date", "Status"]}>
         {filtered.map((review) => (
-          <tr key={review.id} className="hover:bg-neutral-50">
-            <td className="px-4 sm:px-6 py-3 text-sm text-neutral-900 max-w-[180px] line-clamp-2">
+          <tr key={review.id} className="hover:bg-[#2B2D31] transition-colors">
+            <td className="px-4 sm:px-6 py-3 text-sm text-white max-w-[180px] line-clamp-2">
               {review.productName}
             </td>
-            <td className="px-4 sm:px-6 py-3 text-neutral-600">{review.customerName}</td>
+            <td className="px-4 sm:px-6 py-3 text-zinc-400">{review.customerName}</td>
             <td className="px-4 sm:px-6 py-3">
               <RatingStars rating={review.rating} />
             </td>
-            <td className="px-4 sm:px-6 py-3 text-neutral-600 text-xs max-w-[200px] line-clamp-2">
+            <td className="px-4 sm:px-6 py-3 text-zinc-400 text-xs max-w-[200px] line-clamp-2">
               {review.comment}
             </td>
-            <td className="px-4 sm:px-6 py-3 text-neutral-500 text-xs">{review.date}</td>
+            <td className="px-4 sm:px-6 py-3 text-zinc-500 text-xs">{review.date}</td>
             <td className="px-4 sm:px-6 py-3">
-              <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider ${statusColors[review.status]}`}>
+              <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider border ${statusColors[review.status]}`}>
                 {review.status}
               </span>
             </td>

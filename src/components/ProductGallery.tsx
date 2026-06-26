@@ -32,7 +32,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
             key={idx}
             onClick={() => setActiveIndex(idx)}
             className={`relative aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
-              activeIndex === idx ? "border-neutral-900 shadow-md" : "border-transparent opacity-70 hover:opacity-100"
+              activeIndex === idx ? "border-indigo-500 shadow-md" : "border-transparent opacity-70 hover:opacity-100"
             }`}
           >
             <img src={img} alt={`${productName} thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
@@ -41,12 +41,12 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
       </div>
 
       {/* Main Image Viewport */}
-      <div className="relative w-full aspect-[3/4] bg-neutral-100 rounded-2xl overflow-hidden group">
+      <div className="relative w-full aspect-[3/4] bg-[#111214] rounded-2xl overflow-hidden group border border-white/5">
         <button 
           onClick={() => setIsFullscreen(true)}
-          className="absolute top-4 right-4 z-10 bg-white/80 hover:bg-white p-2 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+          className="absolute top-4 right-4 z-10 bg-[#2B2D31]/80 hover:bg-[#2B2D31] p-2 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border border-white/5 text-zinc-300"
         >
-          <Maximize2 className="h-5 w-5 text-neutral-700" />
+          <Maximize2 className="h-5 w-5" />
         </button>
 
         <div 
@@ -79,12 +79,12 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-white flex flex-col"
+            className="fixed inset-0 z-50 bg-[#111214] flex flex-col"
           >
             <div className="flex items-center justify-end p-6">
               <button 
                 onClick={() => setIsFullscreen(false)}
-                className="p-3 bg-neutral-100 hover:bg-neutral-200 rounded-full transition-colors cursor-pointer"
+                className="p-3 bg-[#2B2D31] hover:bg-white/10 rounded-full transition-colors cursor-pointer text-white"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -105,7 +105,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
                   key={idx}
                   onClick={() => setActiveIndex(idx)}
                   className={`relative w-16 h-20 rounded-md overflow-hidden transition-all ${
-                    activeIndex === idx ? "ring-2 ring-neutral-900 scale-110" : "opacity-50 hover:opacity-100"
+                    activeIndex === idx ? "ring-2 ring-indigo-500 scale-110" : "opacity-50 hover:opacity-100"
                   }`}
                 >
                   <img src={img} className="w-full h-full object-cover" />

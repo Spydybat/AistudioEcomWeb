@@ -6,9 +6,9 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-neutral-950 text-neutral-400 text-xs tracking-wide border-t border-neutral-900 pt-20 pb-8 sm:pt-32 relative overflow-hidden">
+    <footer className="bg-[#111214] text-zinc-400 text-xs tracking-wide border-t border-white/5 pt-20 pb-8 sm:pt-32 relative overflow-hidden">
       {/* Background Glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-white/5 blur-[120px] rounded-[100%] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-indigo-500/5 blur-[120px] rounded-[100%] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-20">
@@ -23,17 +23,17 @@ export default function Footer() {
             <h3 className="text-xl font-serif font-bold text-white tracking-widest uppercase">
               AURA STUDIO
             </h3>
-            <p className="text-neutral-400 font-light leading-relaxed max-w-sm">
+            <p className="text-zinc-400 font-light leading-relaxed max-w-sm">
               Fostering timeless garments spun from pure GOTS organic cottons, Mongolian shearling, Irish linen, and Grade-A cashmere thread-work. Pure form, ethical production coordinates.
             </p>
             <div className="flex space-x-6 pt-2">
-              <a href="#instagram" className="text-neutral-500 hover:text-white hover:-translate-y-1 transition-all" title="Aura Instagram">
+              <a href="#instagram" className="text-zinc-500 hover:text-white hover:-translate-y-1 transition-all" title="Aura Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#facebook" className="text-neutral-500 hover:text-white hover:-translate-y-1 transition-all" title="Aura Facebook">
+              <a href="#facebook" className="text-zinc-500 hover:text-white hover:-translate-y-1 transition-all" title="Aura Facebook">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#twitter" className="text-neutral-500 hover:text-white hover:-translate-y-1 transition-all" title="Aura Twitter">
+              <a href="#twitter" className="text-zinc-500 hover:text-white hover:-translate-y-1 transition-all" title="Aura Twitter">
                 <Twitter className="h-5 w-5" />
               </a>
             </div>
@@ -51,10 +51,10 @@ export default function Footer() {
               Collections Range
             </h4>
             <ul className="space-y-4 font-light">
-              <li><Link to="/products" className="text-neutral-400 hover:text-white transition-colors block">Shop All Collections</Link></li>
-              <li><Link to="/products" className="text-neutral-400 hover:text-white transition-colors block">Seasonal Trench Coats</Link></li>
-              <li><Link to="/products" className="text-neutral-400 hover:text-white transition-colors block">Pure Mongolian Cashmere</Link></li>
-              <li><Link to="/products" className="text-neutral-400 hover:text-white transition-colors block">Deconstructed Suit Blazes</Link></li>
+              <li><Link to="/products" className="text-zinc-400 hover:text-white transition-colors block">Shop All Collections</Link></li>
+              <li><Link to="/products" className="text-zinc-400 hover:text-white transition-colors block">Seasonal Trench Coats</Link></li>
+              <li><Link to="/products" className="text-zinc-400 hover:text-white transition-colors block">Pure Mongolian Cashmere</Link></li>
+              <li><Link to="/products" className="text-zinc-400 hover:text-white transition-colors block">Deconstructed Suit Blazes</Link></li>
             </ul>
           </motion.div>
 
@@ -70,10 +70,10 @@ export default function Footer() {
               The Studio Story
             </h4>
             <ul className="space-y-4 font-light">
-              <li><Link to="/about" className="text-neutral-400 hover:text-white transition-colors block">Our Heritage</Link></li>
-              <li><Link to="/about" className="text-neutral-400 hover:text-white transition-colors block">100% Traceable Fibers</Link></li>
-              <li><Link to="/about" className="text-neutral-400 hover:text-white transition-colors block">Milanese Atelier Guilds</Link></li>
-              <li><Link to="/about" className="text-neutral-400 hover:text-white transition-colors block">Carbon-Neutral Delivery</Link></li>
+              <li><Link to="/about" className="text-zinc-400 hover:text-white transition-colors block">Our Heritage</Link></li>
+              <li><Link to="/about" className="text-zinc-400 hover:text-white transition-colors block">100% Traceable Fibers</Link></li>
+              <li><Link to="/about" className="text-zinc-400 hover:text-white transition-colors block">Milanese Atelier Guilds</Link></li>
+              <li><Link to="/about" className="text-zinc-400 hover:text-white transition-colors block">Carbon-Neutral Delivery</Link></li>
             </ul>
           </motion.div>
 
@@ -89,9 +89,9 @@ export default function Footer() {
               Atelier Customer Concierge
             </h4>
             <ul className="space-y-4 font-light">
-              <li><Link to="/wishlist" className="text-neutral-400 hover:text-white transition-colors block">Wishlist</Link></li>
-              <li><Link to="/cart" className="text-neutral-400 hover:text-white transition-colors block">Shopping Bag</Link></li>
-              <li><Link to="/contact" className="text-neutral-400 hover:text-white transition-colors block">Contact Concierge</Link></li>
+              <li><Link to="/wishlist" className="text-zinc-400 hover:text-white transition-colors block">Wishlist</Link></li>
+              <li><Link to="/cart" className="text-zinc-400 hover:text-white transition-colors block">Shopping Bag</Link></li>
+              <li><Link to="/contact" className="text-zinc-400 hover:text-white transition-colors block">Contact Concierge</Link></li>
             </ul>
           </motion.div>
 
@@ -103,11 +103,11 @@ export default function Footer() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
-          className="border-t border-neutral-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-[10px]/none tracking-[0.2em] text-neutral-500 font-mono uppercase"
+          className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-[10px]/none tracking-[0.2em] text-zinc-500 font-mono uppercase"
         >
           <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <span>© {currentYear} AURA STUDIO APPAREL INC.</span>
-            <span className="hidden sm:inline text-neutral-800">•</span>
+            <span className="hidden sm:inline text-zinc-700">•</span>
             <span>ALL RIGHTS PRIVILEGED</span>
           </div>
 
@@ -119,7 +119,7 @@ export default function Footer() {
             </span>
             <div className="flex gap-2">
               {["AMEX", "VISA", "MC", "APPLE", "PAYPAL"].map((p) => (
-                <span key={p} className="px-2 py-1 border border-neutral-800 text-neutral-400 text-[9px] bg-neutral-900 rounded select-none uppercase font-bold">
+                <span key={p} className="px-2 py-1 border border-white/5 text-zinc-400 text-[9px] bg-[#2B2D31] rounded select-none uppercase font-bold">
                   {p}
                 </span>
               ))}

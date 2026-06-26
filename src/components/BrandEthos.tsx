@@ -26,7 +26,7 @@ export default function BrandEthos() {
   ];
 
   return (
-    <section className="bg-neutral-50 border-y border-neutral-100 py-20 sm:py-32 overflow-hidden">
+    <section className="bg-[#111214] border-y border-white/5 py-20 sm:py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Ethos Header */}
@@ -37,14 +37,14 @@ export default function BrandEthos() {
           transition={{ duration: 0.8 }}
           className="text-center max-w-3xl mx-auto mb-20"
         >
-          <p className="text-[10px] font-mono tracking-[0.4em] uppercase text-neutral-400 mb-4">
+          <p className="text-[10px] font-mono tracking-[0.4em] uppercase text-zinc-500 mb-4">
             Craft • Sustainability • Circularity
           </p>
-          <h2 className="text-3xl sm:text-5xl font-serif font-bold tracking-tight text-neutral-900 uppercase">
+          <h2 className="text-3xl sm:text-5xl font-serif font-bold tracking-tight text-white uppercase">
             Designed for Form, Spun for the Planet
           </h2>
-          <div className="w-16 h-[2px] bg-neutral-900 mx-auto mt-8 mb-6" />
-          <p className="text-sm sm:text-base text-neutral-500 font-light leading-relaxed">
+          <div className="w-16 h-[2px] bg-zinc-700 mx-auto mt-8 mb-6" />
+          <p className="text-sm sm:text-base text-zinc-400 font-light leading-relaxed">
             Aura Studio is an architectural project creating wardrobe baseline staples. We believe in minimal purchase volume, fine pristine fibers, and complete production transparency.
           </p>
         </motion.div>
@@ -58,15 +58,15 @@ export default function BrandEthos() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="bg-white p-8 border border-neutral-100 hover:border-neutral-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-start rounded-2xl group cursor-default"
+              className="bg-[#2B2D31] p-8 border border-white/5 hover:border-white/10 shadow-sm hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:-translate-y-2 transition-all duration-300 flex flex-col items-start rounded-2xl group cursor-default"
             >
-              <div className="p-4 bg-neutral-50 text-neutral-800 group-hover:bg-neutral-900 group-hover:text-white transition-colors duration-300 rounded-2xl mb-8 flex items-center justify-center">
+              <div className="p-4 bg-[#1E1F22] text-zinc-400 group-hover:bg-indigo-500 group-hover:text-white transition-colors duration-300 rounded-2xl mb-8 flex items-center justify-center">
                 {value.icon}
               </div>
-              <h3 className="text-base font-semibold tracking-wider text-neutral-900 uppercase mb-3 group-hover:text-neutral-700 transition-colors">
+              <h3 className="text-base font-semibold tracking-wider text-white uppercase mb-3 group-hover:text-zinc-300 transition-colors">
                 {value.title}
               </h3>
-              <p className="text-sm text-neutral-500 font-light leading-relaxed">
+              <p className="text-sm text-zinc-400 font-light leading-relaxed">
                 {value.subtitle}
               </p>
             </motion.div>
@@ -79,14 +79,14 @@ export default function BrandEthos() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mt-20 sm:mt-32 bg-neutral-950 text-white rounded-3xl p-10 sm:p-16 flex flex-col md:flex-row items-center gap-10 justify-between shadow-2xl relative overflow-hidden"
+          className="mt-20 sm:mt-32 bg-[#313338] text-white rounded-3xl p-10 sm:p-16 flex flex-col md:flex-row items-center gap-10 justify-between shadow-[0_20px_40px_rgba(0,0,0,0.4)] relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
           <div className="max-w-2xl relative z-10">
             <h4 className="text-2xl sm:text-4xl font-serif font-medium text-white mb-6 leading-tight">
               "We make clothes so beautiful, natural, and timeless, you will cherish them for decades."
             </h4>
-            <p className="text-xs text-neutral-400 tracking-[0.2em] font-sans uppercase">
+            <p className="text-xs text-zinc-400 tracking-[0.2em] font-sans uppercase">
               – AURA STUDIO DESIGN TEAM, MILAN
             </p>
           </div>
@@ -97,7 +97,7 @@ export default function BrandEthos() {
                 catalogElement.scrollIntoView({ behavior: "smooth" });
               }
             }}
-            className="whitespace-nowrap px-8 py-4 bg-white text-black hover:bg-neutral-200 rounded-full font-semibold text-xs tracking-widest uppercase transition-all shadow-lg hover:shadow-xl flex items-center gap-2 hover:scale-105 relative z-10 cursor-pointer"
+            className="whitespace-nowrap px-8 py-4 bg-indigo-500 text-white hover:bg-indigo-600 rounded-full font-semibold text-xs tracking-widest uppercase transition-all shadow-[0_4px_14px_rgba(88,101,242,0.4)] hover:shadow-[0_6px_20px_rgba(88,101,242,0.6)] flex items-center gap-2 hover:scale-105 relative z-10 cursor-pointer"
           >
             Explore Materials Heritage
             <ArrowRight className="h-4 w-4" />

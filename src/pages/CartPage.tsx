@@ -15,18 +15,18 @@ export default function CartPage() {
 
   return (
     <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 w-full">
-      <nav className="flex text-[10px] uppercase tracking-widest text-neutral-400 mb-6 font-mono">
-        <Link to="/" className="hover:text-neutral-900 transition-colors">Home</Link>
+      <nav className="flex text-[10px] uppercase tracking-widest text-zinc-500 mb-6 font-mono">
+        <Link to="/" className="hover:text-white transition-colors">Home</Link>
         <span className="mx-2">/</span>
-        <span className="text-neutral-900">Shopping Bag</span>
+        <span className="text-zinc-100">Shopping Bag</span>
       </nav>
 
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-neutral-900">
+          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white">
             Your Shopping Bag
           </h1>
-          <p className="text-neutral-500 text-sm mt-2">
+          <p className="text-zinc-400 text-sm mt-2">
             {cart.length === 0
               ? "No items in your bag"
               : `${cart.reduce((s, i) => s + i.quantity, 0)} items in your bag`}
@@ -35,7 +35,7 @@ export default function CartPage() {
         {cart.length > 0 && (
           <button
             onClick={handleClearCart}
-            className="flex items-center gap-2 text-xs uppercase tracking-widest text-neutral-500 hover:text-red-500 transition-colors cursor-pointer"
+            className="flex items-center gap-2 text-xs uppercase tracking-widest text-zinc-500 hover:text-red-500 transition-colors cursor-pointer"
           >
             <Trash2 className="h-4 w-4" />
             Clear Bag
@@ -53,7 +53,7 @@ export default function CartPage() {
         />
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2 bg-white border border-neutral-100 rounded-xl p-4 sm:p-6">
+          <div className="lg:col-span-2 bg-[#1E1F22] border border-white/5 rounded-xl p-4 sm:p-6">
             {cart.map((item, index) => (
               <div key={`${item.product.id}-${item.selectedSize}-${item.selectedColor.name}`}>
                 <CartItemRow
@@ -70,7 +70,7 @@ export default function CartPage() {
             <CartSummary cartItems={cart} />
             <Link
               to="/wishlist"
-              className="block text-center mt-4 text-xs uppercase tracking-widest text-neutral-500 hover:text-neutral-900 transition-colors"
+              className="block text-center mt-4 text-xs uppercase tracking-widest text-zinc-500 hover:text-white transition-colors"
             >
               View Wishlist
             </Link>

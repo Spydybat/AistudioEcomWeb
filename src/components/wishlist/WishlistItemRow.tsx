@@ -1,6 +1,7 @@
 import { X, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Product, ProductColor } from "../../types";
+import { useCurrency } from "../../context/CurrencyContext";
 
 interface WishlistItemRowProps {
   product: Product;
@@ -15,6 +16,7 @@ export default function WishlistItemRow({
   onMoveToCart,
   compact = false,
 }: WishlistItemRowProps) {
+  const { formatPrice } = useCurrency();
   const defaultSize = product.sizes[1] || product.sizes[0];
   const defaultColor = product.colors[0];
   const imageSize = compact ? "w-16 h-20" : "w-24 h-28";
@@ -51,7 +53,7 @@ export default function WishlistItemRow({
             </button>
           </div>
           <span className={`text-neutral-900 font-sans font-semibold block mt-1.5 ${compact ? "text-sm" : "text-base"}`}>
-            ${product.price}.00
+            {formatPrice(product.price)}
           </span>
           {product.badge && (
             <span className="inline-block mt-1 px-2 py-0.5 bg-neutral-900 text-white text-[9px] font-mono tracking-widest uppercase rounded">

@@ -15,11 +15,11 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="bg-neutral-950 text-white py-24 sm:py-32 relative overflow-hidden">
+    <section className="bg-[#111214] text-white py-24 sm:py-32 relative overflow-hidden">
       {/* Abstract Background Elements */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full opacity-30 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-neutral-800 blur-[120px]" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-neutral-800 blur-[120px]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-500/10 blur-[120px]" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-500/10 blur-[120px]" />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -31,14 +31,14 @@ export default function Newsletter() {
           viewport={{ once: true }}
           className="mb-12"
         >
-          <p className="text-[10px] font-mono tracking-[0.4em] uppercase text-neutral-400 mb-4 flex items-center justify-center gap-2">
-            <Sparkles className="h-4 w-4 text-neutral-500" />
+          <p className="text-[10px] font-mono tracking-[0.4em] uppercase text-zinc-500 mb-4 flex items-center justify-center gap-2">
+            <Sparkles className="h-4 w-4 text-zinc-400" />
             <span>EDITORIAL PRIVILEGES</span>
           </p>
           <h2 className="text-4xl sm:text-6xl font-serif font-bold tracking-tight uppercase leading-tight mb-6 text-gradient-dark">
             Join the Aura Circle
           </h2>
-          <p className="text-neutral-400 text-sm sm:text-base font-light leading-relaxed max-w-lg mx-auto">
+          <p className="text-zinc-400 text-sm sm:text-base font-light leading-relaxed max-w-lg mx-auto">
             Subscribe to receive private invitations to seasonal sample events, limited-edition outerwear releases, and curated styling guides. We respect pure minimalism and never spam.
           </p>
         </motion.div>
@@ -48,12 +48,12 @@ export default function Newsletter() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="glass-dark p-8 rounded-3xl border border-neutral-800 text-center max-w-md mx-auto shadow-2xl"
+            className="bg-[#1E1F22] p-8 rounded-3xl border border-white/5 text-center max-w-md mx-auto shadow-2xl"
           >
             <p className="text-lg font-serif font-semibold text-white mb-2 uppercase tracking-wide">
               Invitation Dispatch Success
             </p>
-            <p className="text-sm text-neutral-400 leading-relaxed font-light">
+            <p className="text-sm text-zinc-400 leading-relaxed font-light">
               We have dispatched our digital lookbook volume 04. Check your inbox to unlock your editorial pre-sales entrance code.
             </p>
           </motion.div>
@@ -68,7 +68,7 @@ export default function Newsletter() {
             id="newsletter-form"
           >
             <div className="relative flex-1">
-              <span className="absolute left-6 top-1/2 -translate-y-1/2 text-neutral-500">
+              <span className="absolute left-6 top-1/2 -translate-y-1/2 text-zinc-500">
                 <Mail className="h-5 w-5" />
               </span>
               <input
@@ -77,13 +77,13 @@ export default function Newsletter() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your professional email address"
                 required
-                className="w-full bg-white/5 border border-neutral-800 px-14 py-4 sm:py-5 text-sm tracking-wider placeholder-neutral-500 text-white focus:outline-none focus:border-neutral-500 font-sans rounded-full transition-all shadow-inner backdrop-blur-sm"
+                className="w-full bg-[#2B2D31] border border-white/5 px-14 py-4 sm:py-5 text-sm tracking-wider placeholder-zinc-500 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 font-sans rounded-full transition-all shadow-inner backdrop-blur-sm"
               />
             </div>
             
             <button
               type="submit"
-              className="px-8 py-4 sm:py-5 bg-white text-black hover:bg-neutral-200 text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-3 transition-all rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer"
+              className="px-8 py-4 sm:py-5 bg-indigo-500 text-white hover:bg-indigo-600 text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-3 transition-all rounded-full shadow-lg hover:shadow-[0_4px_14px_rgba(88,101,242,0.4)] hover:-translate-y-0.5 cursor-pointer"
             >
               <span>Subscribe</span>
               <ArrowRight className="h-4 w-4" />
@@ -97,7 +97,7 @@ export default function Newsletter() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
-          className="mt-8 text-[10px] text-neutral-500 tracking-[0.2em] font-sans font-medium uppercase"
+          className="mt-8 text-[10px] text-zinc-600 tracking-[0.2em] font-sans font-medium uppercase"
         >
           SECURE ENCRYPTED VERIFICATION SYSTEM • UNSUBSCRIBE ANYTIME • PRIVACY COMPLIANT
         </motion.p>

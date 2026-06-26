@@ -16,33 +16,33 @@ interface HeroSlide {
 const HERO_SLIDES: HeroSlide[] = [
   {
     id: 1,
-    title: "SARTORIAL STRUCTURE",
-    subtitle: "THE SEASONAL OVERCOAT",
-    highlight: "Italian-Crafted Wool Trench Coat",
-    description: "Discover clean modern geometries, soft structured tailoring, and natural fabrics woven to endure seasonal transitions.",
-    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600",
-    ctaText: "Explore Outerwear",
-    category: "outerwear",
+    title: "PREMIUM MARKETPLACE",
+    subtitle: "FASHION, TECH, HOME",
+    highlight: "Curated departments with luxury-grade presentation",
+    description: "Discover fashion, electronics, home, beauty, sports, grocery, books, and more through a polished marketplace built for high-intent shopping.",
+    image: "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?q=80&w=1600",
+    ctaText: "Explore Departments",
+    category: "all",
   },
   {
     id: 2,
-    title: "MINIMALIST SILHOUETTE",
-    subtitle: "ESSENTIAL KNITWEAR",
-    highlight: "Pure Mongolian Cashmere Wardrobe",
-    description: "An editorial collection designed with natural monochrome hues, soft breathable fibers, and drape that commands effortless form.",
-    image: "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?q=80&w=1600",
-    ctaText: "Explore Knitwear",
-    category: "knitwear",
+    title: "CONNECTED LIVING",
+    subtitle: "ELECTRONICS & MOBILES",
+    highlight: "Smart devices, audio, phones, and creator hardware",
+    description: "Shop refined technology products with specifications, variants, comparison tables, and recommendations designed for confident decisions.",
+    image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=1600",
+    ctaText: "Explore Electronics",
+    category: "electronics",
   },
   {
     id: 3,
-    title: "TAILORED FLOW",
-    subtitle: "SARTORIAL TAILORING",
-    highlight: "Deconstructed Linen-Wool Blazers",
-    description: "Sophisticated unstructured jackets and sharp pleaded wool pants engineered for unmatched luxury flexibility.",
-    image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1600",
-    ctaText: "Explore Tailoring",
-    category: "tailoring",
+    title: "HOME ELEVATED",
+    subtitle: "KITCHEN, FURNITURE, BEAUTY",
+    highlight: "Useful, beautiful products for everyday rituals",
+    description: "From copper cookware to modular furniture and clean skincare, the catalog now supports rich multi-category discovery.",
+    image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?q=80&w=1600",
+    ctaText: "Explore Home",
+    category: "home-kitchen",
   }
 ];
 
@@ -78,7 +78,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
   };
 
   return (
-    <div className="relative h-[65vh] sm:h-[80vh] w-full overflow-hidden bg-neutral-950 text-white">
+    <div className="relative h-[65vh] sm:h-[80vh] w-full overflow-hidden bg-[#111214] text-white">
       {/* Background Slides */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -90,8 +90,8 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
           className="absolute inset-0 w-full h-full"
         >
           {/* Shimmer Dark overlay to protect text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/80 via-neutral-900/45 to-transparent z-10" />
-          <div className="absolute inset-0 bg-black/25 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#111214]/95 via-[#1E1F22]/60 to-transparent z-10" />
+          <div className="absolute inset-0 bg-black/30 z-10" />
           
           <img
             src={activeSlide.image}
@@ -111,7 +111,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-xs font-mono tracking-[0.3em] text-neutral-300 uppercase mb-2 sm:mb-3 flex items-center gap-2"
+            className="text-xs font-mono tracking-[0.3em] text-zinc-300 uppercase mb-2 sm:mb-3 flex items-center gap-2"
           >
             <Compass className="h-4 w-4 animate-spin-slow text-yellow-500/80" />
             <span>{activeSlide.subtitle}</span>
@@ -133,7 +133,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-            className="text-lg sm:text-2xl tracking-widest text-neutral-200 mt-1 mb-4 sm:mb-6 font-light uppercase drop-shadow-md"
+            className="text-lg sm:text-2xl tracking-widest text-zinc-200 mt-1 mb-4 sm:mb-6 font-light uppercase drop-shadow-md"
           >
             {activeSlide.highlight}
           </motion.h3>
@@ -144,7 +144,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
-            className="text-sm sm:text-base text-neutral-300 mb-6 sm:mb-10 font-sans font-normal leading-relaxed max-w-xl drop-shadow"
+            className="text-sm sm:text-base text-zinc-300 mb-6 sm:mb-10 font-sans font-normal leading-relaxed max-w-xl drop-shadow"
           >
             {activeSlide.description}
           </motion.p>
@@ -160,7 +160,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
             <button
               id={`cta-btn-${activeSlide.id}`}
               onClick={() => handleCta(activeSlide.category)}
-              className="px-8 sm:px-10 py-4 bg-white text-black hover:bg-neutral-200 font-semibold tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-3 rounded-full shadow-2xl hover:scale-105 cursor-pointer"
+              className="px-8 sm:px-10 py-4 bg-indigo-500 text-white hover:bg-indigo-600 font-semibold tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-3 rounded-full shadow-[0_4px_14px_rgba(88,101,242,0.5)] hover:scale-105 cursor-pointer"
             >
               <span>{activeSlide.ctaText}</span>
               <ArrowRight className="h-4 w-4" />
@@ -168,9 +168,9 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
 
             <button
               onClick={onExploreClick}
-              className="px-8 sm:px-10 py-4 glass-dark text-white hover:bg-white/20 font-medium tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-2 rounded-full shadow-xl hover:scale-105 cursor-pointer"
+              className="px-8 sm:px-10 py-4 glass-dark text-white hover:bg-[#313338]/50 font-medium tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-2 rounded-full shadow-xl hover:scale-105 cursor-pointer"
             >
-              <span>View All Collection</span>
+              <span>View All Products</span>
             </button>
           </motion.div>
         </div>
@@ -180,15 +180,15 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
       <div className="absolute bottom-6 sm:bottom-10 right-4 sm:right-10 z-20 flex space-x-3">
         <button
           onClick={handlePrev}
-          className="p-3 sm:p-4 rounded-full glass-dark text-neutral-300 hover:text-white hover:bg-neutral-800/80 hover:scale-110 transition-all cursor-pointer shadow-lg"
-          title="Previous garment slide"
+          className="p-3 sm:p-4 rounded-full glass-dark text-zinc-300 hover:text-white hover:bg-[#313338]/80 hover:scale-110 transition-all cursor-pointer shadow-lg border border-white/5"
+          title="Previous marketplace slide"
         >
           <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
         <button
           onClick={handleNext}
-          className="p-3 sm:p-4 rounded-full glass-dark text-neutral-300 hover:text-white hover:bg-neutral-800/80 hover:scale-110 transition-all cursor-pointer shadow-lg"
-          title="Next garment slide"
+          className="p-3 sm:p-4 rounded-full glass-dark text-zinc-300 hover:text-white hover:bg-[#313338]/80 hover:scale-110 transition-all cursor-pointer shadow-lg border border-white/5"
+          title="Next marketplace slide"
         >
           <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
@@ -201,16 +201,16 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
             key={slide.id}
             onClick={() => setCurrentIndex(idx)}
             className="group flex items-center cursor-pointer"
-            title={`Select fashion look ${idx + 1}`}
+            title={`Select marketplace slide ${idx + 1}`}
           >
             <span
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                idx === currentIndex ? "w-8 bg-white" : "w-1.5 bg-neutral-600 group-hover:bg-neutral-400"
+                idx === currentIndex ? "w-8 bg-indigo-500" : "w-1.5 bg-zinc-600 group-hover:bg-zinc-400"
               }`}
             />
           </button>
         ))}
-        <span className="text-[10px] font-mono tracking-widest text-neutral-400 ml-2">
+        <span className="text-[10px] font-mono tracking-widest text-zinc-400 ml-2">
           0{currentIndex + 1} / 0{HERO_SLIDES.length}
         </span>
       </div>
