@@ -22,10 +22,10 @@ export default function CartItemRow({
   const imageSize = compact ? "w-16 h-20" : "w-24 h-28";
 
   return (
-    <div className="flex gap-4 py-4 border-b border-neutral-100 last:border-0">
+    <div className="flex gap-4 py-4 border-b border-white/5 last:border-0">
       <Link
         to={`/product/${item.product.id}`}
-        className={`${imageSize} bg-neutral-50 overflow-hidden border border-neutral-100 shrink-0 hover:opacity-90 transition-opacity`}
+        className={`${imageSize} bg-[#111214] overflow-hidden border border-white/5 shrink-0 hover:opacity-90 transition-opacity rounded-md`}
       >
         <img
           src={item.product.images[0]}
@@ -40,20 +40,20 @@ export default function CartItemRow({
           <div className="flex justify-between items-start gap-2">
             <Link
               to={`/product/${item.product.id}`}
-              className={`font-serif font-medium text-neutral-950 tracking-wide line-clamp-2 hover:text-neutral-600 transition-colors ${compact ? "text-xs sm:text-sm" : "text-sm sm:text-base"}`}
+              className={`font-serif font-medium text-white tracking-wide line-clamp-2 hover:text-zinc-300 transition-colors ${compact ? "text-xs sm:text-sm" : "text-sm sm:text-base"}`}
             >
               {item.product.name}
             </Link>
             <button
               onClick={() => onRemoveItem(index)}
-              className="text-neutral-400 hover:text-red-500 p-1 rounded cursor-pointer shrink-0"
+              className="text-zinc-400 hover:text-rose-500 p-1 rounded cursor-pointer shrink-0"
               title="Remove item"
             >
               <Trash2 className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 mt-1.5 text-[10px] text-neutral-500">
+          <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-zinc-300">
             <span className="flex items-center gap-1">
               <span
                 className="w-2.5 h-2.5 rounded-full inline-block border border-black/10"
@@ -67,27 +67,27 @@ export default function CartItemRow({
         </div>
 
         <div className="flex justify-between items-center mt-3">
-          <div className="flex items-center border border-neutral-200 bg-neutral-50 rounded-md">
+          <div className="flex items-center border border-white/5 bg-[#1E1F22] rounded-md">
             <button
               onClick={() => onUpdateQuantity(index, item.quantity - 1)}
-              className="p-2 hover:bg-neutral-100 text-neutral-600 disabled:opacity-30 cursor-pointer"
+              className="p-2 hover:bg-white/5 text-zinc-400 disabled:opacity-30 cursor-pointer transition-colors"
               disabled={item.quantity <= 1}
               title="Decrease quantity"
             >
               <Minus className="h-3.5 w-3.5" />
             </button>
-            <span className="px-3 text-sm font-mono font-medium text-neutral-800 min-w-[2rem] text-center">
+            <span className="px-3 text-sm font-mono font-medium text-zinc-200 min-w-[2rem] text-center">
               {item.quantity}
             </span>
             <button
               onClick={() => onUpdateQuantity(index, item.quantity + 1)}
-              className="p-2 hover:bg-neutral-100 text-neutral-600 cursor-pointer"
+              className="p-2 hover:bg-white/5 text-zinc-400 cursor-pointer transition-colors"
               title="Increase quantity"
             >
               <Plus className="h-3.5 w-3.5" />
             </button>
           </div>
-          <span className={`font-sans font-semibold text-neutral-950 ${compact ? "text-sm" : "text-base"}`}>
+          <span className={`font-sans font-semibold text-white ${compact ? "text-sm" : "text-base"}`}>
             {formatPrice(item.product.price * item.quantity)}
           </span>
         </div>
@@ -95,3 +95,4 @@ export default function CartItemRow({
     </div>
   );
 }
+

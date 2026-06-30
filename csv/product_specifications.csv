@@ -1,0 +1,105 @@
+id,product_id,spec_key,spec_value
+31f94be7-92fe-49bb-99f5-193ca240fbb5,48c6fc2c-6ccd-4d71-a909-112f1bae8e66,Material,Organic cotton and merino wool
+c29df640-dbb2-432d-983b-615adac2fdce,48c6fc2c-6ccd-4d71-a909-112f1bae8e66,Fit,Tailored
+f0520dfa-1e0c-4037-b882-42311c40a761,48c6fc2c-6ccd-4d71-a909-112f1bae8e66,Origin,Italy
+5f8bc86b-a91c-43f5-ad43-2d249eed6725,48c6fc2c-6ccd-4d71-a909-112f1bae8e66,Care,Dry clean
+41384644-0895-4dca-8d8e-cace1005af14,c3ea9ca6-2d59-4b36-b344-186a9d60f7bc,Material,Irish linen and virgin wool
+ef61704e-c7bd-411e-9c63-45e9bbf9c47b,c3ea9ca6-2d59-4b36-b344-186a9d60f7bc,Closure,Horn buttons
+ef373b7b-e386-4e65-9c98-1ae696857316,c3ea9ca6-2d59-4b36-b344-186a9d60f7bc,Fit,Relaxed tailored
+6d5e4f19-42f6-4bc6-ab88-4723eff6a90c,c3ea9ca6-2d59-4b36-b344-186a9d60f7bc,Season,All-season
+0b0b1967-d414-40f9-b0a7-110666c7ae75,52f8d2b0-ce95-444a-ba77-3093738d33e6,Material,100% cashmere
+7f32a62a-3545-43ca-b085-52d8585c6dde,52f8d2b0-ce95-444a-ba77-3093738d33e6,Gauge,12
+2d40e837-4806-4ae0-bbcf-52150ca153cc,52f8d2b0-ce95-444a-ba77-3093738d33e6,Fit,Classic
+85034c97-c75f-41c7-b0f7-905ede8d81f1,52f8d2b0-ce95-444a-ba77-3093738d33e6,Packaging,Cedar storage box
+0a6d42e1-aa6a-4002-a818-a63e382639c2,868859cf-237a-4923-89a4-10bdcfd8569a,Material,Super-100s wool
+7a4553e3-aa9a-4aba-952d-18b84d37bdc8,868859cf-237a-4923-89a4-10bdcfd8569a,Closure,French fly
+33693f4c-4cd5-483f-a5f8-aa7a245d84c9,868859cf-237a-4923-89a4-10bdcfd8569a,Inseam,34 in unfinished
+c3507a53-55bf-4ab2-a761-2ccc4de10f68,868859cf-237a-4923-89a4-10bdcfd8569a,Fit,Tapered
+51db82b7-dc81-460e-9ff1-ad8240e53877,39e33e14-e9e1-4dbb-b836-ea709d520013,Material,Organic cotton
+7e7621d1-b07e-435d-a89f-2dfc7134c09c,39e33e14-e9e1-4dbb-b836-ea709d520013,Weave,Oxford
+d778a78c-5598-4a2b-8c86-49f6af1f3962,39e33e14-e9e1-4dbb-b836-ea709d520013,Collar,Cutaway
+9b1dc6fa-6bb7-4ae7-b414-32a6c33396ad,39e33e14-e9e1-4dbb-b836-ea709d520013,Care,Machine wash cold
+6c96f6a7-fcc3-49e1-8f7c-07c838a97900,c68e55d5-fbda-482d-8cf3-25cfa45f6a90,Material,Lambskin shearling
+3b0d1a3c-a4c6-468d-a244-1c7ef7dc370d,c68e55d5-fbda-482d-8cf3-25cfa45f6a90,Hardware,Brass YKK
+e70f589d-54c1-4b53-ac7d-af0f72bdc6af,c68e55d5-fbda-482d-8cf3-25cfa45f6a90,Origin,Tuscany
+b478ec76-0474-41f5-968a-c30570c99272,c68e55d5-fbda-482d-8cf3-25cfa45f6a90,Fit,Regular
+646ebb09-396b-491a-a94f-002ac9fb1a51,e55f9b31-952b-44be-bf00-58cc2fcf6bf8,Material,Cashmere silk blend
+b46e4de0-41c9-4be3-be2e-f4033d7f5a52,e55f9b31-952b-44be-bf00-58cc2fcf6bf8,Waist,Elastic drawcord
+c1779bf9-1ecf-4455-89ea-e65850218bec,e55f9b31-952b-44be-bf00-58cc2fcf6bf8,Fit,Tapered
+eaa969e1-f01a-484a-88b9-f12a04dffe2b,e55f9b31-952b-44be-bf00-58cc2fcf6bf8,Care,Dry clean
+a65664c5-5f54-4fef-b858-438d36989e1c,a543df41-0309-416c-beff-307f8057bed8,Upper,Calfskin
+1b75e709-c8c9-4385-8d16-ff12f7a38318,a543df41-0309-416c-beff-307f8057bed8,Sole,Rubber studded leather
+03efee0f-6d56-4248-873c-d6b66e510320,a543df41-0309-416c-beff-307f8057bed8,Construction,Goodyear welt
+83ade2d2-5f2b-4b54-b804-3cd2a1abbd61,a543df41-0309-416c-beff-307f8057bed8,Origin,Italy
+66756ad7-2f85-4b2a-a6dc-d51919b524f2,ce866812-4073-4b30-9612-db64f0564407,Battery,42 hours
+d82c7715-5fd6-4690-8206-abc6e5208609,ce866812-4073-4b30-9612-db64f0564407,Connectivity,Bluetooth 5.4
+a296f1d4-4beb-4fdd-8a93-a9c741a1b7db,ce866812-4073-4b30-9612-db64f0564407,Driver,40 mm dynamic
+116637bd-dcb0-42c6-860b-93beaa078140,ce866812-4073-4b30-9612-db64f0564407,Weight,252 g
+e28fe915-1850-4ba9-b7ff-05b280d1440b,063f3fd9-ac60-4066-87f5-942a8fb02b47,Display,10.1 in HD
+c80836a1-b728-4555-a9e1-218a9eda306b,063f3fd9-ac60-4066-87f5-942a8fb02b47,Connectivity,Wi-Fi 6
+b92a63ab-28ad-4953-be5a-838261f9286f,063f3fd9-ac60-4066-87f5-942a8fb02b47,SmartHome,Matter
+88d00d12-579f-4dc3-a05e-ccc8e4709a07,063f3fd9-ac60-4066-87f5-942a8fb02b47,Speakers,Stereo
+114f1cad-000f-4872-a5d3-042abb798808,04995d50-8adc-4f1b-bb39-7d8e534fd6a8,Display,14 in 2.8K 120Hz
+19677b8a-e612-4002-9aed-a645cd9db97e,04995d50-8adc-4f1b-bb39-7d8e534fd6a8,Memory,16GB or 32GB
+636b66c3-302e-4425-8430-2df9b4395060,04995d50-8adc-4f1b-bb39-7d8e534fd6a8,Storage,512GB or 1TB SSD
+b3d67980-07e7-415a-9218-632b7a5dada5,04995d50-8adc-4f1b-bb39-7d8e534fd6a8,Ports,"Thunderbolt, HDMI, USB-C"
+e6977843-ea17-45d5-8051-1d830911a210,0802b3aa-7ef1-4bf8-8b86-bfca23d896df,Resolution,3840 x 2160
+386d8a15-552b-47c7-b9b6-9978a4aeabb0,0802b3aa-7ef1-4bf8-8b86-bfca23d896df,Panel,IPS
+c6945066-c629-48b3-a326-2aad72d15d20,0802b3aa-7ef1-4bf8-8b86-bfca23d896df,RefreshRate,60Hz
+f556a039-f3a9-4f09-b845-5d5edc78c9c9,0802b3aa-7ef1-4bf8-8b86-bfca23d896df,PowerDelivery,90W USB-C
+cc6ce4a2-c0f4-4ca2-adca-ae2343635123,8db42cbd-fa64-4d3a-ab52-ca736e656e8e,Display,6.7 in OLED
+92e16586-8a7b-4658-aaa5-cfccf0ec1cb0,8db42cbd-fa64-4d3a-ab52-ca736e656e8e,Camera,50MP triple
+d2757c5f-41f1-4c65-bf81-dda7c5e67280,8db42cbd-fa64-4d3a-ab52-ca736e656e8e,Network,5G
+70047b9f-196d-47da-bbe5-788fbfaf8bfb,8db42cbd-fa64-4d3a-ab52-ca736e656e8e,Battery,5100 mAh
+6939ddc9-9413-4085-8c10-a1598f013edd,80a4a5ac-f1ef-4e65-930f-413b6c7f4247,Output,100W
+36190323-54b9-4cc6-a7b5-a3c2fc359c28,80a4a5ac-f1ef-4e65-930f-413b6c7f4247,Ports,USB-C and USB-A
+6115f7d5-4603-42c2-af38-979c4b5b6f97,80a4a5ac-f1ef-4e65-930f-413b6c7f4247,Technology,GaN
+32b89716-4a2e-407d-921d-2693a6bce002,80a4a5ac-f1ef-4e65-930f-413b6c7f4247,Weight,170 g
+323310c3-0e90-464b-ae7f-564991774e50,5a4c555d-8d36-4bac-bfba-de96010eb008,Battery,40 hours
+69e84f50-76f8-443f-8bc2-9b76a155dfe2,5a4c555d-8d36-4bac-bfba-de96010eb008,Connectivity,2.4GHz / Bluetooth / USB-C
+7a1ea3ff-6f12-4bdd-9cfe-53ea8898f779,5a4c555d-8d36-4bac-bfba-de96010eb008,Compatibility,PC and console
+1f42d8f4-cf57-411a-8093-2e46a69f7e83,5a4c555d-8d36-4bac-bfba-de96010eb008,Sticks,Hall effect
+ef0ca0e3-ebf9-44af-b321-a6042c5e5a1f,afe235fe-6ce6-4461-962f-197d42325e1b,Capacity,3 qt or 5 qt
+5e0c004b-7218-464b-a470-cbf284a99792,afe235fe-6ce6-4461-962f-197d42325e1b,Material,Copper and stainless steel
+6e5562b0-d78c-4cce-8f82-1c971c2d98d9,afe235fe-6ce6-4461-962f-197d42325e1b,OvenSafe,500F
+fe4a6b27-6ae8-4431-b180-4a13bb83994d,afe235fe-6ce6-4461-962f-197d42325e1b,Cooktops,All
+cc31b3bf-0f5d-41b6-9194-7d5dbfa08586,f5b9ec45-1e40-4c39-a5fd-c825636b0775,Volume,30 ml or 50 ml
+fb0f8cb2-6d77-4d2f-ba66-6b3cc46320fe,f5b9ec45-1e40-4c39-a5fd-c825636b0775,SkinType,All skin types
+41123281-9dea-414c-aa00-6a6f6999e172,f5b9ec45-1e40-4c39-a5fd-c825636b0775,Fragrance,None
+491d46d7-9ba9-4b37-b792-83fe8b8ac62b,f5b9ec45-1e40-4c39-a5fd-c825636b0775,KeyActives,"Vitamin C, ceramides, niacinamide"
+5a9cf1d1-8d50-44a7-8f80-be6bdc8055b1,a7a702bf-37d4-4654-b26f-be0c87d2e397,Pages,312
+3e2cf9d1-8f3f-44cd-aed7-893d5d16e09e,a7a702bf-37d4-4654-b26f-be0c87d2e397,Language,English
+44e65977-89f5-47f9-91f0-00ce42ba0409,a7a702bf-37d4-4654-b26f-be0c87d2e397,Publisher,Atlas Press
+a8c9e5c5-fe08-4180-8957-d75c9906af30,a7a702bf-37d4-4654-b26f-be0c87d2e397,ISBN,978-1-928000-44-2
+1b00fafb-8ff7-4d67-ad6b-39ab92fbbb0f,57e1e024-6e3d-445f-8c09-6c23a84919c4,Contents,12 or 18 items
+22205e8f-9c5e-4a4d-9ce1-42e60e253beb,57e1e024-6e3d-445f-8c09-6c23a84919c4,Organic,Certified where applicable
+39e0baff-6a3c-444c-ae04-8aa92b015ba3,57e1e024-6e3d-445f-8c09-6c23a84919c4,ShelfLife,3 to 12 months
+5d219207-0536-437d-8047-e4d8d377be0c,57e1e024-6e3d-445f-8c09-6c23a84919c4,Allergens,Varies by box
+16c6e845-6d69-4a7d-a92e-4ab1a1025cbf,f090dd3d-03ff-499d-9620-6b4d403c42cd,Range,5-52 lb or 10-90 lb
+93fed709-3432-4a9d-b2c4-e4b3a64223cd,f090dd3d-03ff-499d-9620-6b4d403c42cd,Material,Steel and nylon composite
+2899e636-6f2d-4c2f-a0ec-08f93d18a14d,f090dd3d-03ff-499d-9620-6b4d403c42cd,Includes,Pair and trays
+fd66da09-42cb-4532-94fc-c0857d652e6f,f090dd3d-03ff-499d-9620-6b4d403c42cd,Warranty,3 years
+c9ee2c5b-f7f8-48ee-957e-8511e8a76b67,a7310c26-0544-404e-b181-e556a7f62cc9,Resolution,4K front / 1080p rear
+81fcff3d-bb54-4b95-8616-5accd0476d72,a7310c26-0544-404e-b181-e556a7f62cc9,Storage,128GB included
+2038b14d-6930-4190-8be8-3bdea2d84454,a7310c26-0544-404e-b181-e556a7f62cc9,GPS,Built in
+f2bb469f-a3ea-4950-80db-703b3a7d06dd,a7310c26-0544-404e-b181-e556a7f62cc9,FieldOfView,150 degrees
+bb7382c7-8e31-4c9d-9ad2-8651874d4bf8,c0ec8aa3-8a9e-40b2-8794-a21485823e7d,Foam,Memory foam
+e1e36e35-ac99-4b14-9919-823caf4d3188,c0ec8aa3-8a9e-40b2-8794-a21485823e7d,Cover,Machine washable
+fcabfc1e-e5f7-41fb-aea5-28637c9a86c2,c0ec8aa3-8a9e-40b2-8794-a21485823e7d,Sizes,Small to Large
+e3870047-4ebb-4107-bbc1-07fd53cce683,c0ec8aa3-8a9e-40b2-8794-a21485823e7d,Base,Non-slip
+17af8999-9f2b-4536-a5d3-cd3266776994,47c8aae0-40ad-4d58-8583-707cac93dff1,AgeRange,8+
+97c829ef-f622-4e0d-ac21-0a2675473805,47c8aae0-40ad-4d58-8583-707cac93dff1,Pieces,120
+91696a1c-9929-4ab2-a39e-faeaad3c0970,47c8aae0-40ad-4d58-8583-707cac93dff1,Coding,Block and JavaScript
+968c7d43-2fb5-48c1-a2f7-597769796d3a,47c8aae0-40ad-4d58-8583-707cac93dff1,Battery,Rechargeable
+83cba237-e6d3-4e4b-b098-207233b9dc6a,99a69767-bfee-4d68-ba27-7d445c0d507b,Frame,Kiln-dried hardwood
+33a31c8c-10d9-46e4-9892-94945dc5977b,99a69767-bfee-4d68-ba27-7d445c0d507b,Upholstery,Performance fabric
+3ddf1d20-3a3d-46ec-b2ab-d46078418158,99a69767-bfee-4d68-ba27-7d445c0d507b,SeatDepth,27 in
+6e24cb07-7a44-4d4e-8d18-a1623db8c08f,99a69767-bfee-4d68-ba27-7d445c0d507b,Delivery,White glove eligible
+bfbfdb4f-6b9f-4120-9290-0234862ac781,748589e4-eae7-472e-89e2-2b56e4b3b44b,Material,Full-grain leather
+861a3642-51e6-4c53-8152-3694c12fa9e0,748589e4-eae7-472e-89e2-2b56e4b3b44b,Capacity,38 L
+5be33482-853e-40e5-978f-c48b291e7901,748589e4-eae7-472e-89e2-2b56e4b3b44b,Laptop,15 in sleeve
+a039e2f2-c07d-46b3-ba7a-1f67f8454846,748589e4-eae7-472e-89e2-2b56e4b3b44b,Hardware,Brass
+1e3224a9-c9ed-42d4-b81b-680f5e2a8dcd,1bf3a33c-b0f3-4861-b129-eb3a9f62dcac,Movement,Automatic
+d8c18fbf-7ecc-490e-a42c-2acc518f70f3,1bf3a33c-b0f3-4861-b129-eb3a9f62dcac,Crystal,Sapphire
+d3f1c757-e167-4d4f-870c-8b6aa6ca5749,1bf3a33c-b0f3-4861-b129-eb3a9f62dcac,Case,38 mm or 41 mm
+446342c4-f031-4875-96a0-706de8abe8bc,1bf3a33c-b0f3-4861-b129-eb3a9f62dcac,WaterResistance,5 ATM

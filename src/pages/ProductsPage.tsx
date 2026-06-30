@@ -151,16 +151,7 @@ export default function ProductsPage() {
           </div>
 
           <div className="space-y-6">
-            {selectedCategory === "all" && (
-              <div>
-                <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Department</label>
-                <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500">
-                  {CATEGORIES.map((category) => (
-                    <option key={category.id} value={category.id}>{category.name}</option>
-                  ))}
-                </select>
-              </div>
-            )}
+
 
             {(selectedCategory === "all" || selectedCategory === "gaming" || selectedCategory === "electronics" || selectedCategory === "fashion" || selectedCategory === "beauty" || selectedCategory === "home-and-kitchen" || selectedCategory === "computers" || selectedCategory === "mobiles") && (
               <div>
@@ -172,7 +163,7 @@ export default function ProductsPage() {
               </div>
             )}
 
-            {selectedCategory === "gaming" && (
+                        {selectedCategory === "gaming" && (
               <>
                 <div>
                   <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Platform</label>
@@ -182,9 +173,33 @@ export default function ProductsPage() {
                   <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Genre</label>
                   <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Genres</option></select>
                 </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Age Rating</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>Any Age Rating</option></select>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Multiplayer</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>Any Multiplayer</option></select>
+                </div>
               </>
             )}
 
+                        {selectedCategory === "fashion" && (
+              <>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Size</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Sizes</option></select>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Color</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Colors</option></select>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Material</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Materials</option></select>
+                </div>
+              </>
+            )}
             {selectedCategory === "electronics" && (
               <>
                 <div>
@@ -209,24 +224,51 @@ export default function ProductsPage() {
                 </div>
               </>
             )}
-
-            {selectedCategory === "fashion" && (
+            {selectedCategory === "computers" && (
               <>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Gender</label>
-                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Genders</option></select>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Processor</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Processors</option></select>
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Size</label>
-                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Sizes</option></select>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">RAM</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All RAM</option></select>
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Color</label>
-                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Colors</option></select>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Storage</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Storage</option></select>
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Material</label>
-                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Materials</option></select>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Graphics</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Graphics</option></select>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Display Size</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Display Sizes</option></select>
+                </div>
+              </>
+            )}
+            {selectedCategory === "mobiles" && (
+              <>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">RAM</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All RAM</option></select>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Storage</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Storage</option></select>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Camera</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Cameras</option></select>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Battery</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Batteries</option></select>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Display</label>
+                  <select className="w-full rounded-xl border border-white/5 bg-[#1E1F22] text-zinc-300 px-3 py-3 text-xs uppercase tracking-wider focus:outline-none focus:border-indigo-500"><option>All Displays</option></select>
                 </div>
               </>
             )}
@@ -297,7 +339,7 @@ export default function ProductsPage() {
               </div>
             )}
 
-            {(selectedCategory === "all" || selectedCategory === "gaming" || selectedCategory === "computers" || selectedCategory === "mobiles") && (
+            {(selectedCategory === "all" || selectedCategory === "gaming" || selectedCategory === "computers" || selectedCategory === "mobiles" || selectedCategory === "fashion" || selectedCategory === "electronics") && (
               <div>
                 <label className="block text-[10px] uppercase tracking-widest text-zinc-400 mb-2">Rating</label>
                 <input type="range" min="0" max="5" step="0.5" value={minRating} onChange={(e) => setMinRating(Number(e.target.value))} className="w-full accent-indigo-500" />
@@ -305,7 +347,7 @@ export default function ProductsPage() {
               </div>
             )}
 
-            {(selectedCategory === "all" || selectedCategory === "gaming" || selectedCategory === "computers" || selectedCategory === "mobiles") && (
+            {(selectedCategory === "all" || selectedCategory === "gaming" || selectedCategory === "computers" || selectedCategory === "mobiles" || selectedCategory === "fashion" || selectedCategory === "electronics") && (
               <label className="flex items-center justify-between gap-3 rounded-xl border border-white/5 px-3 py-3 text-xs text-zinc-300">
                 <span>{(selectedCategory === "gaming" || selectedCategory === "computers" || selectedCategory === "mobiles") ? "Availability" : "In stock only"}</span>
                 <input type="checkbox" checked={inStockOnly} onChange={(e) => setInStockOnly(e.target.checked)} className="accent-indigo-500" />
@@ -409,3 +451,4 @@ export default function ProductsPage() {
     </div>
   );
 }
+

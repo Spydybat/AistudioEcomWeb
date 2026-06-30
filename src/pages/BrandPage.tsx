@@ -12,7 +12,7 @@ export default function BrandPage() {
     return (
       <div className="flex flex-col items-center justify-center py-32 text-center flex-1">
         <h1 className="text-4xl font-serif mb-4">Brand Not Found</h1>
-        <Link to="/products" className="text-neutral-500 underline">Return to Marketplace</Link>
+        <Link to="/products" className="text-zinc-400 underline">Return to Marketplace</Link>
       </div>
     );
   }
@@ -41,7 +41,7 @@ export default function BrandPage() {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className="rounded-full bg-white/10 border border-white/20 px-4 py-2 text-[10px] uppercase tracking-widest hover:bg-white hover:text-neutral-950 transition-colors"
+                className="rounded-full bg-white/10 border border-white/20 px-4 py-2 text-[10px] uppercase tracking-widest hover:bg-white hover:text-white transition-colors"
               >
                 {category.name}
               </button>
@@ -53,10 +53,10 @@ export default function BrandPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <p className="text-[10px] font-mono tracking-[0.4em] uppercase text-neutral-400 mb-3">{products.length} Products</p>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold uppercase text-neutral-900">Shop {brand.name}</h2>
+            <p className="text-[10px] font-mono tracking-[0.4em] uppercase text-zinc-400 mb-3">{products.length} Products</p>
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold uppercase text-white">Shop {brand.name}</h2>
           </div>
-          <Link to="/products" className="text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-950">
+          <Link to="/products" className="text-xs uppercase tracking-widest text-zinc-300 hover:text-white">
             View all marketplace products
           </Link>
         </div>
@@ -76,7 +76,7 @@ export default function BrandPage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-neutral-200 bg-neutral-50 py-16 text-center text-neutral-500">
+          <div className="rounded-2xl border border-neutral-200 bg-neutral-50 py-16 text-center text-zinc-400">
             Products from this brand are being prepared for the catalog.
           </div>
         )}

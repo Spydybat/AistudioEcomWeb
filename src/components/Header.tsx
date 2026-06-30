@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronDown, Heart, Menu, Search, ShoppingBag, User, X } from "lucide-react";
+import { ChevronDown, Heart, Menu, Search, ShoppingBag, User, X, Sun, Moon } from "lucide-react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { BRANDS, CATEGORIES, getSearchSuggestions } from "../data/products";
 import { useCurrency, REGIONS } from "../context/CurrencyContext";
@@ -24,6 +24,19 @@ export default function Header({
   setSelectedCategory,
 }: HeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isLightMode, setIsLightMode] = useState(() => {
+    return localStorage.getItem("theme") === "light";
+  });
+
+  useEffect(() => {
+    if (isLightMode) {
+      document.documentElement.classList.add("theme-light");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.remove("theme-light");
+      localStorage.setItem("theme", "dark");
+    }
+  }, [isLightMode]);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isRegionOpen, setIsRegionOpen] = useState(false);
@@ -92,23 +105,7 @@ export default function Header({
         </div>
 
         <nav className="hidden md:flex items-center space-x-6 text-xs font-medium uppercase tracking-widest text-zinc-400">
-          <button
-            onClick={() => {
-              setIsSearchOpen(false);
-              setIsRegionOpen(false);
-              setIsMegaMenuOpen((open) => !open);
-            }}
-            onMouseEnter={() => {
-              setIsSearchOpen(false);
-              setIsRegionOpen(false);
-              setIsMegaMenuOpen(true);
-            }}
-            className="hover:text-white transition-colors py-1 relative group cursor-pointer flex items-center gap-1"
-          >
-            Departments
-            <ChevronDown className="h-3.5 w-3.5" />
-            <span className="absolute bottom-0 left-0 w-full h-[1px] bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-          </button>
+
 
           {featuredDepartments.map((category) => (
             <button
@@ -189,6 +186,15 @@ export default function Header({
           </div>
 
           <button
+            onClick={() => setIsLightMode(!isLightMode)}
+            className="p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors theme-icon"
+            title="Toggle theme"
+            aria-label="Toggle theme"
+          >
+            {isLightMode ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+          </button>
+
+          <button
             onClick={() => {
               if (!isSearchOpen) {
                 setIsMegaMenuOpen(false);
@@ -254,61 +260,7 @@ export default function Header({
         </div>
       </div>
 
-      <AnimatePresence>
-        {isMegaMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            onMouseLeave={() => setIsMegaMenuOpen(false)}
-            className="hidden md:block absolute left-0 w-full z-30 border-y border-white/10 bg-[#2B2D31]/95 backdrop-blur-xl shadow-[0_16px_40px_rgba(0,0,0,0.5)]"
-          >
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10 grid grid-cols-2 gap-16">
-              {/* Left Column (Categories) */}
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.35em] text-zinc-500 font-mono mb-8 border-b border-white/10 pb-4">Categories</p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-10">
-                  {departments.map((category) => (
-                    <div key={category.id}>
-                      <button onClick={() => handleNavClick(category.id)} className="text-left group mb-4 block">
-                        <span className="block text-xs font-semibold uppercase tracking-widest text-zinc-200 group-hover:text-white transition-colors">
-                          {category.name}
-                        </span>
-                      </button>
-                      <ul className="space-y-3">
-                        {category.subcategories?.slice(0, 3).map((sub, idx) => (
-                          <li key={idx} className="flex items-center text-xs tracking-wide text-zinc-400 font-sans cursor-pointer hover:text-white transition-colors">
-                            <span className="w-1 h-1 bg-indigo-500/50 rounded-full mr-3" />
-                            <span>{sub}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
-              </div>
 
-              {/* Right Column (Featured Brands) */}
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.35em] text-zinc-500 font-mono mb-8 border-b border-white/10 pb-4">Featured Brands</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {BRANDS.slice(0, 5).map((brand) => (
-                    <Link
-                      key={brand.id}
-                      to={`/brand/${brand.id}`}
-                      onClick={() => setIsMegaMenuOpen(false)}
-                      className="block rounded-2xl border border-white/5 bg-[#1E1F22] p-5 hover:bg-[#313338] shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.4)] transition-all group"
-                    >
-                      <span className="block text-sm font-serif font-bold text-zinc-200 group-hover:text-white transition-colors">{brand.name}</span>
-                      <span className="mt-2 block text-xs leading-5 text-zinc-400">{brand.tagline}</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <AnimatePresence>
         {isSearchOpen && (

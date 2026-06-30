@@ -22,10 +22,10 @@ export default function WishlistItemRow({
   const imageSize = compact ? "w-16 h-20" : "w-24 h-28";
 
   return (
-    <div className="flex gap-4 py-4 border-b border-neutral-100 last:border-0">
+    <div className="flex gap-4 py-4 border-b border-white/5 last:border-0">
       <Link
         to={`/product/${product.id}`}
-        className={`${imageSize} bg-neutral-50 overflow-hidden border border-neutral-100 shrink-0 hover:opacity-90 transition-opacity`}
+        className={`${imageSize} bg-[#111214] overflow-hidden border border-white/5 shrink-0 hover:opacity-90 transition-opacity rounded-md`}
       >
         <img
           src={product.images[0]}
@@ -40,23 +40,23 @@ export default function WishlistItemRow({
           <div className="flex justify-between items-start gap-2">
             <Link
               to={`/product/${product.id}`}
-              className={`font-serif font-medium text-neutral-950 tracking-wide line-clamp-2 hover:text-neutral-600 transition-colors ${compact ? "text-xs sm:text-sm" : "text-sm sm:text-base"}`}
+              className={`font-serif font-medium text-white tracking-wide line-clamp-2 hover:text-zinc-300 transition-colors ${compact ? "text-xs sm:text-sm" : "text-sm sm:text-base"}`}
             >
               {product.name}
             </Link>
             <button
               onClick={() => onRemove(product)}
-              className="text-neutral-400 hover:text-red-500 p-1 rounded cursor-pointer shrink-0"
+              className="text-zinc-400 hover:text-rose-500 p-1 rounded cursor-pointer shrink-0"
               title="Remove from wishlist"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
-          <span className={`text-neutral-900 font-sans font-semibold block mt-1.5 ${compact ? "text-sm" : "text-base"}`}>
+          <span className={`text-white font-sans font-semibold block mt-1.5 ${compact ? "text-sm" : "text-base"}`}>
             {formatPrice(product.price)}
           </span>
           {product.badge && (
-            <span className="inline-block mt-1 px-2 py-0.5 bg-neutral-900 text-white text-[9px] font-mono tracking-widest uppercase rounded">
+            <span className="inline-block mt-1 px-2 py-0.5 bg-indigo-500/90 text-white text-[10px] font-mono tracking-widest uppercase rounded">
               {product.badge}
             </span>
           )}
@@ -68,14 +68,14 @@ export default function WishlistItemRow({
               onMoveToCart(product, defaultSize, defaultColor);
               onRemove(product);
             }}
-            className="flex-1 py-2.5 px-4 bg-neutral-950 hover:bg-neutral-800 text-white text-[10px] tracking-widest uppercase font-mono transition-colors flex items-center justify-center gap-2 cursor-pointer rounded-lg"
+            className="flex-1 py-2.5 px-4 bg-[#1E1F22] border border-white/5 hover:border-indigo-500 hover:bg-indigo-500 text-white text-xs tracking-widest uppercase font-mono transition-all flex items-center justify-center gap-2 cursor-pointer rounded-lg"
           >
             <ShoppingBag className="h-3.5 w-3.5" />
             <span>Move to Bag</span>
           </button>
           <Link
             to={`/product/${product.id}`}
-            className="py-2.5 px-4 border border-neutral-200 hover:border-black text-[10px] tracking-widest uppercase font-mono transition-all text-neutral-600 hover:text-black rounded-lg"
+            className="py-2.5 px-4 border border-white/10 hover:border-white/30 text-xs tracking-widest uppercase font-mono transition-all text-zinc-400 hover:text-white rounded-lg"
           >
             View
           </Link>
@@ -84,3 +84,4 @@ export default function WishlistItemRow({
     </div>
   );
 }
+

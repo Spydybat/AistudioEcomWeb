@@ -63,7 +63,7 @@ export default function BundleBuilderPage() {
 
   // UI State
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [activeQuickView, setActiveQuickView] = useState<Product | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState("");
@@ -150,7 +150,11 @@ export default function BundleBuilderPage() {
 
   const filteredProducts = useMemo(() => {
     let result = PRODUCTS;
-    if (selectedCategory !== "all") {
+        const isValid = (val: string | null | undefined) => {
+      return val && val !== "all" && val !== "null" && val !== "undefined" && val.trim() !== "";
+    };
+
+    if (isValid(selectedCategory)) {
       result = result.filter((p) => p.category === selectedCategory);
     }
     if (searchQuery) {
@@ -308,7 +312,7 @@ export default function BundleBuilderPage() {
     <div className="flex-1 bg-[#111214]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header Breadcrumbs & Title */}
-        <nav className="flex text-[10px] uppercase tracking-widest text-zinc-500 mb-6 font-mono">
+        <nav className="flex text-xs uppercase tracking-widest text-zinc-400 mb-6 font-mono">
           <Link to="/" className="hover:text-white transition-colors">Home</Link>
           <span className="mx-2">/</span>
           <span className="text-zinc-100">Bundle Builder</span>
@@ -316,7 +320,7 @@ export default function BundleBuilderPage() {
 
         <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.45em] text-zinc-500">Universal Configuration</p>
+            <p className="text-xs uppercase tracking-[0.45em] text-zinc-400">Universal Configuration</p>
             <h1 className="mt-3 text-4xl sm:text-5xl font-serif font-semibold text-white">
               Bundle Builder
             </h1>
@@ -330,7 +334,7 @@ export default function BundleBuilderPage() {
         {/* Multi-Bundle Tabs */}
         <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
           {bundles.map((bundle) => (
-            <div key={bundle.id} className={`flex items-center rounded-t-xl border-x border-t transition-colors ${activeBundleId === bundle.id ? "bg-[#1E1F22] border-white/5 text-white" : "bg-[#111214] border-transparent text-zinc-500 hover:bg-white/5"}`}>
+            <div key={bundle.id} className={`flex items-center rounded-t-xl border-x border-t transition-colors ${activeBundleId === bundle.id ? "bg-[#1E1F22] border-white/5 text-white" : "bg-[#111214] border-transparent text-zinc-400 hover:bg-white/5"}`}>
               <button
                 onClick={() => setActiveBundleId(bundle.id)}
                 className="px-5 py-3 text-xs font-semibold uppercase tracking-wider"
@@ -340,7 +344,7 @@ export default function BundleBuilderPage() {
               {bundles.length > 1 && (
                 <button
                   onClick={() => handleDeleteBundle(bundle.id)}
-                  className="pr-4 pl-1 text-zinc-500 hover:text-red-500"
+                  className="pr-4 pl-1 text-zinc-400 hover:text-red-500"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -349,7 +353,7 @@ export default function BundleBuilderPage() {
           ))}
           <button
             onClick={handleCreateBundle}
-            className="flex items-center gap-2 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 hover:text-white transition-colors"
+            className="flex items-center gap-2 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-400 hover:text-white transition-colors"
           >
             <Plus className="h-4 w-4" /> New Bundle
           </button>
@@ -361,7 +365,7 @@ export default function BundleBuilderPage() {
             {/* Search & Filter */}
             <div className="bg-[#1E1F22] rounded-3xl border border-white/5 p-4 sm:p-5 flex flex-col sm:flex-row gap-4 items-center z-10 relative">
               <div className="relative flex-1 w-full">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-500" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
                 <input
                   type="text"
                   placeholder="Search products to add..."
@@ -399,7 +403,7 @@ export default function BundleBuilderPage() {
                     />
                     {/* Visual overlay indicating this goes to bundle */}
                     <div className="absolute top-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
-                      <span className="bg-indigo-500 text-white text-[10px] px-3 py-1 rounded-full uppercase tracking-widest shadow-xl font-medium">
+                      <span className="bg-indigo-500 text-white text-xs px-3 py-1 rounded-full uppercase tracking-widest shadow-xl font-medium">
                         Add to Bundle
                       </span>
                     </div>
@@ -416,7 +420,7 @@ export default function BundleBuilderPage() {
               {/* Bundle Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex-1">
-                  <p className="text-[10px] uppercase tracking-[0.4em] text-zinc-500 mb-1">Your Bundle</p>
+                  <p className="text-xs uppercase tracking-[0.4em] text-white mb-1">Your Bundle</p>
                   {isEditingName ? (
                     <div className="flex items-center gap-2">
                       <input
@@ -437,13 +441,13 @@ export default function BundleBuilderPage() {
                   )}
                 </div>
                 <div className="flex flex-col items-end gap-2 ml-4">
-                  <span className="rounded-full bg-indigo-500 px-3 py-1 text-[10px] uppercase tracking-[0.3em] text-white whitespace-nowrap">
+                  <span className="rounded-full bg-indigo-500 px-3 py-1 text-xs uppercase tracking-[0.3em] text-white whitespace-nowrap">
                     {itemCount} Items
                   </span>
                   <div className="flex items-center gap-1">
-                    <button onClick={handleShareBundle} className="p-1.5 text-zinc-500 hover:bg-[#2B2D31] hover:text-white rounded-full transition-colors" title="Share Bundle"><LinkIcon className="h-3.5 w-3.5" /></button>
-                    <button onClick={handleExportJSON} className="p-1.5 text-zinc-500 hover:bg-[#2B2D31] hover:text-white rounded-full transition-colors" title="Export as JSON"><Download className="h-3.5 w-3.5" /></button>
-                    <button onClick={handleClearBundle} className="p-1.5 text-zinc-500 hover:bg-red-500/10 hover:text-red-500 rounded-full transition-colors" title="Clear Bundle"><Trash2 className="h-3.5 w-3.5" /></button>
+                    <button onClick={handleShareBundle} className="p-1.5 text-zinc-400 hover:bg-[#2B2D31] hover:text-white rounded-full transition-colors" title="Share Bundle"><LinkIcon className="h-3.5 w-3.5" /></button>
+                    <button onClick={handleExportJSON} className="p-1.5 text-zinc-400 hover:bg-[#2B2D31] hover:text-white rounded-full transition-colors" title="Export as JSON"><Download className="h-3.5 w-3.5" /></button>
+                    <button onClick={handleClearBundle} className="p-1.5 text-zinc-400 hover:bg-red-500/10 hover:text-red-500 rounded-full transition-colors" title="Clear Bundle"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 </div>
               </div>
@@ -456,7 +460,7 @@ export default function BundleBuilderPage() {
                       <ShoppingBag className="h-5 w-5 text-zinc-600" />
                     </div>
                     <p className="text-sm text-zinc-400 font-medium">Your bundle is empty</p>
-                    <p className="text-[10px] text-zinc-500 mt-1 max-w-[200px]">Search and add products from the catalog to build your custom collection.</p>
+                    <p className="text-xs text-zinc-400 mt-1 max-w-[200px]">Search and add products from the catalog to build your custom collection.</p>
                   </div>
                 ) : (
                   <Reorder.Group 
@@ -491,11 +495,11 @@ export default function BundleBuilderPage() {
                               <div className="flex-1 min-w-0">
                                 <div className="flex justify-between items-start gap-2">
                                   <h4 className="text-xs font-semibold text-white truncate leading-tight">{item.product.name}</h4>
-                                  <button onClick={() => handleRemoveItem(item.id)} className="text-zinc-500 hover:text-red-500 p-0.5 rounded transition-colors shrink-0">
+                                  <button onClick={() => handleRemoveItem(item.id)} className="text-zinc-400 hover:text-red-500 p-0.5 rounded transition-colors shrink-0">
                                     <X className="h-3.5 w-3.5" />
                                   </button>
                                 </div>
-                                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1 text-[10px] text-zinc-400">
+                                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1 text-xs text-zinc-300">
                                   <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full border border-black/10" style={{ backgroundColor: item.color.hex }} /> {item.color.name}</span>
                                   <span>&bull;</span>
                                   <span>{item.size}</span>
@@ -505,21 +509,21 @@ export default function BundleBuilderPage() {
                                   {/* Qty Controls */}
                                   <div className="flex items-center gap-3 bg-[#111214] border border-white/5 rounded-lg px-2 py-1">
                                     <button onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)} className="text-zinc-400 hover:text-white disabled:opacity-30" disabled={item.quantity <= 1}><Minus className="h-3 w-3" /></button>
-                                    <span className="text-white text-[10px] font-medium min-w-[12px] text-center">{item.quantity}</span>
+                                    <span className="text-white text-xs font-medium min-w-[12px] text-center">{item.quantity}</span>
                                     <button onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)} className="text-zinc-400 hover:text-white disabled:opacity-30"><Plus className="h-3 w-3" /></button>
                                   </div>
 
                                   <div className="flex flex-col items-end">
                                     <span className="text-xs font-semibold text-white">{formatPrice(item.product.price * item.quantity)}</span>
                                     {item.product.originalPrice && (
-                                      <span className="text-[9px] text-zinc-500 line-through">{formatPrice(item.product.originalPrice * item.quantity)}</span>
+                                      <span className="text-[10px] text-zinc-400 line-through">{formatPrice(item.product.originalPrice * item.quantity)}</span>
                                     )}
                                   </div>
                                 </div>
                                 
                                 {/* Stock Warning */}
                                 {isOutOfStock && (
-                                  <div className="mt-2 text-[10px] text-red-400 flex items-center gap-1 font-medium bg-red-500/10 p-1.5 rounded-md">
+                                  <div className="mt-2 text-xs text-red-400 flex items-center gap-1 font-medium bg-red-500/10 p-1.5 rounded-md">
                                     <AlertCircle className="h-3 w-3" />
                                     Only {item.product.stock} in stock
                                   </div>
@@ -529,7 +533,7 @@ export default function BundleBuilderPage() {
                             
                             {/* Hover Actions */}
                             <div className="absolute top-full left-0 right-0 mt-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex justify-end">
-                              <button onClick={() => handleMoveToWishlist(item)} className="bg-[#2B2D31] border border-white/5 shadow-md rounded-full px-3 py-1.5 text-[9px] uppercase tracking-widest flex items-center gap-1.5 hover:border-white/30 hover:text-white text-zinc-400 font-medium transition-colors">
+                              <button onClick={() => handleMoveToWishlist(item)} className="bg-[#2B2D31] border border-white/5 shadow-md rounded-full px-3 py-1.5 text-[10px] uppercase tracking-widest flex items-center gap-1.5 hover:border-white/30 hover:text-white text-zinc-400 font-medium transition-colors">
                                 <Heart className="h-3 w-3" /> Move to Wishlist
                               </button>
                             </div>
@@ -562,7 +566,7 @@ export default function BundleBuilderPage() {
                     <span className="font-medium text-white">Subtotal</span>
                     <span className="text-xl font-serif font-bold text-white">{formatPrice(subtotal)}</span>
                   </div>
-                  <div className="text-[10px] text-zinc-500 text-right mt-1">{deliveryEstimate}</div>
+                  <div className="text-xs text-zinc-400 text-right mt-1">{deliveryEstimate}</div>
                 </div>
 
                 <button
@@ -613,3 +617,6 @@ export default function BundleBuilderPage() {
     </div>
   );
 }
+
+
+

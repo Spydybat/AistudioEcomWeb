@@ -37,7 +37,7 @@ export default function AdminSidebar() {
         <h1 className="text-lg font-serif font-bold text-white tracking-widest uppercase">
           Aura Admin
         </h1>
-        <p className="text-[10px] text-neutral-500 font-mono uppercase tracking-widest mt-1">
+        <p className="text-[10px] text-zinc-400 font-mono uppercase tracking-widest mt-1">
           Management Panel
         </p>
       </div>
@@ -53,7 +53,7 @@ export default function AdminSidebar() {
               `flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors ${
                 isActive
                   ? "bg-[#2B2D31] text-white font-medium"
-                  : "text-neutral-400 hover:text-white hover:bg-[#2B2D31]"
+                  : "text-zinc-400 hover:text-white hover:bg-[#2B2D31]"
               }`
             }
           >
@@ -66,7 +66,7 @@ export default function AdminSidebar() {
       <div className="p-4 border-t border-white/5 space-y-2">
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm text-neutral-400 hover:text-white hover:bg-[#2B2D31] transition-colors cursor-pointer"
+          className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-sm text-zinc-400 hover:text-white hover:bg-[#2B2D31] transition-colors cursor-pointer"
         >
           <ChevronLeft className="h-4 w-4" />
           <span>Back to Store</span>
@@ -109,7 +109,7 @@ export default function AdminSidebar() {
       >
         <button
           onClick={() => setIsMobileOpen(false)}
-          className="absolute top-4 right-4 p-1 text-neutral-400 hover:text-white cursor-pointer"
+          className="absolute top-4 right-4 p-1 text-zinc-400 hover:text-white cursor-pointer"
         >
           <X className="h-5 w-5" />
         </button>

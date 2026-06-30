@@ -50,12 +50,12 @@ export default function ProductCard({
       {/* Visual Badge overlay */}
       {(product.badge || product.isFlashDeal) && (
         <div className="absolute top-4 left-4 z-10 flex flex-col gap-1.5">
-          <span className="px-2.5 py-1 bg-indigo-500/90 text-white text-[9px] font-mono tracking-widest uppercase rounded inline-flex items-center gap-1">
+          <span className="px-2.5 py-1 bg-indigo-500/90 text-white text-[10px] font-mono tracking-widest uppercase rounded inline-flex items-center gap-1">
             {product.isFlashDeal && <Zap className="h-3 w-3 fill-current" />}
             {product.badge || "Limited Deal"}
           </span>
           {discountPercent > 0 && (
-            <span className="w-max px-2.5 py-1 bg-rose-500 text-white text-[9px] font-mono tracking-widest uppercase rounded">
+            <span className="w-max px-2.5 py-1 bg-rose-500 text-white text-[10px] font-mono tracking-widest uppercase rounded">
               Save {discountPercent}%
             </span>
           )}
@@ -109,7 +109,7 @@ export default function ProductCard({
               e.stopPropagation();
               onOpenQuickView(product);
             }}
-            className="px-6 py-2.5 glass-dark text-white hover:bg-indigo-500 font-medium tracking-widest text-[10px] uppercase transition-all duration-300 flex items-center gap-2 rounded-full shadow-[0_4px_12px_rgba(88,101,242,0.4)] hover:scale-105 cursor-pointer border-white/10"
+            className="px-6 py-2.5 glass-dark text-white hover:bg-indigo-500 font-medium tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-2 rounded-full shadow-[0_4px_12px_rgba(88,101,242,0.4)] hover:scale-105 cursor-pointer border-white/10"
             id={`quick-view-${product.id}`}
           >
             <Eye className="h-4 w-4" />
@@ -122,7 +122,7 @@ export default function ProductCard({
       <div className="flex-1 flex flex-col px-1">
         
         {/* Rating detail & Category */}
-        <div className="flex items-center justify-between mb-1.5 text-[10px] uppercase font-mono tracking-widest text-zinc-500">
+        <div className="flex items-center justify-between mb-1.5 text-xs uppercase font-mono tracking-widest text-zinc-400">
           <span>{categoryLabel}</span>
           <div className="flex items-center text-yellow-500/90 font-medium">
             <Star className="h-2.5 w-2.5 fill-current mr-0.5" />
@@ -130,7 +130,7 @@ export default function ProductCard({
           </div>
         </div>
         {product.brand && (
-          <p className="text-[10px] uppercase tracking-widest text-zinc-400 mb-1">
+          <p className="text-xs uppercase tracking-widest text-zinc-300 mb-1">
             {product.brand}
           </p>
         )}
@@ -154,7 +154,7 @@ export default function ProductCard({
             </span>
           )}
         </div>
-        <div className="mb-3 flex flex-wrap items-center gap-2 text-[10px] text-zinc-400">
+        <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-zinc-300">
           {product.shipping && <span className="rounded-full bg-white/5 px-2 py-1">{product.shipping}</span>}
           {typeof product.stock === "number" && product.stock <= 20 && (
             <span className="rounded-full bg-amber-500/10 px-2 py-1 text-amber-500">Only {product.stock} left</span>
@@ -163,8 +163,8 @@ export default function ProductCard({
 
         {/* Swatch Color selection dots */}
         <div className="mb-3.5">
-          <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest block mb-1.5">
-            Color: <span className="text-zinc-300 font-sans font-medium">{selectedColor.name}</span>
+          <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block mb-1.5">
+            Color: <span className="text-zinc-200 font-sans font-medium">{selectedColor.name}</span>
           </span>
           <div className="flex items-center gap-2">
             {product.colors.map((color) => {
@@ -192,8 +192,8 @@ export default function ProductCard({
 
         {/* Size Selection Grid */}
         <div className="mb-4">
-          <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest block mb-1.5">
-            {variantLabel}: <span className="text-zinc-300 font-sans font-medium">{selectedSize}</span>
+          <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block mb-1.5">
+            {variantLabel}: <span className="text-zinc-200 font-sans font-medium">{selectedSize}</span>
           </span>
           <div className="flex flex-wrap gap-1">
             {product.sizes.map((size) => {
@@ -202,10 +202,10 @@ export default function ProductCard({
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}
-                  className={`text-[9.5px]/none font-sans font-medium border px-2.5 py-1.5 transition-all rounded-md select-none cursor-pointer ${
+                  className={`text-[10px]/none font-sans font-medium border px-2.5 py-1.5 transition-all rounded-md select-none cursor-pointer ${
                     isSelected
                       ? "bg-indigo-500 text-white border-indigo-500 shadow-sm"
-                      : "bg-transparent text-zinc-400 border-white/10 hover:border-white/30 hover:text-white"
+                      : "bg-transparent text-zinc-300 border-white/10 hover:border-white/30 hover:text-white"
                   }`}
                 >
                   {size}
@@ -220,9 +220,9 @@ export default function ProductCard({
           <button
             onClick={handleQuickAdd}
             disabled={isAdding}
-            className={`w-full py-3 text-[10px] font-semibold tracking-widest uppercase flex items-center justify-center gap-2 transition-all duration-300 rounded-xl cursor-pointer ${
+            className={`w-full py-3 text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-2 transition-all duration-300 rounded-xl cursor-pointer ${
               isAdding
-                ? "bg-[#1E1F22] text-zinc-500 cursor-not-allowed"
+                ? "bg-[#1E1F22] text-zinc-400 cursor-not-allowed"
                 : "bg-indigo-500 text-white hover:bg-indigo-600 hover:shadow-[0_4px_12px_rgba(88,101,242,0.4)] hover:-translate-y-0.5"
             }`}
             id={`add-to-bag-${product.id}`}
@@ -232,7 +232,7 @@ export default function ProductCard({
           </button>
           <button
             onClick={() => navigate(`/product/${product.id}`)}
-            className="mt-2 w-full py-2.5 text-[10px] font-semibold tracking-widest uppercase flex items-center justify-center gap-2 rounded-xl border border-white/10 text-zinc-400 hover:border-white/30 hover:text-white transition-all cursor-pointer"
+            className="mt-2 w-full py-2.5 text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-2 rounded-xl border border-white/10 text-zinc-300 hover:border-white/30 hover:text-white transition-all cursor-pointer"
           >
             <GitCompare className="h-3.5 w-3.5" />
             Compare Details

@@ -43,7 +43,7 @@ export default function AnimatedStatistics() {
             <h4 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold mb-3 text-gradient-dark">
               <Counter from={0} to={10} suffix="K+" />
             </h4>
-            <p className="text-[10px] sm:text-xs tracking-[0.2em] text-neutral-400 uppercase font-medium">Customers Worldwide</p>
+            <p className="text-[10px] sm:text-xs tracking-[0.2em] text-zinc-400 uppercase font-medium">Customers Worldwide</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -55,7 +55,7 @@ export default function AnimatedStatistics() {
             <h4 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold mb-3 text-gradient-dark">
               <Counter from={0} to={98} suffix="%" />
             </h4>
-            <p className="text-[10px] sm:text-xs tracking-[0.2em] text-neutral-400 uppercase font-medium">Satisfaction Rate</p>
+            <p className="text-[10px] sm:text-xs tracking-[0.2em] text-zinc-400 uppercase font-medium">Satisfaction Rate</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -67,7 +67,7 @@ export default function AnimatedStatistics() {
             <h4 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold mb-3 text-gradient-dark">
               <Counter from={0} to={24} suffix="/7" />
             </h4>
-            <p className="text-[10px] sm:text-xs tracking-[0.2em] text-neutral-400 uppercase font-medium">Concierge Support</p>
+            <p className="text-[10px] sm:text-xs tracking-[0.2em] text-zinc-400 uppercase font-medium">Concierge Support</p>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -79,7 +79,7 @@ export default function AnimatedStatistics() {
             <h4 className="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold mb-3 text-gradient-dark">
               <Counter from={0} to={100} suffix="%" />
             </h4>
-            <p className="text-[10px] sm:text-xs tracking-[0.2em] text-neutral-400 uppercase font-medium">Carbon Neutral</p>
+            <p className="text-[10px] sm:text-xs tracking-[0.2em] text-zinc-400 uppercase font-medium">Carbon Neutral</p>
           </motion.div>
         </div>
       </div>

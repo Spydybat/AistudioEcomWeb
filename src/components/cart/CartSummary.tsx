@@ -22,28 +22,28 @@ export default function CartSummary({
   const total = subtotal + shippingCost;
 
   return (
-    <div className="bg-neutral-50 border border-neutral-100 p-6 rounded-xl space-y-4">
-      <h2 className="text-sm font-mono uppercase tracking-widest text-neutral-900 font-semibold">
+    <div className="bg-[#111214] border border-white/5 p-6 rounded-xl space-y-4">
+      <h2 className="text-sm font-mono uppercase tracking-widest text-white font-semibold">
         Order Summary
       </h2>
 
       <div className="space-y-3 text-sm">
-        <div className="flex justify-between text-neutral-600">
+        <div className="flex justify-between text-zinc-400">
           <span>Subtotal ({cartItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
           <span>{formatPrice(subtotal)}</span>
         </div>
-        <div className="flex justify-between text-neutral-600">
+        <div className="flex justify-between text-zinc-400">
           <span>Shipping</span>
           <span>{shippingCost === 0 ? "Complimentary" : formatPrice(shippingCost)}</span>
         </div>
         {subtotal < FREE_SHIPPING_THRESHOLD && subtotal > 0 && (
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-zinc-500">
             Add {formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} more for free shipping
           </p>
         )}
-        <div className="border-t border-neutral-200 pt-3 flex justify-between items-baseline">
-          <span className="font-semibold uppercase tracking-wider text-neutral-900">Total</span>
-          <span className="text-2xl font-serif font-bold text-neutral-900">{formatPrice(total)}</span>
+        <div className="border-t border-white/10 pt-3 flex justify-between items-baseline">
+          <span className="font-semibold uppercase tracking-wider text-white">Total</span>
+          <span className="text-2xl font-serif font-bold text-white">{formatPrice(total)}</span>
         </div>
       </div>
 
@@ -51,14 +51,14 @@ export default function CartSummary({
         onCheckout ? (
           <button
             onClick={onCheckout}
-            className="w-full block text-center bg-black text-white px-8 py-4 rounded-full text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors cursor-pointer"
+            className="w-full block text-center bg-indigo-500 text-white px-8 py-4 rounded-full text-xs uppercase tracking-widest hover:bg-indigo-600 transition-colors cursor-pointer"
           >
             {checkoutLabel}
           </button>
         ) : (
           <Link
             to="/checkout"
-            className="w-full block text-center bg-black text-white px-8 py-4 rounded-full text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors"
+            className="w-full block text-center bg-indigo-500 text-white px-8 py-4 rounded-full text-xs uppercase tracking-widest hover:bg-indigo-600 transition-colors"
           >
             {checkoutLabel}
           </Link>

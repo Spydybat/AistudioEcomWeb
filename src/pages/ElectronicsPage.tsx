@@ -34,7 +34,6 @@ export default function ElectronicsPage() {
   const [brandFilter, setBrandFilter] = useState("all");
   const [priceBand, setPriceBand] = useState("all");
   const [minRating, setMinRating] = useState(0);
-  const [dealsOnly, setDealsOnly] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);
 
   // Focus only on electronics
@@ -44,25 +43,22 @@ export default function ElectronicsPage() {
   const brands = useMemo(() => Array.from(new Set(allElectronics.map(p => p.brand).filter(Boolean))) as string[], [allElectronics]);
   const activePriceBand = priceBands.find((band) => band.id === priceBand) || priceBands[0];
 
-  // Specific sections for Electronics
-  const bestSellers = useMemo(() => allElectronics.filter(p => p.isBestSeller).slice(0, 8), [allElectronics]);
-  const flashDeals = useMemo(() => allElectronics.filter(p => p.isFlashDeal || p.originalPrice).slice(0, 8), [allElectronics]);
-  const featured = useMemo(() => allElectronics.filter(p => p.rating >= 4.7 && !p.isBestSeller).slice(0, 8), [allElectronics]);
+  const featured = useMemo(() => allElectronics.filter(p => p.rating >= 4.7).slice(0, 8), [allElectronics]);
 
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => setIsLoading(false), 450);
     return () => clearTimeout(timer);
-  }, [sortOption, searchQuery, brandFilter, priceBand, minRating, dealsOnly, inStockOnly, currentPage]);
+  }, [sortOption, searchQuery, brandFilter, priceBand, minRating, inStockOnly, currentPage]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, brandFilter, priceBand, minRating, dealsOnly, inStockOnly, sortOption]);
+  }, [searchQuery, brandFilter, priceBand, minRating, inStockOnly, sortOption]);
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...allElectronics];
 
-    if (brandFilter !== "all") {
+        if (brandFilter !== "all") {
       result = result.filter((product) => product.brand === brandFilter);
     }
 
@@ -70,10 +66,6 @@ export default function ElectronicsPage() {
 
     if (minRating > 0) {
       result = result.filter((product) => product.rating >= minRating);
-    }
-
-    if (dealsOnly) {
-      result = result.filter((product) => product.isFlashDeal || product.originalPrice);
     }
 
     if (inStockOnly) {
@@ -102,7 +94,7 @@ export default function ElectronicsPage() {
     if (sortOption === "newest") result.sort((a, b) => Number(Boolean(b.badge === "New Arrival")) - Number(Boolean(a.badge === "New Arrival")));
 
     return result;
-  }, [allElectronics, activePriceBand.max, activePriceBand.min, brandFilter, dealsOnly, inStockOnly, minRating, priceBand, searchQuery, sortOption]);
+  }, [allElectronics, brandFilter, inStockOnly, minRating, priceBand, searchQuery, sortOption]);
 
   const totalPages = Math.max(1, Math.ceil(filteredAndSortedProducts.length / ITEMS_PER_PAGE));
   const currentProducts = filteredAndSortedProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
@@ -112,7 +104,6 @@ export default function ElectronicsPage() {
     setBrandFilter("all");
     setPriceBand("all");
     setMinRating(0);
-    setDealsOnly(false);
     setInStockOnly(false);
     setSortOption("default");
   };
@@ -145,37 +136,6 @@ export default function ElectronicsPage() {
           </div>
         </div>
       </div>
-
-      {/* Featured Sections */}
-      {flashDeals.length > 0 && (
-        <div className="py-8 bg-[#1E1F22] border-b border-white/5">
-          <ProductSlider 
-            title="Flash Deals" 
-            subtitle="Limited Time Offers"
-            products={flashDeals}
-            onAddToCart={handleAddToCart}
-            onOpenQuickView={setActiveQuickView}
-            wishlist={wishlist}
-            onToggleWishlist={handleToggleWishlist}
-            bgWhite={false}
-          />
-        </div>
-      )}
-
-      {bestSellers.length > 0 && (
-        <div className="py-8 bg-[#111214] border-b border-white/5">
-          <ProductSlider 
-            title="Best Sellers" 
-            subtitle="Top Rated Electronics"
-            products={bestSellers}
-            onAddToCart={handleAddToCart}
-            onOpenQuickView={setActiveQuickView}
-            wishlist={wishlist}
-            onToggleWishlist={handleToggleWishlist}
-            bgWhite={false}
-          />
-        </div>
-      )}
 
       {/* Full Catalog with Filters */}
       <div className="pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex-1 w-full" id="electronics-catalog">
@@ -352,3 +312,4 @@ export default function ElectronicsPage() {
     </div>
   );
 }
+

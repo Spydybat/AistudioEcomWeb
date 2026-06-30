@@ -58,7 +58,7 @@ export default function ProductDetailsPage() {
     return (
       <div className="flex flex-col items-center justify-center py-32 text-center flex-1">
         <h1 className="text-4xl font-serif mb-4">Product Not Found</h1>
-        <Link to="/products" className="text-neutral-500 underline">Return to Shop</Link>
+        <Link to="/products" className="text-zinc-400 underline">Return to Shop</Link>
       </div>
     );
   }
@@ -101,7 +101,7 @@ export default function ProductDetailsPage() {
   return (
     <div className="flex-1 w-full relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        <nav className="flex flex-wrap text-[10px] uppercase tracking-widest text-zinc-500 mb-8 font-mono">
+        <nav className="flex flex-wrap text-xs uppercase tracking-widest text-zinc-400 mb-8 font-mono">
           <Link to="/" className="hover:text-white transition-colors">Home</Link>
           <span className="mx-2">/</span>
           <Link to="/products" className="hover:text-white transition-colors">Departments</Link>
@@ -119,11 +119,11 @@ export default function ProductDetailsPage() {
           <div className="flex flex-col pt-2 lg:pt-0">
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-[10px] tracking-widest text-zinc-400 uppercase font-mono">
+                <span className="text-xs tracking-widest text-zinc-300 uppercase font-mono">
                   {product.brand ? `${product.brand} / ` : ""}{product.department || getCategoryName(product.category)}
                 </span>
                 {product.badge && (
-                  <span className="px-2 py-1 bg-indigo-500 text-white text-[9px] font-mono tracking-widest uppercase rounded">
+                  <span className="px-2 py-1 bg-indigo-500 text-white text-[10px] font-mono tracking-widest uppercase rounded">
                     {product.badge}
                   </span>
                 )}
@@ -138,11 +138,11 @@ export default function ProductDetailsPage() {
                   <Star className="h-4 w-4 fill-current" />
                   <span className="text-sm font-medium text-white ml-1">{product.rating}</span>
                 </div>
-                <span className="text-xs text-zinc-500 uppercase tracking-widest">
+                <span className="text-xs text-zinc-400 uppercase tracking-widest">
                   Read {product.reviews} Reviews
                 </span>
                 {product.sku && (
-                  <span className="text-xs text-zinc-600 uppercase tracking-widest">SKU {product.sku}</span>
+                  <span className="text-xs text-zinc-200 uppercase tracking-widest">SKU {product.sku}</span>
                 )}
               </div>
             </div>
@@ -156,7 +156,7 @@ export default function ProductDetailsPage() {
 
             <div className="mb-8">
               <div className="flex justify-between items-center mb-3">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest">
                   Color / Finish: <span className="text-white font-sans font-medium text-sm ml-1">{selectedColor?.name}</span>
                 </span>
               </div>
@@ -175,10 +175,10 @@ export default function ProductDetailsPage() {
 
             <div className="mb-10">
               <div className="flex justify-between items-center mb-3">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest">
                   {variantLabel}: <span className="text-white font-sans font-medium text-sm ml-1">{selectedSize}</span>
                 </span>
-                <button className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest underline hover:text-white transition-colors">
+                <button className="text-xs font-mono text-zinc-300 uppercase tracking-widest underline hover:text-white transition-colors">
                   Compare Options
                 </button>
               </div>
@@ -215,7 +215,7 @@ export default function ProductDetailsPage() {
                   disabled={isAdding || isOutOfStock}
                   className={`flex-1 h-full flex items-center justify-center text-xs tracking-widest uppercase font-bold transition-all rounded-xl cursor-pointer ${
                     isOutOfStock || isAdding
-                      ? "bg-[#1E1F22] text-zinc-600"
+                      ? "bg-[#1E1F22] text-zinc-300"
                       : "bg-[#2B2D31] text-white border-2 border-white/10 hover:border-white/30 hover:bg-[#313338]"
                   }`}
                 >
@@ -228,7 +228,7 @@ export default function ProductDetailsPage() {
                   onClick={handleBuyNow}
                   disabled={isOutOfStock}
                   className={`flex-[3] h-full rounded-xl text-xs tracking-widest uppercase font-bold transition-all cursor-pointer ${
-                    isOutOfStock ? "bg-[#1E1F22] text-zinc-600" : "bg-indigo-500 text-white hover:bg-indigo-600 hover:shadow-[0_4px_14px_rgba(88,101,242,0.4)] hover:-translate-y-0.5"
+                    isOutOfStock ? "bg-[#1E1F22] text-zinc-300" : "bg-indigo-500 text-white hover:bg-indigo-600 hover:shadow-[0_4px_14px_rgba(88,101,242,0.4)] hover:-translate-y-0.5"
                   }`}
                 >
                   Buy Now
@@ -264,7 +264,7 @@ export default function ProductDetailsPage() {
             </div>
 
             <div className="mt-4">
-              <h3 className="text-xs font-mono tracking-widest text-zinc-500 uppercase mb-4">Marketplace Desk</h3>
+              <h3 className="text-sm font-mono tracking-widest text-zinc-400 uppercase mb-4">Marketplace Desk</h3>
               <FAQAccordion faqs={MARKETPLACE_FAQS} />
             </div>
           </div>
@@ -274,7 +274,7 @@ export default function ProductDetailsPage() {
           <section className="mt-16 rounded-2xl border border-white/5 bg-[#1E1F22] p-5 sm:p-6">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div>
-                <p className="text-[10px] font-mono tracking-[0.35em] uppercase text-zinc-500 mb-2">Smart Bundle</p>
+                <p className="text-xs font-mono tracking-[0.35em] uppercase text-zinc-400 mb-2">Smart Bundle</p>
                 <h2 className="text-2xl font-serif font-bold uppercase text-white">Frequently Bought Together</h2>
               </div>
               <div className="flex flex-wrap items-center gap-3">
@@ -290,7 +290,7 @@ export default function ProductDetailsPage() {
               </div>
               <button
                 onClick={() => [product, ...frequentlyBoughtTogether].forEach((item) => handleAddToCart(item, item.sizes[0], item.colors[0]))}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-indigo-500 px-5 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-indigo-600 transition-colors"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-indigo-500 px-5 text-xs font-bold uppercase tracking-widest text-white hover:bg-indigo-600 transition-colors"
               >
                 <ShoppingBag className="h-4 w-4" />
                 Add Bundle
@@ -314,7 +314,7 @@ export default function ProductDetailsPage() {
           </div>
           <div className="overflow-x-auto rounded-2xl border border-white/5">
             <table className="min-w-full bg-[#1E1F22] text-sm">
-              <thead className="bg-[#2B2D31] text-left text-[10px] uppercase tracking-widest text-zinc-400">
+              <thead className="bg-[#2B2D31] text-left text-xs uppercase tracking-widest text-zinc-300">
                 <tr>
                   <th className="px-5 py-4">Product</th>
                   <th className="px-5 py-4">Price</th>
@@ -356,8 +356,8 @@ export default function ProductDetailsPage() {
                   {[...Array(review.rating)].map((_, j) => <Star key={j} className="h-4 w-4 fill-current" />)}
                 </div>
                 <h4 className="font-serif font-semibold text-lg mb-2 text-white">{review.title}</h4>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6">&quot;{review.comment}&quot;</p>
-                <div className="text-xs tracking-widest font-mono text-zinc-500 uppercase">
+                <p className="text-zinc-300 text-sm leading-relaxed mb-6">&quot;{review.comment}&quot;</p>
+                <div className="text-xs tracking-widest font-mono text-zinc-400 uppercase">
                   {review.verified ? "Verified Buyer" : "Customer"} / {review.author}
                 </div>
               </div>

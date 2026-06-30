@@ -111,7 +111,7 @@ export default function ProductQuickView({
           <div className="w-full md:w-1/2 p-6 sm:p-8 overflow-y-auto flex flex-col justify-between">
             <div>
               {/* Product category & social trust alignment */}
-              <div className="flex items-center justify-between mb-3 text-[10px] uppercase font-mono tracking-[0.2em] text-zinc-500">
+              <div className="flex items-center justify-between mb-3 text-xs uppercase font-mono tracking-[0.2em] text-zinc-400">
                 <span>{product.category} COLLECTION</span>
                 <div className="flex items-center text-yellow-500 font-medium">
                   <Star className="h-3 w-3 fill-current mr-1" />
@@ -140,8 +140,8 @@ export default function ProductQuickView({
 
               {/* Colors selection list */}
               <div className="mb-5">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-2">
-                  Color Spec: <span className="text-zinc-300 font-sans font-medium">{selectedColor.name}</span>
+                <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest block mb-2">
+                  Color Spec: <span className="text-zinc-200 font-sans font-medium">{selectedColor.name}</span>
                 </span>
                 <div className="flex items-center gap-2">
                   {product.colors.map((color) => {
@@ -170,10 +170,10 @@ export default function ProductQuickView({
               {/* Sizes selection list */}
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
-                    Select Size: <span className="text-zinc-300 font-sans font-medium">{selectedSize}</span>
+                  <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest">
+                    Select Size: <span className="text-zinc-200 font-sans font-medium">{selectedSize}</span>
                   </span>
-                  <button className="text-[10px] text-zinc-500 uppercase font-mono tracking-widest border-b border-transparent hover:border-zinc-500">
+                  <button className="text-xs text-zinc-400 uppercase font-mono tracking-widest border-b border-transparent hover:border-zinc-400">
                     Sizing Ledger
                   </button>
                 </div>
@@ -199,13 +199,13 @@ export default function ProductQuickView({
 
               {/* Technical features / bullet logs */}
               <div className="border-t border-white/5 py-5 space-y-3 bg-[#111214] px-4 mb-6 rounded-xl">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block">
+                <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest block">
                   Garment Blueprint & Sourcing
                 </span>
                 <ul className="space-y-2">
                   {product.details.map((detail, idx) => (
-                    <li key={idx} className="flex items-start text-[11px] text-zinc-400 font-light leading-normal">
-                      <BadgeCheck className="h-3.5 w-3.5 text-zinc-500 mr-2 shrink-0 mt-0.5" />
+                    <li key={idx} className="flex items-start text-xs text-zinc-300 font-light leading-normal">
+                      <BadgeCheck className="h-3.5 w-3.5 text-zinc-400 mr-2 shrink-0 mt-0.5" />
                       <span>{detail}</span>
                     </li>
                   ))}
@@ -221,7 +221,7 @@ export default function ProductQuickView({
                   disabled={isAdding}
                   className={`flex-1 py-4 text-xs font-mono tracking-widest uppercase flex items-center justify-center gap-2.5 transition-all duration-300 border cursor-pointer rounded-xl ${
                     isAdding
-                      ? "bg-[#2B2D31] text-zinc-600 border-white/5 cursor-not-allowed"
+                      ? "bg-[#2B2D31] text-zinc-300 border-white/5 cursor-not-allowed"
                       : "bg-indigo-500 text-white border-indigo-500 hover:bg-indigo-600 hover:shadow-[0_4px_14px_rgba(88,101,242,0.4)]"
                   }`}
                   id="modal-add-to-cart"
@@ -232,13 +232,13 @@ export default function ProductQuickView({
               </div>
 
               {/* Reassurances footnotes */}
-              <div className="flex justify-around items-center mt-4 text-[10px] text-zinc-500 uppercase tracking-wider font-mono">
+              <div className="flex justify-around items-center mt-4 text-xs text-zinc-400 uppercase tracking-wider font-mono">
                 <div className="flex items-center gap-1.5">
-                  <RotateCcw className="h-3.5 w-3.5 text-zinc-500" />
+                  <RotateCcw className="h-3.5 w-3.5 text-zinc-400" />
                   <span>30-Day Returns</span>
                 </div>
-                <span className="text-zinc-700">|</span>
-                <span className="text-zinc-500">GOTS Ethical Cotton</span>
+                <span className="text-zinc-300">|</span>
+                <span className="text-zinc-400">GOTS Ethical Cotton</span>
               </div>
             </div>
 

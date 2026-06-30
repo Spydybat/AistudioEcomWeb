@@ -5,8 +5,8 @@
   "homepage": "https://spydybat.github.io/AistudioEcomWeb",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "vite build",
+    "dev": "vite --port 3000 --host 0.0.0.0",
+    "build": "tsc -b && vite build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "preview": "vite preview",

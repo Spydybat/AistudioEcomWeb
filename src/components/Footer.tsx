@@ -107,7 +107,7 @@ export default function Footer() {
         >
           <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <span>© {currentYear} AURA STUDIO APPAREL INC.</span>
-            <span className="hidden sm:inline text-zinc-700">•</span>
+            <span className="hidden sm:inline text-zinc-300">•</span>
             <span>ALL RIGHTS PRIVILEGED</span>
           </div>
 

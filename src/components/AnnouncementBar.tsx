@@ -41,7 +41,7 @@ export default function AnnouncementBar() {
       </AnimatePresence>
       <button 
         onClick={() => setIsVisible(false)}
-        className="absolute right-4 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+        className="absolute right-4 text-zinc-400 hover:text-white transition-colors cursor-pointer"
         aria-label="Close announcement"
       >
         <X className="h-4 w-4" />
