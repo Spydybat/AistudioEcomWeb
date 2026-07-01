@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Mail, Lock, Loader2, LogIn, UserPlus } from "lucide-react";
+import { X, Mail, Lock, Loader2, LogIn, UserPlus, User, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { supabase } from "../supabaseClient";
 import { useShop } from "../context/ShopContext";
@@ -9,6 +9,8 @@ export default function AuthModal() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,7 +30,12 @@ export default function AuthModal() {
           const { data: profile, error: profileErr } = await supabase.from('profiles').select('id').eq('id', data.user.id).maybeSingle();
           if (profileErr) throw profileErr;
           if (!profile) {
-            const { error: insertErr } = await supabase.from('profiles').insert([{ id: data.user.id }]);
+            const { error: insertErr } = await supabase.from('profiles').insert([{ 
+              id: data.user.id,
+              email: email,
+              role: 'customer',
+              status: 'active'
+            }]);
             if (insertErr) throw insertErr;
           }
         }
@@ -43,7 +50,14 @@ export default function AuthModal() {
           const { data: profile, error: profileErr } = await supabase.from('profiles').select('id').eq('id', data.user.id).maybeSingle();
           if (profileErr) throw profileErr;
           if (!profile) {
-            const { error: insertErr } = await supabase.from('profiles').insert([{ id: data.user.id }]);
+            const { error: insertErr } = await supabase.from('profiles').insert([{ 
+              id: data.user.id,
+              full_name: fullName || email.split('@')[0],
+              email: email,
+              phone: phone || null,
+              role: 'customer',
+              status: 'active'
+            }]);
             if (insertErr) throw insertErr;
           }
         }
@@ -97,6 +111,41 @@ export default function AuthModal() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
+                {!isLogin && (
+                  <>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium text-zinc-300 uppercase tracking-wider pl-1">
+                        Full Name
+                      </label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+                        <input
+                          type="text"
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          className="w-full bg-[#1E1F22]/80 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all"
+                          placeholder="John Doe"
+                          required={!isLogin}
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-medium text-zinc-300 uppercase tracking-wider pl-1">
+                        Phone (Optional)
+                      </label>
+                      <div className="relative">
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+                        <input
+                          type="tel"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          className="w-full bg-[#1E1F22]/80 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all"
+                          placeholder="+1 (555) 000-0000"
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-zinc-300 uppercase tracking-wider pl-1">
                     Email Address
