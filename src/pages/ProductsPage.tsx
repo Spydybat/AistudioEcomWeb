@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowUpDown, Grid3X3, RefreshCw, SlidersHorizontal, X, Zap } from "lucide-react";
-import { CATEGORIES, PRODUCTS, getCategoryName } from "../data/products";
+import { fetchCategories, fetchProducts, getCategoryName } from "../data/products";
 import ProductCard from "../components/ProductCard";
 import { useShop } from "../context/ShopContext";
 
@@ -26,6 +26,14 @@ export default function ProductsPage() {
     setSelectedCategory,
   } = useShop();
 
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  const [CATEGORIES, setCATEGORIES] = useState<any[]>([]);
+  
+  useEffect(() => {
+    fetchProducts().then(setPRODUCTS);
+    fetchCategories().then(setCATEGORIES);
+  }, []);
+
   const [sortOption, setSortOption] = useState<SortOption>("default");
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +43,7 @@ export default function ProductsPage() {
   const [dealsOnly, setDealsOnly] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);
 
-  const brands = useMemo(() => Array.from(new Set(PRODUCTS.map((product) => product.brand).filter(Boolean))) as string[], []);
+  const brands = useMemo(() => Array.from(new Set(PRODUCTS.map((product) => product.brand).filter(Boolean))) as string[], [PRODUCTS]);
   const activeCategory = CATEGORIES.find((category) => category.id === selectedCategory);
   const activePriceBand = priceBands.find((band) => band.id === priceBand) || priceBands[0];
 
@@ -97,7 +105,7 @@ export default function ProductsPage() {
     if (sortOption === "newest") result.sort((a, b) => Number(Boolean(b.badge === "New Arrival")) - Number(Boolean(a.badge === "New Arrival")));
 
     return result;
-  }, [activePriceBand.max, activePriceBand.min, brandFilter, dealsOnly, inStockOnly, minRating, priceBand, searchQuery, selectedCategory, sortOption]);
+  }, [PRODUCTS, activePriceBand.max, activePriceBand.min, brandFilter, dealsOnly, inStockOnly, minRating, priceBand, searchQuery, selectedCategory, sortOption]);
 
   const totalPages = Math.max(1, Math.ceil(filteredAndSortedProducts.length / ITEMS_PER_PAGE));
   const currentProducts = filteredAndSortedProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
@@ -128,7 +136,7 @@ export default function ProductsPage() {
           </div>
           <div className="relative min-h-56 hidden lg:block">
             <img
-              src={activeCategory?.image || CATEGORIES[0].image}
+              src={activeCategory?.image || CATEGORIES[0]?.image || 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=2000'}
               alt={activeCategory?.name || "All departments"}
               className="absolute inset-0 h-full w-full object-cover opacity-80"
               referrerPolicy="no-referrer"
@@ -451,4 +459,6 @@ export default function ProductsPage() {
     </div>
   );
 }
+
+
 

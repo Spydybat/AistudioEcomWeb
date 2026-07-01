@@ -1,12 +1,17 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, BadgePercent, Building2, Sparkles } from "lucide-react";
-import { BRANDS, CATEGORIES, PRODUCTS } from "../data/products";
+import { fetchBrands, fetchCategories, fetchProducts } from "../data/products";
 
 interface MarketplaceShowcaseProps {
   onFilterCategory: (catId: string) => void;
 }
 
 export default function MarketplaceShowcase({ onFilterCategory }: MarketplaceShowcaseProps) {
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  const [CATEGORIES, setCATEGORIES] = useState<any[]>([]);
+  const [BRANDS, setBRANDS] = useState<any[]>([]);
+  useEffect(() => { fetchProducts().then(setPRODUCTS); fetchCategories().then(setCATEGORIES); fetchBrands().then(setBRANDS); }, []);
   const featuredBrands = BRANDS.slice(0, 6);
   const flashDeals = PRODUCTS.filter((product) => product.isFlashDeal).slice(0, 4);
   const featuredDepartments = CATEGORIES.filter((category) => category.id !== "all" && category.featured).slice(0, 8);
@@ -54,7 +59,7 @@ export default function MarketplaceShowcase({ onFilterCategory }: MarketplaceSho
             {flashDeals.map((product) => (
               <Link key={product.id} to={`/product/${product.id}`} className="rounded-2xl border border-white/5 bg-[#1E1F22] p-4 hover:border-indigo-500 hover:bg-[#2B2D31] transition-all">
                 <div className="flex gap-4">
-                  <img src={product.images[0]} alt={product.name} className="h-24 w-24 rounded-xl object-cover" referrerPolicy="no-referrer" />
+                  <img src={product?.images?.[0] ?? ""} alt={product.name} className="h-24 w-24 rounded-xl object-cover" referrerPolicy="no-referrer" />
                   <div>
                     <p className="text-[10px] uppercase tracking-widest text-red-500">Deal ends {product.dealEndsAt || "soon"}</p>
                     <h3 className="mt-1 line-clamp-2 text-sm font-medium text-zinc-100">{product.name}</h3>

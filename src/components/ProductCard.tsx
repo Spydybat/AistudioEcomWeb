@@ -20,8 +20,8 @@ export default function ProductCard({
   isWishlisted,
   onToggleWishlist,
 }: ProductCardProps) {
-  const [selectedColor, setSelectedColor] = useState<ProductColor>(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState<string>(product.sizes[1] || product.sizes[0]);
+  const [selectedColor, setSelectedColor] = useState<ProductColor>(product?.colors?.[0] ?? { name: "Default", hex: "#000" });
+  const [selectedSize, setSelectedSize] = useState<string>(product?.sizes?.[1] ?? product?.sizes?.[0] ?? "Default");
   const [isHovered, setIsHovered] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const { formatPrice } = useCurrency();
@@ -81,19 +81,28 @@ export default function ProductCard({
         className="relative aspect-[3/4] overflow-hidden bg-[#1E1F22] rounded-xl mb-5 cursor-pointer border border-white/5"
       >
         {/* Primary Image */}
-        <img
-          src={product.images[0]}
-          alt={product.name}
-          className={`w-full h-full object-cover object-center transition-all duration-700 ${
-            isHovered && product.images[1] ? "opacity-0 scale-102" : "opacity-100 scale-100"
-          }`}
-          referrerPolicy="no-referrer"
-        />
+        {(() => {
+          const imageUrl = product?.images?.[0] ?? (product as any)?.image ?? null;
+          return imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={product.name}
+              className={`w-full h-full object-cover object-center transition-all duration-700 ${
+                isHovered && product?.images?.[1] ? "opacity-0 scale-102" : "opacity-100 scale-100"
+              }`}
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-[#1E1F22] text-[10px] uppercase tracking-widest text-zinc-600 font-medium">
+              No Image
+            </div>
+          );
+        })()}
 
         {/* Hover/Detail Alternate Image */}
-        {product.images[1] && (
+        {product?.images?.[1] && (
           <img
-            src={product.images[1]}
+            src={product?.images?.[1]}
             alt={`${product.name} alternate view`}
             className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-700 ${
               isHovered ? "opacity-100 scale-100" : "opacity-0 scale-102"

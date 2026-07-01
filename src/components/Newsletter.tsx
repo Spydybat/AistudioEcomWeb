@@ -1,6 +1,7 @@
 import { useState, FormEvent } from "react";
 import { ArrowRight, Mail, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
+import { supabase } from "../supabaseClient";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");

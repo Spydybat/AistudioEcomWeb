@@ -10,6 +10,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import CartDrawer from "./components/CartDrawer";
 import WishlistDrawer from "./components/WishlistDrawer";
+import AuthModal from "./components/AuthModal";
 
 // Store Pages
 import HomePage from "./pages/HomePage";
@@ -102,6 +103,8 @@ function StoreLayout() {
         onAddToCartFromWishlist={handleAddToCartFromWishlist}
         onOpenQuickView={() => {}}
       />
+
+      <AuthModal />
 
       <AnimatePresence>
         {toast && (

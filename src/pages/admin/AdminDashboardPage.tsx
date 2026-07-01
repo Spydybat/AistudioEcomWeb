@@ -1,10 +1,15 @@
+import { useEffect, useState } from "react";
 import { DollarSign, ShoppingCart, Users, Package, TrendingUp } from "lucide-react";
 import StatCard from "../../components/admin/StatCard";
 import DataTable from "../../components/admin/DataTable";
-import { PRODUCTS } from "../../data/products";
-import { ORDERS, CUSTOMERS } from "../../data/adminData";
+import { fetchProducts } from "../../data/products";
+import { fetchOrders, fetchCustomers } from "../../data/adminData";
 
 export default function AdminDashboardPage() {
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  const [ORDERS, setORDERS] = useState<any[]>([]);
+  const [CUSTOMERS, setCUSTOMERS] = useState<any[]>([]);
+  useEffect(() => { fetchProducts().then(setPRODUCTS); fetchOrders().then(setORDERS); fetchCustomers().then(setCUSTOMERS); }, []);
   const totalRevenue = ORDERS.reduce((sum, o) => sum + o.total, 0);
   const pendingOrders = ORDERS.filter((o) => o.status === "pending" || o.status === "processing").length;
   const recentOrders = ORDERS.slice(0, 5);
@@ -83,7 +88,7 @@ export default function AdminDashboardPage() {
               <div key={product.id} className="flex items-center gap-4 p-4 hover:bg-[#2B2D31] transition-colors">
                 <span className="text-xs font-mono text-zinc-500 w-6">#{i + 1}</span>
                 <img
-                  src={product.images[0]}
+                  src={product?.images?.[0] ?? ""}
                   alt={product.name}
                   className="w-10 h-10 rounded-lg object-cover border border-white/5"
                   referrerPolicy="no-referrer"

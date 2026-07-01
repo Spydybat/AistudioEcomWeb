@@ -24,8 +24,8 @@ export default function ProductQuickView({
   // Synchronize state with product changes
   useEffect(() => {
     if (product) {
-      setSelectedColor(product.colors[0]);
-      setSelectedSize(product.sizes[1] || product.sizes[0]);
+      setSelectedColor(product?.colors?.[0] ?? { name: "Default", hex: "#000" });
+      setSelectedSize(product?.sizes?.[1] ?? product?.sizes?.[0] ?? "Default");
       setActiveImageIdx(0);
     }
   }, [product]);
@@ -77,7 +77,7 @@ export default function ProductQuickView({
             {/* Main Visual Display */}
             <div className="aspect-[3/4] bg-[#111214] overflow-hidden mb-4 relative shadow-sm border border-white/5">
               <img
-                src={product.images[activeImageIdx]}
+                src={product?.images?.[activeImageIdx] ?? product?.images?.[0] ?? ""}
                 alt={product.name}
                 className="w-full h-full object-cover object-center"
                 referrerPolicy="no-referrer"

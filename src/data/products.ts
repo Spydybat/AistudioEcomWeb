@@ -30,7 +30,7 @@ const DEFAULT_REVIEWS = [
   },
 ];
 
-export const CATEGORIES: Category[] = [
+export const LOCAL_CATEGORIES: Category[] = [
   {
     id: "all",
     name: "All Departments",
@@ -167,7 +167,7 @@ export const CATEGORIES: Category[] = [
   },
 ];
 
-export const BRANDS: Brand[] = [
+export const LOCAL_BRANDS: Brand[] = [
   {
     id: "aura-atelier",
     name: "Aura Atelier",
@@ -212,7 +212,7 @@ export const BRANDS: Brand[] = [
   },
 ];
 
-export const PRODUCTS: Product[] = [
+export const LOCAL_PRODUCTS: Product[] = [
   {
     id: "merino-trench-coat",
     name: "Sartorial Double-Breasted Trench",
@@ -1003,12 +1003,12 @@ export const PRODUCTS: Product[] = [
 export const getCategoryName = (categoryId: string) =>
   CATEGORIES.find((category) => category.id === categoryId)?.name || categoryId;
 
-export const getProductsByIds = (ids: string[] = []) =>
-  ids.map((id) => PRODUCTS.find((product) => product.id === id)).filter(Boolean) as Product[];
+export const getProductsByIds = (ids: string[] = [], productList: Product[] = LOCAL_PRODUCTS) =>
+  ids.map((id) => productList.find((product) => product.id === id)).filter(Boolean) as Product[];
 
-export const getRelatedProducts = (product: Product, limit = 4) => {
-  const explicit = getProductsByIds(product.relatedProductIds).filter((item) => item.id !== product.id);
-  const inferred = PRODUCTS.filter(
+export const getRelatedProducts = (product: Product, limit = 4, productList: Product[] = LOCAL_PRODUCTS) => {
+  const explicit = getProductsByIds(product.relatedProductIds, productList).filter((item) => item.id !== product.id);
+  const inferred = productList.filter(
     (item) =>
       item.id !== product.id &&
       (item.category === product.category || item.brand === product.brand || item.tags?.some((tag) => product.tags?.includes(tag)))
@@ -1022,10 +1022,84 @@ export const getSearchSuggestions = (query: string, limit = 6) => {
   const pool = [
     ...CATEGORIES.filter((category) => category.id !== "all").map((category) => category.name),
     ...BRANDS.map((brand) => brand.name),
-    ...PRODUCTS.flatMap((product) => [product.name, product.department || "", ...(product.tags || [])]),
+    ...(cachedProducts || PRODUCTS).flatMap((product) => [product.name, product.department || "", ...(product.tags || [])]),
   ].filter(Boolean);
 
   const unique = Array.from(new Set(pool));
   if (!normalized) return unique.slice(0, limit);
   return unique.filter((item) => item.toLowerCase().includes(normalized)).slice(0, limit);
 };
+
+import { supabase } from "../supabaseClient";
+
+export const CATEGORIES = LOCAL_CATEGORIES;
+export const BRANDS = LOCAL_BRANDS;
+export const PRODUCTS = LOCAL_PRODUCTS;
+
+let cachedProducts: Product[] | null = null;
+let cachedCategories: Category[] | null = null;
+let cachedBrands: Brand[] | null = null;
+
+export async function fetchProducts(): Promise<Product[]> {
+  if (cachedProducts) return cachedProducts;
+  try {
+    const { data, error } = await supabase.from('products').select(`
+      *,
+      images:product_images(image_url),
+      colors:product_colors(color_name, color_hex),
+      sizes:product_sizes(size),
+      specifications:product_specifications(spec_key, spec_value),
+      details:product_details(detail),
+      variants:product_variants(*),
+      reviews_data:reviews(*),
+      categories(slug),
+      brands(name)
+    `);
+    if (error || !data || data.length === 0) return LOCAL_PRODUCTS;
+    
+    const formattedData = data.map((item: any) => ({
+      ...item,
+      category: item.categories?.slug || item.category,
+      brand: item.brands?.name || item.brand,
+      images: item.images?.length ? item.images.map((img: any) => img.image_url) : item.images,
+      colors: item.colors?.length ? item.colors.map((c: any) => ({ name: c.color_name, hex: c.color_hex })) : [],
+      sizes: item.sizes?.length ? item.sizes.map((s: any) => s.size) : item.sizes,
+      specifications: item.specifications?.reduce((acc: any, spec: any) => ({ ...acc, [spec.spec_key]: spec.spec_value }), {}) || {},
+      details: item.details?.length ? item.details.map((d: any) => d.detail) : item.details,
+      variants: item.variants || [],
+      reviewList: item.reviews_data || []
+    }));
+    cachedProducts = formattedData;
+    return formattedData;
+  } catch {
+    return LOCAL_PRODUCTS;
+  }
+}
+
+export async function fetchCategories(): Promise<Category[]> {
+  if (cachedCategories) return cachedCategories;
+  try {
+    const { data, error } = await supabase.from('categories').select('*');
+    if (error || !data || data.length === 0) return LOCAL_CATEGORIES;
+    const formattedCategories = data.map((c: any) => ({ ...c, id: c.slug || c.id }));
+    cachedCategories = formattedCategories;
+    return formattedCategories;
+  } catch {
+    return LOCAL_CATEGORIES;
+  }
+}
+
+export async function fetchBrands(): Promise<Brand[]> {
+  if (cachedBrands) return cachedBrands;
+  try {
+    const { data, error } = await supabase.from('brands').select('*');
+    if (error || !data || data.length === 0) return LOCAL_BRANDS;
+    const formattedBrands = data.map((b: any) => ({ ...b, id: b.slug || b.id }));
+    cachedBrands = formattedBrands;
+    return formattedBrands;
+  } catch {
+    return LOCAL_BRANDS;
+  }
+}
+
+

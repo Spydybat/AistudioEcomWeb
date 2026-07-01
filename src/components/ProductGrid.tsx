@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
+import {  useState, useMemo , useEffect } from "react";
 import { SlidersHorizontal, Grid3X3, ArrowUpDown, RefreshCw } from "lucide-react";
 import { Product, ProductColor } from "../types";
-import { CATEGORIES, PRODUCTS } from "../data/products";
+import { fetchCategories, fetchProducts } from "../data/products";
 import ProductCard from "./ProductCard";
 
 interface ProductGridProps {
@@ -27,11 +27,14 @@ export default function ProductGrid({
   selectedCategory,
   setSelectedCategory,
 }: ProductGridProps) {
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  const [CATEGORIES, setCATEGORIES] = useState<any[]>([]);
+  useEffect(() => { fetchProducts().then(setPRODUCTS); fetchCategories().then(setCATEGORIES); }, []);
   const [sortOption, setSortOption] = useState<SortOption>("default");
 
   const categoryMap = useMemo(() => {
     return new Map(CATEGORIES.map(c => [c.id, c.name]));
-  }, []);
+  }, [CATEGORIES]);
 
   // Filter and sort the product static catalog list
   const filteredAndSortedProducts = useMemo(() => {
@@ -69,7 +72,7 @@ export default function ProductGrid({
     }
 
     return result;
-  }, [selectedCategory, searchQuery, sortOption]);
+  }, [selectedCategory, searchQuery, sortOption, PRODUCTS]);
 
   const activeCategoryName = categoryMap.get(selectedCategory) || "All Collections";
 
@@ -206,3 +209,4 @@ export default function ProductGrid({
     </section>
   );
 }
+

@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
+import {  useState, useMemo , useEffect } from "react";
 import { Star } from "lucide-react";
 import DataTable from "../../components/admin/DataTable";
-import { REVIEWS } from "../../data/adminData";
+import { fetchReviews } from "../../data/adminData";
 
 const statusColors: Record<string, string> = {
   published: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
@@ -23,12 +23,14 @@ function RatingStars({ rating }: { rating: number }) {
 }
 
 export default function AdminReviewsPage() {
+  const [REVIEWS, setREVIEWS] = useState<any[]>([]);
+  useEffect(() => { fetchReviews().then(setREVIEWS); }, []);
   const [statusFilter, setStatusFilter] = useState("all");
 
   const filtered = useMemo(() => {
     if (statusFilter === "all") return REVIEWS;
     return REVIEWS.filter((r) => r.status === statusFilter);
-  }, [statusFilter]);
+  }, [statusFilter, REVIEWS]);
 
   return (
     <div className="space-y-6">
@@ -78,3 +80,4 @@ export default function AdminReviewsPage() {
     </div>
   );
 }
+

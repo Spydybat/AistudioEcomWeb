@@ -1,6 +1,6 @@
 import { Order, Customer, Review } from "../types";
 
-export const ORDERS: Order[] = [
+export const LOCAL_ORDERS: Order[] = [
   { id: "ORD-1001", customerName: "Elena Rossi", customerEmail: "elena.r@email.com", items: 2, total: 815, status: "delivered", date: "2026-06-18" },
   { id: "ORD-1002", customerName: "James Chen", customerEmail: "jchen@email.com", items: 1, total: 260, status: "shipped", date: "2026-06-19" },
   { id: "ORD-1003", customerName: "Sophie Laurent", customerEmail: "sophie.l@email.com", items: 3, total: 1245, status: "processing", date: "2026-06-20" },
@@ -11,7 +11,7 @@ export const ORDERS: Order[] = [
   { id: "ORD-1008", customerName: "Claire Dubois", customerEmail: "claire.d@email.com", items: 1, total: 495, status: "processing", date: "2026-06-22" },
 ];
 
-export const CUSTOMERS: Customer[] = [
+export const LOCAL_CUSTOMERS: Customer[] = [
   { id: "CUS-001", name: "Elena Rossi", email: "elena.r@email.com", orders: 5, totalSpent: 2340, joinedDate: "2025-03-12", status: "active" },
   { id: "CUS-002", name: "James Chen", email: "jchen@email.com", orders: 3, totalSpent: 890, joinedDate: "2025-06-08", status: "active" },
   { id: "CUS-003", name: "Sophie Laurent", email: "sophie.l@email.com", orders: 8, totalSpent: 4120, joinedDate: "2024-11-22", status: "active" },
@@ -22,7 +22,7 @@ export const CUSTOMERS: Customer[] = [
   { id: "CUS-008", name: "Claire Dubois", email: "claire.d@email.com", orders: 3, totalSpent: 1125, joinedDate: "2025-08-17", status: "active" },
 ];
 
-export const REVIEWS: Review[] = [
+export const LOCAL_REVIEWS: Review[] = [
   { id: "REV-001", productName: "Sartorial Double-Breasted Trench", customerName: "Elena Rossi", rating: 5, comment: "Absolutely stunning craftsmanship. The fabric quality is unmatched.", date: "2026-06-10", status: "published" },
   { id: "REV-002", productName: "Grade-A Mongolian Cashmere Sweater", customerName: "James Chen", rating: 5, comment: "The softest cashmere I've ever worn. Worth every penny.", date: "2026-06-12", status: "published" },
   { id: "REV-003", productName: "Deconstructed Linen-Wool Blazer", customerName: "Sophie Laurent", rating: 4, comment: "Beautiful blazer but sizing runs slightly small.", date: "2026-06-15", status: "published" },
@@ -37,3 +37,49 @@ export const ADMIN_CREDENTIALS = {
   email: "admin@aura.studio",
   password: "auraadmin2024",
 };
+
+import { supabase } from "../supabaseClient";
+
+export const ORDERS = LOCAL_ORDERS;
+export const CUSTOMERS = LOCAL_CUSTOMERS;
+export const REVIEWS = LOCAL_REVIEWS;
+
+let cachedOrders: Order[] | null = null;
+let cachedCustomers: Customer[] | null = null;
+let cachedReviews: Review[] | null = null;
+
+export async function fetchOrders(): Promise<Order[]> {
+  if (cachedOrders) return cachedOrders;
+  try {
+    const { data, error } = await supabase.from('orders').select('*');
+    if (error || !data || data.length === 0) return LOCAL_ORDERS;
+    cachedOrders = data;
+    return data;
+  } catch {
+    return LOCAL_ORDERS;
+  }
+}
+
+export async function fetchCustomers(): Promise<Customer[]> {
+  if (cachedCustomers) return cachedCustomers;
+  try {
+    const { data, error } = await supabase.from('profiles').select('*');
+    if (error || !data || data.length === 0) return LOCAL_CUSTOMERS;
+    cachedCustomers = data;
+    return data;
+  } catch {
+    return LOCAL_CUSTOMERS;
+  }
+}
+
+export async function fetchReviews(): Promise<Review[]> {
+  if (cachedReviews) return cachedReviews;
+  try {
+    const { data, error } = await supabase.from('reviews').select('*');
+    if (error || !data || data.length === 0) return LOCAL_REVIEWS;
+    cachedReviews = data;
+    return data;
+  } catch {
+    return LOCAL_REVIEWS;
+  }
+}

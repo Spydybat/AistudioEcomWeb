@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import {  useState, useMemo , useEffect } from "react";
 import DataTable from "../../components/admin/DataTable";
-import { ORDERS } from "../../data/adminData";
+import { fetchOrders } from "../../data/adminData";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20",
@@ -11,12 +11,14 @@ const statusColors: Record<string, string> = {
 };
 
 export default function AdminOrdersPage() {
+  const [ORDERS, setORDERS] = useState<any[]>([]);
+  useEffect(() => { fetchOrders().then(setORDERS); }, []);
   const [statusFilter, setStatusFilter] = useState("all");
 
   const filtered = useMemo(() => {
     if (statusFilter === "all") return ORDERS;
     return ORDERS.filter((o) => o.status === statusFilter);
-  }, [statusFilter]);
+  }, [statusFilter, ORDERS]);
 
   return (
     <div className="space-y-6">
@@ -61,3 +63,4 @@ export default function AdminOrdersPage() {
     </div>
   );
 }
+

@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useShop } from "../context/ShopContext";
 import { useCurrency } from "../context/CurrencyContext";
-import { PRODUCTS, CATEGORIES } from "../data/products";
+import { fetchProducts, fetchCategories } from "../data/products";
 import { Product, ProductColor } from "../types";
 import ProductCard from "../components/ProductCard";
 import ProductQuickView from "../components/ProductQuickView";
@@ -43,6 +43,13 @@ export default function BundleBuilderPage() {
   const { wishlist, handleAddToCart, handleToggleWishlist, showToast } = useShop();
   const { formatPrice } = useCurrency();
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  const [CATEGORIES, setCATEGORIES] = useState<any[]>([]);
+  useEffect(() => {
+    fetchProducts().then(setPRODUCTS);
+    fetchCategories().then(setCATEGORIES);
+  }, []);
 
   // Multi-bundle state
   const [bundles, setBundles] = useState<Bundle[]>(() => {
@@ -88,8 +95,8 @@ export default function BundleBuilderPage() {
                 id: crypto.randomUUID(),
                 product,
                 quantity: item.q || 1,
-                size: product.sizes[0] || "Default",
-                color: product.colors[0] || { name: "Default", hex: "#000" }
+                size: product?.sizes?.[0] ?? "Default",
+                color: product?.colors?.[0] ?? { name: "Default", hex: "#000" }
               });
             }
           });
@@ -146,7 +153,7 @@ export default function BundleBuilderPage() {
     return Array.from(ids);
   }, [activeBundle.items]);
 
-  const fbtProducts = useMemo(() => PRODUCTS.filter((p) => frequentlyBoughtProductIds.includes(p.id)), [frequentlyBoughtProductIds]);
+  const fbtProducts = useMemo(() => PRODUCTS.filter((p) => frequentlyBoughtProductIds.includes(p.id)), [frequentlyBoughtProductIds, PRODUCTS]);
 
   const filteredProducts = useMemo(() => {
     let result = PRODUCTS;
@@ -164,7 +171,7 @@ export default function BundleBuilderPage() {
       );
     }
     return result;
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, PRODUCTS]);
 
   // Actions
   const updateActiveBundle = (updater: (bundle: Bundle) => Bundle) => {
@@ -489,7 +496,7 @@ export default function BundleBuilderPage() {
                               </div>
                               
                               {/* Thumbnail */}
-                              <img src={item.product.images[0]} alt={item.product.name} className="h-16 w-16 rounded-xl object-cover border border-white/5 bg-[#111214]" />
+                              <img src={item?.product?.images?.[0] ?? ""} alt={item.product.name} className="h-16 w-16 rounded-xl object-cover border border-white/5 bg-[#111214]" />
                               
                               {/* Details */}
                               <div className="flex-1 min-w-0">

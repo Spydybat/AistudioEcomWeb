@@ -1,9 +1,11 @@
-import { useState, useMemo } from "react";
+import {  useState, useMemo , useEffect } from "react";
 import { Search } from "lucide-react";
 import DataTable from "../../components/admin/DataTable";
-import { CUSTOMERS } from "../../data/adminData";
+import { fetchCustomers } from "../../data/adminData";
 
 export default function AdminCustomersPage() {
+  const [CUSTOMERS, setCUSTOMERS] = useState<any[]>([]);
+  useEffect(() => { fetchCustomers().then(setCUSTOMERS); }, []);
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
@@ -12,7 +14,7 @@ export default function AdminCustomersPage() {
     return CUSTOMERS.filter(
       (c) => c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q)
     );
-  }, [search]);
+  }, [search, CUSTOMERS]);
 
   return (
     <div className="space-y-6">
@@ -58,3 +60,4 @@ export default function AdminCustomersPage() {
     </div>
   );
 }
+

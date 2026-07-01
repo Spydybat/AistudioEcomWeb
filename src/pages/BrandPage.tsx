@@ -1,9 +1,13 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
-import { BRANDS, PRODUCTS, getCategoryName } from "../data/products";
+import { fetchBrands, fetchProducts, getCategoryName } from "../data/products";
 import { useShop } from "../context/ShopContext";
 
 export default function BrandPage() {
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  const [BRANDS, setBRANDS] = useState<any[]>([]);
+  useEffect(() => { fetchProducts().then(setPRODUCTS); fetchBrands().then(setBRANDS); }, []);
   const { brandId } = useParams();
   const brand = BRANDS.find((item) => item.id === brandId);
   const { wishlist, handleAddToCart, handleToggleWishlist, setSelectedCategory } = useShop();

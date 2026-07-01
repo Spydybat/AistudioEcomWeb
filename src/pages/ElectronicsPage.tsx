@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowUpDown, Grid3X3, RefreshCw, SlidersHorizontal, X, Zap, Cpu } from "lucide-react";
-import { CATEGORIES, PRODUCTS } from "../data/products";
+import { fetchCategories, fetchProducts } from "../data/products";
 import { Product } from "../types";
 import ProductCard from "../components/ProductCard";
 import ProductSlider from "../components/ProductSlider";
@@ -19,6 +19,9 @@ const priceBands = [
 ];
 
 export default function ElectronicsPage() {
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  const [CATEGORIES, setCATEGORIES] = useState<any[]>([]);
+  useEffect(() => { fetchProducts().then(setPRODUCTS); fetchCategories().then(setCATEGORIES); }, []);
   const {
     wishlist,
     handleAddToCart,
@@ -37,7 +40,7 @@ export default function ElectronicsPage() {
   const [inStockOnly, setInStockOnly] = useState(false);
 
   // Focus only on electronics
-  const allElectronics = useMemo(() => PRODUCTS.filter(p => p.category === "electronics"), []);
+  const allElectronics = useMemo(() => PRODUCTS.filter(p => p.category === "electronics"), [PRODUCTS]);
   
   const electronicsCategory = CATEGORIES.find(c => c.id === "electronics");
   const brands = useMemo(() => Array.from(new Set(allElectronics.map(p => p.brand).filter(Boolean))) as string[], [allElectronics]);
@@ -312,4 +315,5 @@ export default function ElectronicsPage() {
     </div>
   );
 }
+
 

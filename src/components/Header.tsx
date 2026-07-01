@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronDown, Heart, Menu, Search, ShoppingBag, User, X, Sun, Moon } from "lucide-react";
+import { ChevronDown, Heart, Menu, Search, ShoppingBag, User, X, Sun, Moon, LogOut, Shield } from "lucide-react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
-import { BRANDS, CATEGORIES, getSearchSuggestions } from "../data/products";
+import { BRANDS, CATEGORIES, getSearchSuggestions, fetchCategories } from "../data/products";
 import { useCurrency, REGIONS } from "../context/CurrencyContext";
+import { useShop } from "../context/ShopContext";
 
 interface HeaderProps {
   cartCount: number;
@@ -23,6 +24,17 @@ export default function Header({
   setSearchQuery,
   setSelectedCategory,
 }: HeaderProps) {
+  const { user, setIsAuthModalOpen, handleLogout } = useShop();
+  const [categories, setCategories] = useState(CATEGORIES);
+  
+  useEffect(() => {
+    fetchCategories().then((data) => {
+      if (data && data.length > 0) {
+        setCategories(data);
+      }
+    });
+  }, []);
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isLightMode, setIsLightMode] = useState(() => {
     return localStorage.getItem("theme") === "light";
@@ -55,8 +67,18 @@ export default function Header({
     restDelta: 0.001,
   });
 
-  const implementedCategoryIds = ["fashion", "electronics", "computers", "mobiles", "gaming"];
-  const departments = CATEGORIES.filter((category) => category.id !== "all" && implementedCategoryIds.includes(category.id));
+  const fallbackOrder = ["fashion", "electronics", "computers", "mobiles", "gaming"];
+  
+  const departments = categories
+    .filter((category) => category.id !== "all")
+    .sort((a, b) => {
+      const indexA = fallbackOrder.indexOf(a.id);
+      const indexB = fallbackOrder.indexOf(b.id);
+      if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+      if (indexA !== -1) return -1;
+      if (indexB !== -1) return 1;
+      return 0;
+    });
   const featuredDepartments = departments.slice(0, 5);
   const searchSuggestions = getSearchSuggestions(searchQuery || "premium", 8);
 
@@ -213,12 +235,30 @@ export default function Header({
             {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
           </button>
 
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-full hover:bg-white/5 text-indigo-400 hover:text-indigo-300 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="h-5 w-5" />
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsAuthModalOpen(true)}
+              className="p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors"
+              title="Sign In"
+            >
+              <User className="h-5 w-5" />
+            </button>
+          )}
+
           <button
             onClick={() => navigate("/admin/login")}
             className="hidden sm:inline-block p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
             title="Admin Panel"
           >
-            <User className="h-5 w-5" />
+            <Shield className="h-5 w-5" />
           </button>
 
           <Link

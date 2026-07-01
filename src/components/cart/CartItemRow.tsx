@@ -25,14 +25,21 @@ export default function CartItemRow({
     <div className="flex gap-4 py-4 border-b border-white/5 last:border-0">
       <Link
         to={`/product/${item.product.id}`}
-        className={`${imageSize} bg-[#111214] overflow-hidden border border-white/5 shrink-0 hover:opacity-90 transition-opacity rounded-md`}
+        className={`${imageSize} bg-[#111214] overflow-hidden border border-white/5 shrink-0 hover:opacity-90 transition-opacity rounded-md flex items-center justify-center`}
       >
-        <img
-          src={item.product.images[0]}
-          alt={item.product.name}
-          className="w-full h-full object-cover"
-          referrerPolicy="no-referrer"
-        />
+        {(() => {
+          const imageUrl = item?.product?.images?.[0] ?? (item?.product as any)?.image ?? null;
+          return imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={item.product.name}
+              className="w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <span className="text-[10px] text-zinc-600 font-medium">No Image</span>
+          );
+        })()}
       </Link>
 
       <div className="flex-1 flex flex-col justify-between min-w-0">

@@ -1,9 +1,12 @@
-import { useState, useMemo } from "react";
+import {  useState, useMemo , useEffect } from "react";
 import { Search } from "lucide-react";
 import DataTable from "../../components/admin/DataTable";
-import { PRODUCTS, CATEGORIES } from "../../data/products";
+import { fetchProducts, fetchCategories } from "../../data/products";
 
 export default function AdminProductsPage() {
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  const [CATEGORIES, setCATEGORIES] = useState<any[]>([]);
+  useEffect(() => { fetchProducts().then(setPRODUCTS); fetchCategories().then(setCATEGORIES); }, []);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
@@ -19,7 +22,7 @@ export default function AdminProductsPage() {
       );
     }
     return result;
-  }, [search, categoryFilter]);
+  }, [search, categoryFilter, PRODUCTS]);
 
   return (
     <div className="space-y-6">
@@ -56,7 +59,7 @@ export default function AdminProductsPage() {
             <td className="px-4 sm:px-6 py-3">
               <div className="flex items-center gap-3">
                 <img
-                  src={product.images[0]}
+                  src={product?.images?.[0] ?? ""}
                   alt={product.name}
                   className="w-10 h-10 rounded-lg object-cover border border-white/5"
                   referrerPolicy="no-referrer"
@@ -93,3 +96,4 @@ export default function AdminProductsPage() {
     </div>
   );
 }
+

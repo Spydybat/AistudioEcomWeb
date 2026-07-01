@@ -1,6 +1,6 @@
-import { useState } from "react";
+import {  useState , useEffect } from "react";
 import { Product } from "../types";
-import { PRODUCTS } from "../data/products";
+import { fetchProducts } from "../data/products";
 import { useShop } from "../context/ShopContext";
 
 // Layout Sections
@@ -20,6 +20,8 @@ import TrustBadges from "../components/TrustBadges";
 import MarketplaceShowcase from "../components/MarketplaceShowcase";
 
 export default function HomePage() {
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  useEffect(() => { fetchProducts().then(setPRODUCTS); }, []);
   const { 
     wishlist, 
     searchQuery, 

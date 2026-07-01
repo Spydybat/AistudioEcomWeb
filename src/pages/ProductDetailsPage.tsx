@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { CheckCircle, GitCompare, Heart, RotateCcw, Share2, ShieldCheck, ShoppingBag, Star, Truck } from "lucide-react";
-import { PRODUCTS, getCategoryName, getProductsByIds, getRelatedProducts } from "../data/products";
+import { fetchProducts, getCategoryName, getProductsByIds, getRelatedProducts, LOCAL_PRODUCTS } from "../data/products";
 import { Product } from "../types";
 import { useShop } from "../context/ShopContext";
 import { useCurrency } from "../context/CurrencyContext";
@@ -27,21 +27,33 @@ const MARKETPLACE_FAQS = [
 ];
 
 export default function ProductDetailsPage() {
+  const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts().then((data) => {
+      setPRODUCTS(data);
+      setIsLoading(false);
+    });
+  }, []);
+
   const { id } = useParams();
   const { wishlist, handleAddToCart, handleToggleWishlist, setIsCartOpen, showToast } = useShop();
   const { formatPrice } = useCurrency();
-  const product = PRODUCTS.find((item) => item.id === id);
+  
+  const activeProducts = PRODUCTS.length > 0 ? PRODUCTS : LOCAL_PRODUCTS;
+  const product = activeProducts.find((item) => item.id === id || item.slug === id || String(item.id) === String(id));
 
-  const [selectedColor, setSelectedColor] = useState(product?.colors[0]);
-  const [selectedSize, setSelectedSize] = useState(product?.sizes[1] || product?.sizes[0]);
+  const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] ?? { name: "Default", hex: "#000" });
+  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[1] ?? product?.sizes?.[0] ?? "Default");
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
 
   useEffect(() => {
     if (product) {
-      setSelectedColor(product.colors[0]);
-      setSelectedSize(product.sizes[1] || product.sizes[0]);
+      setSelectedColor(product?.colors?.[0] ?? { name: "Default", hex: "#000" });
+      setSelectedSize(product?.sizes?.[1] ?? product?.sizes?.[0] ?? "Default");
       setQuantity(1);
     }
   }, [product]);
@@ -49,10 +61,18 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     if (!product) return;
     const stored = JSON.parse(localStorage.getItem("aura_recently_viewed") || "[]") as string[];
-    setRecentlyViewed(getProductsByIds(stored.filter((itemId) => itemId !== product.id)).slice(0, 4));
+    setRecentlyViewed(getProductsByIds(stored.filter((itemId) => itemId !== product.id), activeProducts).slice(0, 4));
     const nextIds = [product.id, ...stored.filter((itemId) => itemId !== product.id)].slice(0, 8);
     localStorage.setItem("aura_recently_viewed", JSON.stringify(nextIds));
   }, [product]);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 text-center flex-1">
+        <p className="text-zinc-400">Loading product details...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -66,8 +86,8 @@ export default function ProductDetailsPage() {
   const isWishlisted = wishlist.some((item) => item.id === product.id);
   const isOutOfStock = product.stock === 0;
   const variantLabel = product.variants?.[0]?.label || (product.category === "fashion" ? "Size" : "Option");
-  const relatedProducts = getRelatedProducts(product, 6);
-  const frequentlyBoughtTogether = getProductsByIds(product.frequentlyBoughtTogether).slice(0, 3);
+  const relatedProducts = getRelatedProducts(product, 6, activeProducts);
+  const frequentlyBoughtTogether = getProductsByIds(product.frequentlyBoughtTogether, activeProducts).slice(0, 3);
   const comparisonProducts = [product, ...relatedProducts.slice(0, 2)];
 
   const handleQuickAdd = () => {
@@ -280,7 +300,7 @@ export default function ProductDetailsPage() {
               <div className="flex flex-wrap items-center gap-3">
                 {[product, ...frequentlyBoughtTogether].map((item) => (
                   <Link key={item.id} to={`/product/${item.id}`} className="flex items-center gap-3 rounded-xl bg-[#2B2D31] border border-white/5 p-3 hover:border-white/30 transition-colors">
-                    <img src={item.images[0]} alt={item.name} className="h-14 w-14 rounded-lg object-cover" referrerPolicy="no-referrer" />
+                    <img src={item?.images?.[0] ?? ""} alt={item.name} className="h-14 w-14 rounded-lg object-cover" referrerPolicy="no-referrer" />
                     <div className="max-w-[150px]">
                       <p className="line-clamp-1 text-xs font-medium text-white">{item.name}</p>
                       <p className="text-xs text-zinc-400">${item.price}.00</p>
@@ -289,7 +309,7 @@ export default function ProductDetailsPage() {
                 ))}
               </div>
               <button
-                onClick={() => [product, ...frequentlyBoughtTogether].forEach((item) => handleAddToCart(item, item.sizes[0], item.colors[0]))}
+                onClick={() => [product, ...frequentlyBoughtTogether].forEach((item) => handleAddToCart(item, item?.sizes?.[0] ?? "Default", item?.colors?.[0] ?? { name: "Default", hex: "#000" }))}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-indigo-500 px-5 text-xs font-bold uppercase tracking-widest text-white hover:bg-indigo-600 transition-colors"
               >
                 <ShoppingBag className="h-4 w-4" />

@@ -1,11 +1,14 @@
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { CATEGORIES } from "../data/products";
+import { fetchCategories } from "../data/products";
 
 export default function FeaturedCategories({
   onFilterCategory
 }: {
   onFilterCategory: (catId: string) => void;
 }) {
+  const [CATEGORIES, setCATEGORIES] = useState<any[]>([]);
+  useEffect(() => { fetchCategories().then(setCATEGORIES); }, []);
   const visualCategories = CATEGORIES.filter(c => c.id !== "all" && c.featured).slice(0, 4);
 
   return (

@@ -212,7 +212,7 @@ export default function CartDrawer({
                         {/* Thumbnail image */}
                         <div className="w-20 h-24 bg-[#1E1F22] overflow-hidden relative border border-white/5 shrink-0 rounded-lg">
                           <img
-                            src={item.product.images[0]}
+                            src={item?.product?.images?.[0] ?? ""}
                             alt={item.product.name}
                             className="w-full h-full object-cover"
                             referrerPolicy="no-referrer"
