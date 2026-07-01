@@ -4,6 +4,8 @@ import { X, Plus, Minus, Trash2, ShoppingBag, Percent, ShieldCheck, TicketCheck 
 import { CartItem } from "../types";
 import { motion, AnimatePresence } from "motion/react";
 import { useCurrency } from "../context/CurrencyContext";
+import { useShop } from "../context/ShopContext";
+import { supabase } from "../supabaseClient";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -22,12 +24,14 @@ export default function CartDrawer({
   onRemoveItem,
   onClearCart,
 }: CartDrawerProps) {
+  const { user } = useShop();
   const [promoCode, setPromoCode] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
   const [promoError, setPromoError] = useState("");
   const [promoSuccess, setPromoSuccess] = useState("");
   const [isCheckoutSuccess, setIsCheckoutSuccess] = useState(false);
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const { formatPrice } = useCurrency();
 
   const FREE_SHIPPING_THRESHOLD = 200;
@@ -67,18 +71,72 @@ export default function CartDrawer({
     }
   };
 
-  const handleTriggerCheckout = () => {
+  const handleTriggerCheckout = async () => {
     setIsProcessingCheckout(true);
-    // Simulate luxury fulfillment payment process
-    setTimeout(() => {
-      setIsProcessingCheckout(false);
+    setCheckoutError(null);
+    
+    try {
+      // Step 1: Insert one row into the orders table.
+      const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert([{
+          profile_id: user?.id,
+          order_number: orderNumber,
+          total: totalCost,
+          status: 'pending',
+          payment_status: 'pending',
+          customer_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Guest',
+          email: user?.email || 'guest@example.com'
+        }])
+        .select()
+        .single();
+
+      console.log('Supabase orders response:', { data: orderData, error: orderError });
+
+      if (orderError) {
+        throw new Error(orderError.message || JSON.stringify(orderError));
+      }
+
+      // Step 2: Retrieve the new order ID.
+      const orderId = orderData.id;
+
+      // Step 3: Insert every cart item into order_items
+      const orderItemsToInsert = cartItems.map(item => ({
+        order_id: orderId,
+        product_id: item.product.id,
+        quantity: item.quantity,
+        price: item.product.price
+      }));
+
+      const { data: itemsData, error: itemsError } = await supabase
+        .from('order_items')
+        .insert(orderItemsToInsert)
+        .select();
+
+      console.log('Supabase order_items response:', { data: itemsData, error: itemsError });
+
+      if (itemsError) {
+        throw new Error(itemsError.message || JSON.stringify(itemsError));
+      }
+
+      // Step 4: Only after BOTH inserts succeed, clear the cart.
+      onClearCart();
+      
+      // Step 5: Only then display success
       setIsCheckoutSuccess(true);
-    }, 2000);
+    } catch (error: any) {
+      console.error('Checkout error:', error);
+      setCheckoutError(error.message || "An unexpected error occurred.");
+    } finally {
+      setIsProcessingCheckout(false);
+    }
   };
 
   const handleResetSuccessState = () => {
-    onClearCart();
+    // onClearCart is now handled in handleTriggerCheckout
     setIsCheckoutSuccess(false);
+    setCheckoutError(null);
     setPromoCode("");
     setDiscountPercent(0);
     setPromoSuccess("");
@@ -212,7 +270,7 @@ export default function CartDrawer({
                         {/* Thumbnail image */}
                         <div className="w-20 h-24 bg-[#1E1F22] overflow-hidden relative border border-white/5 shrink-0 rounded-lg">
                           <img
-                            src={item?.product?.images?.[0] ?? ""}
+                            src={item?.product?.images?.[0] ?? (item?.product as any)?.image ?? (item?.product as any)?.thumbnail ?? ""}
                             alt={item.product.name}
                             className="w-full h-full object-cover"
                             referrerPolicy="no-referrer"
@@ -337,6 +395,12 @@ export default function CartDrawer({
                     <span className="text-sm font-medium uppercase tracking-wider">Estimated Total</span>
                     <span className="text-lg font-semibold">{formatPrice(totalCost)}</span>
                   </div>
+
+                  {checkoutError && (
+                    <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-xs font-mono">
+                      Error: {checkoutError}
+                    </div>
+                  )}
 
                   {/* Checkout simulator CTA button */}
                   <button

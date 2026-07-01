@@ -28,7 +28,7 @@ export default function WishlistItemRow({
         className={`${imageSize} bg-[#111214] overflow-hidden border border-white/5 shrink-0 hover:opacity-90 transition-opacity rounded-md flex items-center justify-center`}
       >
         {(() => {
-          const imageUrl = product?.images?.[0] ?? (product as any)?.image ?? null;
+          const imageUrl = product?.images?.[0] ?? (product as any)?.image ?? (product as any)?.thumbnail ?? null;
           return imageUrl ? (
             <img
               src={imageUrl}

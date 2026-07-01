@@ -1,6 +1,7 @@
-import {  useState, useMemo , useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { X, Eye } from "lucide-react";
 import DataTable from "../../components/admin/DataTable";
-import { fetchOrders } from "../../data/adminData";
+import { supabase } from "../../supabaseClient";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20",
@@ -12,8 +13,44 @@ const statusColors: Record<string, string> = {
 
 export default function AdminOrdersPage() {
   const [ORDERS, setORDERS] = useState<any[]>([]);
-  useEffect(() => { fetchOrders().then(setORDERS); }, []);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+
+  useEffect(() => {
+    fetchOrdersFromSupabase();
+  }, []);
+
+  const fetchOrdersFromSupabase = async () => {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*, order_items(*, products(*))")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching orders:", error);
+    } else if (data) {
+      setORDERS(data);
+    }
+  };
+
+  const handleStatusChange = async (newStatus: string) => {
+    if (!selectedOrder) return;
+    const { error } = await supabase
+      .from("orders")
+      .update({ status: newStatus })
+      .eq("id", selectedOrder.id);
+
+    if (!error) {
+      setORDERS(
+        ORDERS.map((o) =>
+          o.id === selectedOrder.id ? { ...o, status: newStatus } : o
+        )
+      );
+      setSelectedOrder({ ...selectedOrder, status: newStatus });
+    } else {
+      console.error("Error updating status:", error);
+    }
+  };
 
   const filtered = useMemo(() => {
     if (statusFilter === "all") return ORDERS;
@@ -23,12 +60,23 @@ export default function AdminOrdersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white">Orders</h1>
-        <p className="text-zinc-400 text-sm mt-1">{ORDERS.length} total orders</p>
+        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+          Orders
+        </h1>
+        <p className="text-zinc-400 text-sm mt-1">
+          {ORDERS.length} total orders
+        </p>
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {["all", "pending", "processing", "shipped", "delivered", "cancelled"].map((status) => (
+        {[
+          "all",
+          "pending",
+          "processing",
+          "shipped",
+          "delivered",
+          "cancelled",
+        ].map((status) => (
           <button
             key={status}
             onClick={() => setStatusFilter(status)}
@@ -43,24 +91,232 @@ export default function AdminOrdersPage() {
         ))}
       </div>
 
-      <DataTable headers={["Order ID", "Customer", "Email", "Items", "Total", "Date", "Status"]}>
-        {filtered.map((order) => (
-          <tr key={order.id} className="hover:bg-[#2B2D31] transition-colors">
-            <td className="px-4 sm:px-6 py-3 font-mono text-xs text-white">{order.id}</td>
-            <td className="px-4 sm:px-6 py-3 text-white">{order.customerName}</td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400 text-xs">{order.customerEmail}</td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400">{order.items}</td>
-            <td className="px-4 sm:px-6 py-3 font-medium text-white">${order.total}</td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400 text-xs">{order.date}</td>
-            <td className="px-4 sm:px-6 py-3">
-              <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider ${statusColors[order.status]}`}>
-                {order.status}
-              </span>
-            </td>
-          </tr>
-        ))}
-      </DataTable>
+      {ORDERS.length === 0 ? (
+        <div className="bg-[#1E1F22] border border-white/5 rounded-xl p-12 text-center">
+          <p className="text-zinc-400">No orders found.</p>
+        </div>
+      ) : (
+        <DataTable
+          headers={[
+            "Order ID",
+            "Customer",
+            "Email",
+            "Items",
+            "Total",
+            "Date",
+            "Status",
+            "Actions",
+          ]}
+        >
+          {filtered.map((order) => (
+            <tr
+              key={order.id}
+              className="hover:bg-[#2B2D31] transition-colors"
+            >
+              <td className="px-4 sm:px-6 py-3 font-mono text-xs text-white">
+                {order.order_number || order.id.slice(0, 8).toUpperCase()}
+              </td>
+              <td className="px-4 sm:px-6 py-3 text-white">
+                {order.customer_name}
+              </td>
+              <td className="px-4 sm:px-6 py-3 text-zinc-400 text-xs">
+                {order.email}
+              </td>
+              <td className="px-4 sm:px-6 py-3 text-zinc-400">
+                {order.order_items?.reduce(
+                  (acc: number, item: any) => acc + item.quantity,
+                  0
+                ) || 0}
+              </td>
+              <td className="px-4 sm:px-6 py-3 font-medium text-white">
+                ${order.total?.toFixed(2) || "0.00"}
+              </td>
+              <td className="px-4 sm:px-6 py-3 text-zinc-400 text-xs">
+                {new Date(order.created_at).toLocaleDateString()}
+              </td>
+              <td className="px-4 sm:px-6 py-3">
+                <span
+                  className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider ${
+                    statusColors[order.status] || statusColors.pending
+                  }`}
+                >
+                  {order.status || "pending"}
+                </span>
+              </td>
+              <td className="px-4 sm:px-6 py-3">
+                <button
+                  onClick={() => setSelectedOrder(order)}
+                  className="p-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                  title="View Details"
+                >
+                  <Eye className="h-4 w-4" />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </DataTable>
+      )}
+
+      {/* Order Details Modal */}
+      {selectedOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 overflow-y-auto">
+          <div className="bg-[#1E1F22] border border-white/10 rounded-xl w-full max-w-3xl overflow-hidden my-8">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/5">
+              <div>
+                <h3 className="text-lg font-serif font-bold text-white">
+                  Order Details
+                </h3>
+                <p className="text-zinc-400 font-mono text-xs mt-1">
+                  {selectedOrder.order_number || selectedOrder.id}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedOrder(null)}
+                className="p-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="p-4 sm:p-6 space-y-8">
+              {/* Top Meta Data */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-white/5 rounded-lg p-4">
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-mono mb-1">
+                    Order Status
+                  </p>
+                  <select
+                    value={selectedOrder.status || "pending"}
+                    onChange={(e) => handleStatusChange(e.target.value)}
+                    className="w-full bg-[#1E1F22] border border-white/10 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-indigo-500"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+                <div className="bg-white/5 rounded-lg p-4">
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-mono mb-1">
+                    Payment Status
+                  </p>
+                  <p className="text-sm font-medium text-white capitalize">
+                    {selectedOrder.payment_status || "N/A"}
+                  </p>
+                </div>
+                <div className="bg-white/5 rounded-lg p-4">
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-mono mb-1">
+                    Order Date
+                  </p>
+                  <p className="text-sm font-medium text-white">
+                    {new Date(selectedOrder.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="bg-white/5 rounded-lg p-4">
+                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-mono mb-1">
+                    Total Amount
+                  </p>
+                  <p className="text-sm font-medium text-emerald-400">
+                    ${selectedOrder.total?.toFixed(2) || "0.00"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Customer & Shipping */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="text-sm font-bold text-white mb-3">
+                    Customer Information
+                  </h4>
+                  <div className="space-y-2 text-sm text-zinc-400">
+                    <p>
+                      <strong className="text-white">Name:</strong>{" "}
+                      {selectedOrder.customer_name || "N/A"}
+                    </p>
+                    <p>
+                      <strong className="text-white">Email:</strong>{" "}
+                      {selectedOrder.email || "N/A"}
+                    </p>
+                    <p>
+                      <strong className="text-white">Phone:</strong>{" "}
+                      {selectedOrder.phone || "N/A"}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-white mb-3">
+                    Shipping Address
+                  </h4>
+                  <div className="space-y-1 text-sm text-zinc-400">
+                    <p>{selectedOrder.address || "N/A"}</p>
+                    <p>
+                      {selectedOrder.city
+                        ? `${selectedOrder.city}, ${selectedOrder.state || ""} ${
+                            selectedOrder.postal_code || ""
+                          }`
+                        : ""}
+                    </p>
+                    <p>{selectedOrder.country || ""}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Line Items */}
+              <div>
+                <h4 className="text-sm font-bold text-white mb-4">
+                  Ordered Products
+                </h4>
+                <div className="border border-white/5 rounded-lg overflow-hidden">
+                  <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead className="bg-[#2B2D31] text-zinc-400 font-mono text-[10px] uppercase tracking-wider">
+                      <tr>
+                        <th className="px-4 py-3 font-medium">Product</th>
+                        <th className="px-4 py-3 font-medium">Unit Price</th>
+                        <th className="px-4 py-3 font-medium">Quantity</th>
+                        <th className="px-4 py-3 font-medium text-right">
+                          Total
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {selectedOrder.order_items?.map((item: any) => (
+                        <tr key={item.id} className="hover:bg-white/5">
+                          <td className="px-4 py-3 text-white">
+                            {item.products?.name || "Unknown Product"}
+                          </td>
+                          <td className="px-4 py-3 text-zinc-400">
+                            ${item.price?.toFixed(2) || "0.00"}
+                          </td>
+                          <td className="px-4 py-3 text-zinc-400">
+                            {item.quantity}
+                          </td>
+                          <td className="px-4 py-3 text-white text-right">
+                            ${((item.price || 0) * (item.quantity || 0)).toFixed(
+                              2
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                      {(!selectedOrder.order_items ||
+                        selectedOrder.order_items.length === 0) && (
+                        <tr>
+                          <td
+                            colSpan={4}
+                            className="px-4 py-6 text-center text-zinc-500"
+                          >
+                            No products found for this order.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-

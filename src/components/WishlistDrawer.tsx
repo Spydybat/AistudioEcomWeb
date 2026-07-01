@@ -110,7 +110,7 @@ export default function WishlistDrawer({
                           className="w-20 h-24 bg-[#1E1F22] overflow-hidden relative border border-white/5 shrink-0 cursor-pointer hover:opacity-90 transition-opacity rounded-lg"
                         >
                           <img
-                            src={product?.images?.[0] ?? ""}
+                            src={product?.images?.[0] ?? (product as any)?.image ?? (product as any)?.thumbnail ?? ""}
                             alt={product.name}
                             className="w-full h-full object-cover"
                             referrerPolicy="no-referrer"

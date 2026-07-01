@@ -4,7 +4,7 @@ import { fetchProducts } from "../data/products";
 import { useShop } from "../context/ShopContext";
 
 // Layout Sections
-import AnnouncementBar from "../components/AnnouncementBar";
+
 import Hero from "../components/Hero";
 import FeaturedCategories from "../components/FeaturedCategories";
 import ProductSlider from "../components/ProductSlider";
@@ -47,7 +47,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <AnnouncementBar />
+
 
       <Hero 
         onExploreClick={handleScrollToSection} 

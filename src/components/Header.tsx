@@ -52,6 +52,7 @@ export default function Header({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isRegionOpen, setIsRegionOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { selectedRegionId, setSelectedRegionId, activeRegion } = useCurrency();
   const navigate = useNavigate();
 
@@ -222,6 +223,7 @@ export default function Header({
                 setIsMegaMenuOpen(false);
                 setIsMobileMenuOpen(false);
                 setIsRegionOpen(false);
+                setIsProfileOpen(false);
               }
               setIsSearchOpen((open) => !open);
               if (!isSearchOpen) {
@@ -236,13 +238,48 @@ export default function Header({
           </button>
 
           {user ? (
-            <button
-              onClick={handleLogout}
-              className="p-2 rounded-full hover:bg-white/5 text-indigo-400 hover:text-indigo-300 transition-colors"
-              title="Sign Out"
-            >
-              <LogOut className="h-5 w-5" />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setIsProfileOpen(!isProfileOpen);
+                  setIsMegaMenuOpen(false);
+                  setIsRegionOpen(false);
+                  setIsSearchOpen(false);
+                }}
+                className="p-2 rounded-full hover:bg-white/5 text-indigo-400 hover:text-indigo-300 transition-colors"
+                title="Profile Menu"
+              >
+                <User className="h-5 w-5" />
+              </button>
+              <AnimatePresence>
+                {isProfileOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-48 bg-[#111214] border border-white/10 rounded-xl shadow-2xl py-2 z-50"
+                  >
+                    <Link
+                      to="/my-orders"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="block px-4 py-2 text-sm text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
+                    >
+                      My Orders
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setIsProfileOpen(false);
+                        handleLogout();
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors"
+                    >
+                      Sign Out
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           ) : (
             <button
               onClick={() => setIsAuthModalOpen(true)}

@@ -24,6 +24,7 @@ import CartPage from "./pages/CartPage";
 import WishlistPage from "./pages/WishlistPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import BundleBuilderPage from "./pages/BundleBuilderPage";
+import MyOrdersPage from "./pages/MyOrdersPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 // Admin Pages
@@ -188,6 +189,7 @@ export default function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/my-orders" element={<MyOrdersPage />} />
           <Route path="/bundle-builder" element={<BundleBuilderPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
