@@ -10,10 +10,11 @@ interface ProductTabsProps {
 }
 
 export default function ProductTabs({ description, details, specifications, warranty, shipping }: ProductTabsProps) {
-  const [activeTab, setActiveTab] = useState<"description" | "specifications" | "shipping">("description");
+  const [activeTab, setActiveTab] = useState<"description" | "details" | "specifications" | "shipping">("description");
 
   const tabs = [
     { id: "description", label: "Description" },
+    { id: "details", label: "Product Details" },
     { id: "specifications", label: "Specifications" },
     { id: "shipping", label: "Shipping & Returns" },
   ] as const;
@@ -59,6 +60,19 @@ export default function ProductTabs({ description, details, specifications, warr
               </div>
             )}
             
+            {activeTab === "details" && (
+              <div className="max-w-4xl space-y-8">
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {details.map((detail, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 shrink-0" />
+                      <span>{detail}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
             {activeTab === "specifications" && (
               <div className="max-w-4xl space-y-8">
                 {specifications && (
@@ -71,14 +85,6 @@ export default function ProductTabs({ description, details, specifications, warr
                     ))}
                   </dl>
                 )}
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {details.map((detail, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 shrink-0" />
-                      <span>{detail}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             )}
             
