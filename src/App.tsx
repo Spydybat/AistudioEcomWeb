@@ -168,12 +168,12 @@ export default function App() {
           }
         >
           <Route index element={<AdminDashboardPage />} />
-          <Route path="products" element={<AdminProductsPage />} />
-          <Route path="categories" element={<AdminCategoriesPage />} />
-          <Route path="brands" element={<AdminBrandsPage />} />
-          <Route path="orders" element={<AdminOrdersPage />} />
-          <Route path="customers" element={<AdminCustomersPage />} />
-          <Route path="reviews" element={<AdminReviewsPage />} />
+          <Route path="/admin/products" element={<AdminProductsPage />} />
+          <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+          <Route path="/admin/brands" element={<AdminBrandsPage />} />
+          <Route path="/admin/orders" element={<AdminOrdersPage />} />
+          <Route path="/admin/customers" element={<AdminCustomersPage />} />
+          <Route path="/admin/reviews" element={<AdminReviewsPage />} />
         </Route>
 
         {/* Store routes */}
