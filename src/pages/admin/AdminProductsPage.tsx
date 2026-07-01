@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Search, Plus, Edit2, Trash2, X } from "lucide-react";
 import DataTable from "../../components/admin/DataTable";
 import { fetchProducts, fetchCategories, fetchBrands } from "../../data/products";
