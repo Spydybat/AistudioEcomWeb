@@ -59,6 +59,15 @@ export default function Header({
   const handleRegionSelect = (regionId: string) => {
     setSelectedRegionId(regionId);
     setIsRegionOpen(false);
+    setIsMobileMenuOpen(false);
+  };
+
+  const toggleRegion = () => {
+    if (!isRegionOpen) {
+      setIsSearchOpen(false);
+      setIsMegaMenuOpen(false);
+    }
+    setIsRegionOpen((open) => !open);
   };
 
   const { scrollYProgress } = useScroll();
@@ -91,6 +100,10 @@ export default function Header({
     
     if (catId === "electronics") {
       navigate("/electronics");
+    } else if (catId === "wishlist") {
+      navigate("/wishlist");
+    } else if (catId === "cart") {
+      navigate("/cart");
     } else {
       setSelectedCategory(catId);
       navigate("/products");
@@ -103,6 +116,39 @@ export default function Header({
     setIsMobileMenuOpen(false);
     navigate("/products");
   };
+
+  const renderRegionDropdown = () => (
+    <AnimatePresence>
+      {isRegionOpen && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setIsRegionOpen(false)} />
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute top-full right-0 lg:right-2 mt-2 w-48 bg-[#2B2D31] border border-white/10 rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.5)] z-50 overflow-hidden"
+          >
+            <div className="py-2">
+              {REGIONS.map((region) => (
+                <button
+                  key={region.id}
+                  onClick={() => handleRegionSelect(region.id)}
+                  className={`w-full text-left px-4 py-2.5 text-xs tracking-wide flex items-center gap-3 hover:bg-indigo-500 hover:text-white transition-colors ${
+                    selectedRegionId === region.id ? "bg-indigo-500/10 text-indigo-400" : "text-zinc-300"
+                  }`}
+                >
+                  <span className="text-sm">{region.flag}</span>
+                  <span className="font-medium">{region.name}</span>
+                  <span className="ml-auto opacity-60 font-mono">{region.currency}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
 
   return (
     <header className="sticky top-0 z-40 w-full glass transition-all duration-300">
@@ -159,53 +205,18 @@ export default function Header({
           </span>
         </div>
 
-        <div className="flex items-center space-x-3 sm:space-x-5 text-zinc-300">
-          <div className="hidden lg:block relative">
+        <div className="flex items-center space-x-1.5 sm:space-x-5 text-zinc-300">
+          <div className="relative">
             <button
-              onClick={() => {
-                if (!isRegionOpen) {
-                  setIsSearchOpen(false);
-                  setIsMegaMenuOpen(false);
-                }
-                setIsRegionOpen((open) => !open);
-              }}
-              className="flex items-center text-xs text-zinc-400 tracking-wider gap-1.5 mr-2 bg-[#1E1F22] border border-white/5 px-3 py-1.5 rounded-full shadow-sm hover:text-white hover:bg-[#313338] hover:border-white/10 transition-all cursor-pointer"
+              onClick={toggleRegion}
+              className="hidden lg:flex items-center text-xs text-zinc-400 tracking-wider gap-1.5 mr-2 bg-[#1E1F22] border border-white/5 px-3 py-1.5 rounded-full shadow-sm hover:text-white hover:bg-[#313338] hover:border-white/10 transition-all cursor-pointer"
             >
               <span>{activeRegion.flag}</span>
               <span>{activeRegion.id} ({activeRegion.symbol})</span>
               <ChevronDown className="h-3 w-3 opacity-70" />
             </button>
 
-            <AnimatePresence>
-              {isRegionOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setIsRegionOpen(false)} />
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.15, ease: "easeOut" }}
-                    className="absolute top-full right-2 mt-2 w-48 bg-[#2B2D31] border border-white/10 rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.5)] z-50 overflow-hidden"
-                  >
-                    <div className="py-2">
-                      {REGIONS.map((region) => (
-                        <button
-                          key={region.id}
-                          onClick={() => handleRegionSelect(region.id)}
-                          className={`w-full text-left px-4 py-2.5 text-xs tracking-wide flex items-center gap-3 hover:bg-indigo-500 hover:text-white transition-colors ${
-                            selectedRegionId === region.id ? "bg-indigo-500/10 text-indigo-400" : "text-zinc-300"
-                          }`}
-                        >
-                          <span className="text-sm">{region.flag}</span>
-                          <span className="font-medium">{region.name}</span>
-                          <span className="ml-auto opacity-60 font-mono">{region.currency}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
+            {!isMobileMenuOpen && renderRegionDropdown()}
           </div>
 
           <button
@@ -292,7 +303,7 @@ export default function Header({
 
           <button
             onClick={() => navigate("/admin/login")}
-            className="hidden sm:inline-block p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+            className="p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
             title="Admin Panel"
           >
             <Shield className="h-5 w-5" />
@@ -426,19 +437,39 @@ export default function Header({
               >
                 Bundle Builder
               </Link>
-              <div className="pt-6 flex flex-col gap-3">
-                <span className="text-xs text-zinc-500 normal-case mb-2">Selected Region: {activeRegion.name} ({activeRegion.symbol})</span>
-                <div className="flex gap-4">
-                  <Link to="/wishlist" className="flex-1 py-3 text-center bg-[#2B2D31] border border-white/5 text-zinc-300 text-xs tracking-widest uppercase rounded-lg shadow-sm hover:text-white transition-colors">
-                    Wishlist
-                  </Link>
-                  <Link to="/cart" className="flex-1 py-3 text-center bg-indigo-500 text-white text-xs tracking-widest uppercase rounded-lg shadow-[0_4px_12px_rgba(88,101,242,0.4)] hover:bg-indigo-600 transition-colors">
-                    Cart
-                  </Link>
+              <div className="pt-6 flex flex-col gap-4">
+                <div className="relative w-full">
+                  <button 
+                    onClick={toggleRegion}
+                    className="flex items-center w-full p-4 bg-[#1A1B1E] hover:bg-[#2B2D31] border border-white/5 rounded-xl transition-all group cursor-pointer"
+                  >
+                    <div className="flex flex-col items-start gap-1">
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-base leading-none">{activeRegion.flag}</span>
+                        <span className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors normal-case tracking-normal">Select Region</span>
+                      </div>
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-widest group-hover:text-zinc-400 transition-colors pl-7">
+                        {activeRegion.name} ({activeRegion.symbol})
+                      </span>
+                    </div>
+                  </button>
+                  {isMobileMenuOpen && renderRegionDropdown()}
                 </div>
-                <Link to="/admin/login" className="text-center text-[10px] text-zinc-500 uppercase tracking-widest hover:text-zinc-300 transition-colors">
-                  Admin Panel
-                </Link>
+
+                <div className="flex gap-4">
+                  <button 
+                    onClick={() => handleNavClick("wishlist")}
+                    className="flex-1 py-3 text-center bg-[#2B2D31] border border-white/5 text-zinc-300 text-xs tracking-widest uppercase rounded-lg shadow-sm hover:text-white transition-colors"
+                  >
+                    Wishlist
+                  </button>
+                  <button 
+                    onClick={() => handleNavClick("cart")}
+                    className="flex-1 py-3 text-center bg-indigo-500 text-white text-xs tracking-widest uppercase rounded-lg shadow-[0_4px_12px_rgba(88,101,242,0.4)] hover:bg-indigo-600 transition-colors"
+                  >
+                    Cart
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
