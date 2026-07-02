@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ShoppingBag, Eye, X, Package } from "lucide-react";
 import { useShop } from "../context/ShopContext";
 import { supabase } from "../supabaseClient";
@@ -42,10 +42,6 @@ export default function MyOrdersPage() {
 
     fetchOrders();
   }, [user]);
-
-  if (!user && !loading) {
-    return <Navigate to="/" replace />;
-  }
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {

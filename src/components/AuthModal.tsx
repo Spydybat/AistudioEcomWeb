@@ -3,9 +3,11 @@ import { X, Mail, Lock, Loader2, LogIn, UserPlus, User, Phone } from "lucide-rea
 import { motion, AnimatePresence } from "motion/react";
 import { supabase } from "../supabaseClient";
 import { useShop } from "../context/ShopContext";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthModal() {
   const { isAuthModalOpen, setIsAuthModalOpen, showToast } = useShop();
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,8 +44,17 @@ export default function AuthModal() {
         
         showToast("Successfully logged in!");
         setIsAuthModalOpen(false);
+        navigate("/");
       } else {
-        const { data, error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({ 
+          email, 
+          password,
+          options: {
+            data: {
+              full_name: fullName || email.split('@')[0],
+            }
+          }
+        });
         if (error) throw error;
         
         if (data.user) {
@@ -64,6 +75,7 @@ export default function AuthModal() {
 
         showToast("Account created successfully!");
         setIsAuthModalOpen(false);
+        navigate("/");
       }
     } catch (err: any) {
       showToast(err.message || "An error occurred", "info");

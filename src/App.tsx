@@ -25,6 +25,7 @@ import WishlistPage from "./pages/WishlistPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import BundleBuilderPage from "./pages/BundleBuilderPage";
 import MyOrdersPage from "./pages/MyOrdersPage";
+import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 // Admin Pages
@@ -38,6 +39,7 @@ import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
 import AdminCustomersPage from "./pages/admin/AdminCustomersPage";
 import AdminReviewsPage from "./pages/admin/AdminReviewsPage";
 import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -186,9 +188,22 @@ export default function App() {
           <Route path="/brand/:brandId" element={<BrandPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/cart" element={
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/wishlist" element={
+            <ProtectedRoute>
+              <WishlistPage />
+            </ProtectedRoute>
+          } />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } />
           <Route path="/my-orders" element={<MyOrdersPage />} />
           <Route path="/bundle-builder" element={<BundleBuilderPage />} />
           <Route path="*" element={<NotFoundPage />} />

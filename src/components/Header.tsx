@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ChevronDown, Heart, Menu, Search, ShoppingBag, User, X, Sun, Moon, LogOut, Shield } from "lucide-react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { BRANDS, CATEGORIES, getSearchSuggestions, fetchCategories } from "../data/products";
@@ -55,6 +55,41 @@ export default function Header({
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { selectedRegionId, setSelectedRegionId, activeRegion } = useCurrency();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsProfileOpen(false);
+    setIsSearchOpen(false);
+    setIsMobileMenuOpen(false);
+    setIsRegionOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsProfileOpen(false);
+        setIsSearchOpen(false);
+      }
+    };
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("#profile-menu-container")) {
+        setIsProfileOpen(false);
+      }
+      if (!target.closest("#search-panel-container") && !target.closest("#search-trigger")) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    if (isProfileOpen || isSearchOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProfileOpen, isSearchOpen]);
 
   const handleRegionSelect = (regionId: string) => {
     setSelectedRegionId(regionId);
@@ -248,7 +283,7 @@ export default function Header({
           </button>
 
           {user ? (
-            <div className="relative">
+            <div className="relative" id="profile-menu-container">
               <button
                 onClick={() => {
                   setIsProfileOpen(!isProfileOpen);
@@ -256,10 +291,12 @@ export default function Header({
                   setIsRegionOpen(false);
                   setIsSearchOpen(false);
                 }}
-                className="p-2 rounded-full hover:bg-zinc-100 text-sky-500 hover:text-sky-600 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-zinc-100 text-sky-500 hover:text-sky-600 transition-colors"
                 title="Profile Menu"
               >
-                <User className="h-5 w-5" />
+                <span className="text-sm font-medium truncate max-w-[150px] hidden sm:block">{user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Profile"}</span>
+                <User className="h-5 w-5 sm:hidden" />
+                <ChevronDown className="h-4 w-4 hidden sm:block" />
               </button>
               <AnimatePresence>
                 {isProfileOpen && (
@@ -270,6 +307,13 @@ export default function Header({
                     transition={{ duration: 0.2 }}
                     className="absolute right-0 mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.1)] py-2 z-50"
                   >
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="block px-4 py-2 text-sm text-zinc-600 hover:text-black hover:bg-zinc-50 transition-colors"
+                    >
+                      Profile
+                    </Link>
                     <Link
                       to="/my-orders"
                       onClick={() => setIsProfileOpen(false)}
@@ -284,7 +328,7 @@ export default function Header({
                       }}
                       className="w-full text-left px-4 py-2 text-sm text-red-500 hover:text-red-600 hover:bg-zinc-50 transition-colors"
                     >
-                      Sign Out
+                      Logout
                     </button>
                   </motion.div>
                 )}
@@ -352,6 +396,7 @@ export default function Header({
       <AnimatePresence>
         {isSearchOpen && (
           <motion.div
+            id="search-panel-container"
             initial={{ opacity: 0, y: -20, filter: "blur(10px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}

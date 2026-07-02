@@ -323,6 +323,11 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
   // --- Cart operations ---
   const handleAddToCart = async (product: Product, size: string, color: ProductColor) => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     if (user && cartId && isUUID(product.id)) {
       const { data: existingItem } = await supabase.from('cart_items')
         .select('quantity')
@@ -401,6 +406,11 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
   // --- Wishlist operations ---
   const handleToggleWishlist = async (product: Product) => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     const exists = wishlist.some((item) => item?.id === product.id);
 
     if (exists) {
@@ -434,6 +444,11 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   };
 
   const handleMoveAllWishlistToCart = async () => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+    
     if (wishlist.length === 0) return;
     
     if (user && cartId) {
