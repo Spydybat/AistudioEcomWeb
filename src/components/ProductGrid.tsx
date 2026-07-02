@@ -77,22 +77,22 @@ export default function ProductGrid({
   const activeCategoryName = categoryMap.get(selectedCategory) || "All Collections";
 
   return (
-    <section id="product-catalog" className="py-20 bg-[#111214] scroll-mt-20">
+    <section id="product-catalog" className="py-20 bg-white scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
-          <p className="text-[10px] font-mono tracking-[0.4em] uppercase text-zinc-500 mb-4">
+          <p className="text-[10px] font-sans font-bold tracking-widest uppercase text-zinc-500 mb-4">
             Aura Marketplace
           </p>
-          <h2 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-white uppercase">
+          <h2 className="text-4xl sm:text-5xl font-sans font-bold tracking-tight text-black uppercase">
             {activeCategoryName}
           </h2>
-          <div className="w-16 h-[2px] bg-indigo-500 mx-auto mt-6" />
+          <div className="w-16 h-[2px] bg-zinc-200 mx-auto mt-6" />
         </div>
 
         {/* Filters Top Bar */}
-        <div className="bg-[#1E1F22]/80 backdrop-blur-md rounded-2xl border border-white/5 p-2 mb-12 flex flex-col md:flex-row gap-5 items-stretch md:items-center justify-between shadow-sm">
+        <div className="bg-white border border-zinc-200 rounded-full p-2 mb-12 flex flex-col md:flex-row gap-5 items-stretch md:items-center justify-between shadow-sm">
           
           {/* Category Tabs */}
           <div className="flex items-center overflow-x-auto no-scrollbar gap-2 p-1">
@@ -100,10 +100,10 @@ export default function ProductGrid({
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-6 py-2.5 text-xs tracking-wider uppercase font-medium whitespace-nowrap transition-all rounded-xl cursor-pointer ${
+                className={`px-6 py-2.5 text-xs tracking-widest uppercase font-bold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                   selectedCategory === cat.id
-                    ? "bg-indigo-500 text-white shadow-md"
-                    : "bg-transparent text-zinc-400 hover:text-white hover:bg-white/10"
+                    ? "bg-black text-white shadow-sm"
+                    : "bg-transparent text-zinc-500 hover:text-black hover:bg-zinc-100"
                 }`}
                 id={`cat-tab-${cat.id}`}
               >
@@ -113,19 +113,19 @@ export default function ProductGrid({
           </div>
 
           {/* Filtering Metrics & Dropdowns */}
-          <div className="flex items-center justify-between md:justify-end gap-6 px-4 md:px-2 border-t border-white/5 pt-4 md:pt-0 md:border-0">
-            <div className="flex items-center gap-2 text-xs text-zinc-400 uppercase tracking-widest font-medium">
+          <div className="flex items-center justify-between md:justify-end gap-6 px-4 md:px-2 border-t border-zinc-200 pt-4 md:pt-0 md:border-0">
+            <div className="flex items-center gap-2 text-xs text-zinc-600 uppercase tracking-widest font-bold">
               <Grid3X3 className="h-4 w-4" />
               <span>{filteredAndSortedProducts.length} Options</span>
             </div>
 
             {/* Sorting List dropdown */}
             <div className="relative flex items-center gap-2">
-              <ArrowUpDown className="h-4 w-4 text-zinc-400" />
+              <ArrowUpDown className="h-4 w-4 text-zinc-600" />
               <select
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value as SortOption)}
-                className="bg-transparent text-xs uppercase tracking-wider font-medium text-white focus:outline-none cursor-pointer hover:opacity-70 transition-opacity [&>option]:bg-[#2B2D31]"
+                className="bg-transparent text-xs uppercase tracking-widest font-bold text-black focus:outline-none cursor-pointer hover:opacity-70 transition-opacity [&>option]:bg-white"
                 title="Sort Collections"
                 id="sort-selector"
               >
@@ -140,16 +140,16 @@ export default function ProductGrid({
 
         {/* Active Searches Feedback line */}
         {(searchQuery || (selectedCategory && selectedCategory !== "all")) && (
-          <div className="mb-6 flex items-center justify-between bg-[#1E1F22] border border-white/5 px-4 py-3 text-xs text-zinc-400 rounded">
+          <div className="mb-6 flex items-center justify-between bg-zinc-50 border border-zinc-200 px-4 py-3 text-xs text-zinc-600 font-bold rounded-xl">
             <div className="flex flex-wrap items-center gap-2">
               <span>Filtering for:</span>
               {selectedCategory && selectedCategory !== "all" && (
-                <span className="px-2 py-0.5 bg-[#2B2D31] text-zinc-300 rounded border border-white/5 uppercase font-mono text-[10px]">
+                <span className="px-2 py-0.5 bg-white text-black rounded border border-zinc-200 uppercase font-sans tracking-widest text-[10px]">
                   Department: {activeCategoryName}
                 </span>
               )}
               {searchQuery && (
-                <span className="px-2 py-0.5 bg-[#2B2D31] text-zinc-300 rounded border border-white/5">
+                <span className="px-2 py-0.5 bg-white text-black rounded border border-zinc-200">
                   Search: "{searchQuery}"
                 </span>
               )}
@@ -160,7 +160,7 @@ export default function ProductGrid({
                 setSelectedCategory("all");
                 setSortOption("default");
               }}
-              className="text-white border-b border-white hover:text-zinc-500 hover:border-zinc-500 transition-colors py-0.5 cursor-pointer flex items-center gap-1"
+              className="text-black border-b border-black hover:text-zinc-500 hover:border-zinc-500 transition-colors py-0.5 cursor-pointer flex items-center gap-1"
             >
               <RefreshCw className="h-3 w-3" />
               <span>Reset filter</span>
@@ -189,8 +189,8 @@ export default function ProductGrid({
           </div>
         ) : (
           /* Empty / No items match fallback */
-          <div className="text-center py-20 bg-[#1E1F22] border border-white/5">
-            <p className="text-sm font-sans text-zinc-400 mb-4">
+          <div className="text-center py-20 bg-zinc-50 border border-zinc-200 rounded-3xl">
+            <p className="text-sm font-sans font-medium text-zinc-600 mb-4">
               We did not find any products matching your criteria.
             </p>
             <button
@@ -198,7 +198,7 @@ export default function ProductGrid({
                 setSearchQuery("");
                 setSelectedCategory("all");
               }}
-              className="px-6 py-3 bg-indigo-500 text-white hover:bg-indigo-600 text-xs tracking-widest uppercase transition-colors rounded-none"
+              className="px-6 py-3 bg-black text-white hover:bg-zinc-800 text-xs font-bold tracking-widest uppercase transition-colors rounded-full"
             >
               Browse All Products
             </button>
@@ -209,4 +209,3 @@ export default function ProductGrid({
     </section>
   );
 }
-

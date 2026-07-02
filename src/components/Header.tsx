@@ -126,16 +126,15 @@ export default function Header({
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute top-full right-0 lg:right-2 mt-2 w-48 bg-[#2B2D31] border border-white/10 rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.5)] z-50 overflow-hidden"
+            className="absolute top-full right-0 lg:right-2 mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.1)] z-50 overflow-hidden"
           >
             <div className="py-2">
               {REGIONS.map((region) => (
                 <button
                   key={region.id}
                   onClick={() => handleRegionSelect(region.id)}
-                  className={`w-full text-left px-4 py-2.5 text-xs tracking-wide flex items-center gap-3 hover:bg-indigo-500 hover:text-white transition-colors ${
-                    selectedRegionId === region.id ? "bg-indigo-500/10 text-indigo-400" : "text-zinc-300"
+                  className={`w-full text-left px-4 py-2.5 text-xs flex items-center gap-3 hover:bg-zinc-50 hover:text-black transition-colors ${
+                    selectedRegionId === region.id ? "bg-zinc-100 text-black font-semibold" : "text-zinc-600"
                   }`}
                 >
                   <span className="text-sm">{region.flag}</span>
@@ -151,7 +150,7 @@ export default function Header({
   );
 
   return (
-    <header className="sticky top-0 z-40 w-full glass transition-all duration-300">
+    <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-xl border-b border-zinc-100 transition-all duration-300">
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500 origin-left z-50"
         style={{ scaleX }}
@@ -165,7 +164,7 @@ export default function Header({
               setIsRegionOpen(false);
               setIsMobileMenuOpen((open) => !open);
             }}
-            className="p-1 px-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded transition-colors"
+            className="p-1 px-2 text-zinc-600 hover:text-black hover:bg-zinc-100 rounded-full transition-colors"
             id="mobile-menu-toggle"
             aria-label="Open departments"
           >
@@ -173,43 +172,43 @@ export default function Header({
           </button>
         </div>
 
-        <nav className="hidden md:flex items-center space-x-6 text-xs font-medium uppercase tracking-widest text-zinc-400">
+        <nav className="hidden md:flex items-center space-x-6 text-xs font-semibold uppercase tracking-widest text-zinc-500">
 
 
           {featuredDepartments.map((category) => (
             <button
               key={category.id}
               onClick={() => handleNavClick(category.id)}
-              className="hover:text-white transition-colors py-1 relative group cursor-pointer"
+              className="hover:text-black transition-colors py-1 relative group cursor-pointer"
             >
               {category.name}
-              <span className="absolute bottom-0 left-0 w-full h-[1px] bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              <span className="absolute bottom-0 left-0 w-full h-[1px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
             </button>
           ))}
 
-          <Link to="/bundle-builder" onClick={() => { setIsSearchOpen(false); setIsRegionOpen(false); }} className="hover:text-white transition-colors py-1 relative group cursor-pointer">
+          <Link to="/bundle-builder" onClick={() => { setIsSearchOpen(false); setIsRegionOpen(false); }} className="hover:text-black transition-colors py-1 relative group cursor-pointer">
             Bundle Builder
-            <span className="absolute bottom-0 left-0 w-full h-[1px] bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+            <span className="absolute bottom-0 left-0 w-full h-[1px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
           </Link>
         </nav>
 
         <div className="flex flex-col items-center select-none text-center">
           <Link
             to="/"
-            className="text-xl sm:text-2xl font-serif font-semibold tracking-widest text-white uppercase cursor-pointer hover:opacity-80 transition-opacity"
+            className="text-xl sm:text-2xl font-sans font-bold tracking-tight text-black cursor-pointer hover:opacity-80 transition-opacity"
           >
             AURA STUDIO
           </Link>
-          <span className="hidden md:inline text-[8px] tracking-[0.3em] font-light text-zinc-500 mt-1 uppercase">
+          <span className="hidden md:inline text-[8px] tracking-[0.3em] font-light text-white mix-blend-difference mt-1 uppercase">
             Premium Marketplace
           </span>
         </div>
 
-        <div className="flex items-center space-x-1.5 sm:space-x-5 text-zinc-300">
+        <div className="flex items-center space-x-1.5 sm:space-x-5 text-zinc-500">
           <div className="relative">
             <button
               onClick={toggleRegion}
-              className="hidden lg:flex items-center text-xs text-zinc-400 tracking-wider gap-1.5 mr-2 bg-[#1E1F22] border border-white/5 px-3 py-1.5 rounded-full shadow-sm hover:text-white hover:bg-[#313338] hover:border-white/10 transition-all cursor-pointer"
+              className="hidden lg:flex items-center text-xs text-zinc-600 font-medium gap-1.5 mr-2 bg-zinc-50 border border-zinc-200 px-3 py-1.5 rounded-full hover:text-black hover:bg-zinc-100 transition-all cursor-pointer"
             >
               <span>{activeRegion.flag}</span>
               <span>{activeRegion.id} ({activeRegion.symbol})</span>
@@ -221,7 +220,7 @@ export default function Header({
 
           <button
             onClick={() => setIsLightMode(!isLightMode)}
-            className="p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors theme-icon"
+            className="p-2 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-black transition-colors theme-icon"
             title="Toggle theme"
             aria-label="Toggle theme"
           >
@@ -241,7 +240,7 @@ export default function Header({
                 setTimeout(() => document.getElementById("search-box-input")?.focus(), 150);
               }
             }}
-            className="p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors"
+            className="p-2 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-black transition-colors"
             title="Search products"
             id="search-trigger"
           >
@@ -257,7 +256,7 @@ export default function Header({
                   setIsRegionOpen(false);
                   setIsSearchOpen(false);
                 }}
-                className="p-2 rounded-full hover:bg-white/5 text-indigo-400 hover:text-indigo-300 transition-colors"
+                className="p-2 rounded-full hover:bg-zinc-100 text-sky-500 hover:text-sky-600 transition-colors"
                 title="Profile Menu"
               >
                 <User className="h-5 w-5" />
@@ -269,12 +268,12 @@ export default function Header({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 bg-[#111214] border border-white/10 rounded-xl shadow-2xl py-2 z-50"
+                    className="absolute right-0 mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.1)] py-2 z-50"
                   >
                     <Link
                       to="/my-orders"
                       onClick={() => setIsProfileOpen(false)}
-                      className="block px-4 py-2 text-sm text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
+                      className="block px-4 py-2 text-sm text-zinc-600 hover:text-black hover:bg-zinc-50 transition-colors"
                     >
                       My Orders
                     </Link>
@@ -283,7 +282,7 @@ export default function Header({
                         setIsProfileOpen(false);
                         handleLogout();
                       }}
-                      className="w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-white/5 transition-colors"
+                      className="w-full text-left px-4 py-2 text-sm text-red-500 hover:text-red-600 hover:bg-zinc-50 transition-colors"
                     >
                       Sign Out
                     </button>
@@ -294,7 +293,7 @@ export default function Header({
           ) : (
             <button
               onClick={() => setIsAuthModalOpen(true)}
-              className="p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors"
+              className="p-2 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-black transition-colors"
               title="Sign In"
             >
               <User className="h-5 w-5" />
@@ -303,7 +302,7 @@ export default function Header({
 
           <button
             onClick={() => navigate("/admin/login")}
-            className="p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+            className="p-2 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-black transition-colors cursor-pointer"
             title="Admin Panel"
           >
             <Shield className="h-5 w-5" />
@@ -311,7 +310,7 @@ export default function Header({
 
           <Link
             to="/wishlist"
-            className="p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-rose-400 transition-colors relative group"
+            className="p-2 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-rose-500 transition-colors relative group"
             title="View Wishlist"
             id="wishlist-trigger"
           >
@@ -329,7 +328,7 @@ export default function Header({
 
           <Link
             to="/cart"
-            className="p-2 rounded-full hover:bg-white/5 text-zinc-400 hover:text-white transition-colors relative group"
+            className="p-2 rounded-full hover:bg-zinc-100 text-zinc-600 hover:text-black transition-colors relative group"
             title="View Cart"
             id="cart-trigger"
           >
@@ -339,7 +338,7 @@ export default function Header({
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 key={cartCount}
-                className="absolute top-0 -right-1 bg-indigo-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold"
+                className="absolute top-0 -right-1 bg-sky-500 text-white rounded-full text-[10px] w-4 h-4 flex items-center justify-center font-bold"
               >
                 {cartCount}
               </motion.span>
@@ -356,18 +355,18 @@ export default function Header({
             initial={{ opacity: 0, y: -20, filter: "blur(10px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-            className="absolute left-0 w-full glass-dark border-b border-white/5 shadow-[0_16px_40px_rgba(0,0,0,0.5)] z-30"
+            className="absolute left-0 w-full bg-white/90 backdrop-blur-xl border-b border-zinc-100 shadow-[0_16px_40px_rgba(0,0,0,0.1)] z-30"
           >
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 h-6 w-6" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 h-6 w-6" />
                 <input
                   id="search-box-input"
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products, brands, and departments..."
-                  className="w-full bg-[#1E1F22]/80 backdrop-blur-sm pl-14 pr-10 py-5 text-lg font-sans rounded-2xl border border-white/5 focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 focus:outline-none transition-all text-white shadow-inner"
+                  className="w-full bg-zinc-50 pl-14 pr-10 py-5 text-lg font-sans rounded-2xl border border-zinc-200 focus:border-zinc-300 focus:ring-1 focus:ring-zinc-300 focus:outline-none transition-all text-zinc-900 shadow-sm"
                 />
                 {searchQuery && (
                   <button
@@ -375,7 +374,7 @@ export default function Header({
                       setSearchQuery("");
                       navigate("/products");
                     }}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white bg-[#313338] rounded-full p-1 transition-colors cursor-pointer"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-black bg-zinc-200 rounded-full p-1 transition-colors cursor-pointer"
                     aria-label="Clear search"
                   >
                     <X className="h-5 w-5" />
@@ -389,19 +388,19 @@ export default function Header({
                     setIsSearchOpen(false);
                     navigate("/products");
                   }}
-                  className="mt-4 w-full py-3 bg-indigo-500 text-white text-xs uppercase tracking-widest rounded-lg hover:bg-indigo-600 transition-colors cursor-pointer"
+                  className="mt-4 w-full py-3 bg-black text-white text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-zinc-800 transition-colors cursor-pointer"
                 >
                   View all results for &quot;{searchQuery}&quot;
                 </button>
               )}
 
-              <div className="mt-6 flex flex-wrap gap-2 items-center text-xs text-zinc-500">
-                <span className="font-medium mr-2 uppercase tracking-wider text-zinc-400">Suggestions:</span>
+              <div className="mt-8 text-xs text-zinc-500 flex flex-wrap gap-2">
+                <span className="font-bold mr-2 uppercase tracking-wider text-zinc-500">Suggestions:</span>
                 {searchSuggestions.map((tag) => (
                   <button
                     key={tag}
                     onClick={() => handleSearchClick(tag)}
-                    className="px-4 py-1.5 bg-[#2B2D31] hover:bg-indigo-500 hover:text-white border border-white/5 text-zinc-300 transition-all uppercase tracking-wider rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.2)]"
+                    className="px-4 py-1.5 bg-zinc-100 hover:bg-black hover:text-white border border-zinc-200 text-zinc-700 transition-all uppercase tracking-wider rounded-full shadow-sm font-medium"
                   >
                     {tag}
                   </button>
@@ -418,14 +417,14 @@ export default function Header({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-b border-white/10 glass-dark"
+            className="md:hidden border-b border-zinc-100 bg-white"
           >
-            <div className="px-4 pt-2 pb-6 space-y-3 flex flex-col items-stretch text-sm uppercase tracking-wider font-medium text-zinc-300">
+            <div className="px-4 pt-2 pb-6 space-y-3 flex flex-col items-stretch text-sm uppercase tracking-wider font-semibold text-zinc-500">
               {departments.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => handleNavClick(category.id)}
-                  className="text-left py-3 hover:text-white hover:pl-2 transition-all border-b border-white/5 justify-start"
+                  className="text-left py-3 hover:text-black hover:pl-2 transition-all border-b border-zinc-100 justify-start"
                 >
                   {category.name}
                 </button>
@@ -433,7 +432,7 @@ export default function Header({
               <Link
                 to="/bundle-builder"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-left py-3 hover:text-white hover:pl-2 transition-all border-b border-white/5 justify-start"
+                className="text-left py-3 hover:text-black hover:pl-2 transition-all border-b border-zinc-100 justify-start"
               >
                 Bundle Builder
               </Link>
@@ -441,14 +440,14 @@ export default function Header({
                 <div className="relative w-full">
                   <button 
                     onClick={toggleRegion}
-                    className="flex items-center w-full p-4 bg-[#1A1B1E] hover:bg-[#2B2D31] border border-white/5 rounded-xl transition-all group cursor-pointer"
+                    className="flex items-center w-full p-4 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 rounded-2xl transition-all group cursor-pointer"
                   >
                     <div className="flex flex-col items-start gap-1">
                       <div className="flex items-center gap-2.5">
                         <span className="text-base leading-none">{activeRegion.flag}</span>
-                        <span className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors normal-case tracking-normal">Select Region</span>
+                        <span className="text-sm font-semibold text-zinc-700 group-hover:text-black transition-colors normal-case tracking-normal">Select Region</span>
                       </div>
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-widest group-hover:text-zinc-400 transition-colors pl-7">
+                      <span className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest transition-colors pl-7">
                         {activeRegion.name} ({activeRegion.symbol})
                       </span>
                     </div>
@@ -459,13 +458,13 @@ export default function Header({
                 <div className="flex gap-4">
                   <button 
                     onClick={() => handleNavClick("wishlist")}
-                    className="flex-1 py-3 text-center bg-[#2B2D31] border border-white/5 text-zinc-300 text-xs tracking-widest uppercase rounded-lg shadow-sm hover:text-white transition-colors"
+                    className="flex-1 py-3 text-center bg-zinc-100 border border-zinc-200 text-zinc-700 font-semibold text-xs tracking-widest uppercase rounded-full hover:bg-zinc-200 hover:text-black transition-colors"
                   >
                     Wishlist
                   </button>
                   <button 
                     onClick={() => handleNavClick("cart")}
-                    className="flex-1 py-3 text-center bg-indigo-500 text-white text-xs tracking-widest uppercase rounded-lg shadow-[0_4px_12px_rgba(88,101,242,0.4)] hover:bg-indigo-600 transition-colors"
+                    className="flex-1 py-3 text-center bg-black text-white font-semibold text-xs tracking-widest uppercase rounded-full shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:bg-zinc-800 transition-colors"
                   >
                     Cart
                   </button>

@@ -12,7 +12,7 @@ export default function FeaturedCategories({
   const visualCategories = CATEGORIES.filter(c => c.id !== "all" && c.featured).slice(0, 4);
 
   return (
-    <section className="py-24 sm:py-32 bg-[#1E1F22] overflow-hidden">
+    <section className="py-24 sm:py-32 bg-white overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -20,7 +20,7 @@ export default function FeaturedCategories({
           viewport={{ once: true }}
           className="text-center mb-16 sm:mb-24"
         >
-          <h2 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-white uppercase">
+          <h2 className="text-4xl sm:text-5xl font-sans font-bold tracking-tight text-black uppercase">
             Shop By Category
           </h2>
         </motion.div>
@@ -37,7 +37,7 @@ export default function FeaturedCategories({
                 onFilterCategory(category.id);
                 document.getElementById('product-catalog')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="relative group aspect-square md:aspect-[4/3] rounded-[2rem] overflow-hidden cursor-pointer"
+              className="relative group aspect-square md:aspect-[4/3] rounded-[2rem] overflow-hidden cursor-pointer shadow-sm hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-shadow duration-500"
             >
               <img
                 src={category.image}
@@ -48,10 +48,10 @@ export default function FeaturedCategories({
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
               
               <div className="absolute inset-0 p-8 sm:p-12 flex flex-col justify-end items-center sm:items-start text-center sm:text-left transition-transform duration-500 group-hover:-translate-y-2">
-                <h3 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-wide uppercase mb-2">
+                <h3 className="text-3xl sm:text-4xl font-sans font-bold text-white tracking-tight uppercase mb-2">
                   {category.name}
                 </h3>
-                <span className="text-white/80 text-xs font-mono tracking-[0.2em] uppercase font-semibold">
+                <span className="text-white/90 text-xs font-sans tracking-[0.2em] uppercase font-bold">
                   Explore Department
                 </span>
               </div>

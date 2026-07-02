@@ -22,10 +22,10 @@ export default function WishlistItemRow({
   const imageSize = compact ? "w-16 h-20" : "w-24 h-28";
 
   return (
-    <div className="flex gap-4 py-4 border-b border-white/5 last:border-0">
+    <div className="flex gap-4 py-5 border-b border-zinc-100 last:border-0">
       <Link
         to={`/product/${product.id}`}
-        className={`${imageSize} bg-[#111214] overflow-hidden border border-white/5 shrink-0 hover:opacity-90 transition-opacity rounded-md flex items-center justify-center`}
+        className={`${imageSize} bg-zinc-50 overflow-hidden border border-zinc-200 shrink-0 hover:opacity-90 transition-opacity rounded-xl flex items-center justify-center`}
       >
         {(() => {
           const imageUrl = product?.images?.[0] ?? (product as any)?.image ?? (product as any)?.thumbnail ?? null;
@@ -37,7 +37,7 @@ export default function WishlistItemRow({
               referrerPolicy="no-referrer"
             />
           ) : (
-            <span className="text-[10px] text-zinc-600 font-medium">No Image</span>
+            <span className="text-[10px] text-zinc-500 font-medium">No Image</span>
           );
         })()}
       </Link>
@@ -47,42 +47,42 @@ export default function WishlistItemRow({
           <div className="flex justify-between items-start gap-2">
             <Link
               to={`/product/${product.id}`}
-              className={`font-serif font-medium text-white tracking-wide line-clamp-2 hover:text-zinc-300 transition-colors ${compact ? "text-xs sm:text-sm" : "text-sm sm:text-base"}`}
+              className={`font-sans font-bold text-black tracking-tight line-clamp-2 hover:text-zinc-600 transition-colors ${compact ? "text-xs sm:text-sm" : "text-sm sm:text-base"}`}
             >
               {product.name}
             </Link>
             <button
               onClick={() => onRemove(product)}
-              className="text-zinc-400 hover:text-rose-500 p-1 rounded cursor-pointer shrink-0"
+              className="text-zinc-400 hover:text-red-500 p-1.5 rounded-full hover:bg-zinc-100 cursor-pointer shrink-0 transition-colors"
               title="Remove from wishlist"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
-          <span className={`text-white font-sans font-semibold block mt-1.5 ${compact ? "text-sm" : "text-base"}`}>
+          <span className={`text-black font-sans font-bold block mt-1.5 ${compact ? "text-sm" : "text-base"}`}>
             {formatPrice(product.price)}
           </span>
           {product.badge && (
-            <span className="inline-block mt-1 px-2 py-0.5 bg-indigo-500/90 text-white text-[10px] font-mono tracking-widest uppercase rounded">
+            <span className="inline-block mt-1.5 px-2.5 py-1 bg-black text-white text-[9px] font-sans font-bold tracking-widest uppercase rounded">
               {product.badge}
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-2 mt-3">
+        <div className="flex items-center gap-2 mt-4">
           <button
             onClick={() => {
               onMoveToCart(product, defaultSize, defaultColor);
               onRemove(product);
             }}
-            className="flex-1 py-2.5 px-4 bg-[#1E1F22] border border-white/5 hover:border-indigo-500 hover:bg-indigo-500 text-white text-xs tracking-widest uppercase font-mono transition-all flex items-center justify-center gap-2 cursor-pointer rounded-lg"
+            className="flex-1 py-3 px-4 bg-black border border-black hover:bg-zinc-800 text-white text-[10px] tracking-widest uppercase font-sans font-bold transition-all flex items-center justify-center gap-2 cursor-pointer rounded-full shadow-sm hover:-translate-y-0.5"
           >
             <ShoppingBag className="h-3.5 w-3.5" />
             <span>Move to Bag</span>
           </button>
           <Link
             to={`/product/${product.id}`}
-            className="py-2.5 px-4 border border-white/10 hover:border-white/30 text-xs tracking-widest uppercase font-mono transition-all text-zinc-400 hover:text-white rounded-lg"
+            className="py-3 px-5 border border-zinc-200 hover:border-black text-[10px] tracking-widest uppercase font-sans font-bold transition-all text-zinc-600 hover:text-black rounded-full"
           >
             View
           </Link>

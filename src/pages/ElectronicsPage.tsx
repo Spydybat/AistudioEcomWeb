@@ -112,28 +112,28 @@ export default function ElectronicsPage() {
   };
 
   return (
-    <div className="flex-1 w-full flex flex-col">
+    <div className="flex-1 w-full flex flex-col bg-white">
       {/* Electronics Hero Section */}
-      <div className="bg-[#111214] text-white py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-40">
+      <div className="bg-zinc-50 text-black py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden border-b border-zinc-200">
+        <div className="absolute inset-0 opacity-20 mix-blend-multiply">
           <img 
             src={electronicsCategory?.image || "https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=2000"} 
             alt="Electronics" 
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#111214] via-[#111214]/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-zinc-50 via-zinc-50/80 to-transparent" />
         </div>
         
         <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono tracking-widest uppercase mb-6 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-zinc-200 text-[10px] font-bold tracking-widest uppercase mb-6 shadow-sm text-zinc-500">
               <Cpu className="h-4 w-4" />
               Technology & Audio
             </div>
-            <h1 className="text-4xl md:text-6xl font-serif font-bold tracking-tight mb-4">
+            <h1 className="text-4xl md:text-6xl font-sans font-bold tracking-tight uppercase mb-4">
               Premium Electronics
             </h1>
-            <p className="text-lg text-zinc-400 leading-relaxed max-w-xl">
+            <p className="text-lg text-zinc-600 font-medium leading-relaxed max-w-xl">
               {electronicsCategory?.description || "Audio, smart devices, and connected home technology curated for the modern lifestyle."}
             </p>
           </div>
@@ -141,68 +141,68 @@ export default function ElectronicsPage() {
       </div>
 
       {/* Full Catalog with Filters */}
-      <div className="pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex-1 w-full" id="electronics-catalog">
-        <div className="mb-10">
-          <h2 className="text-3xl font-serif font-bold tracking-tight uppercase text-white">All Electronics</h2>
-          <p className="text-zinc-400 mt-2">Browse our complete collection of technology products.</p>
+      <div className="pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex-1 w-full bg-white" id="electronics-catalog">
+        <div className="mb-10 border-b border-zinc-200 pb-6">
+          <h2 className="text-3xl font-sans font-bold tracking-tight uppercase text-black">All Electronics</h2>
+          <p className="text-zinc-500 font-medium mt-2">Browse our complete collection of technology products.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
           {/* Sidebar Filters */}
-          <aside className="lg:sticky lg:top-28 h-max rounded-2xl border border-white/5 bg-[#1E1F22] p-5">
+          <aside className="lg:sticky lg:top-28 h-max">
             <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-2 text-xs uppercase tracking-widest font-semibold text-white">
+              <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-black">
                 <SlidersHorizontal className="h-4 w-4" />
                 Filters
               </div>
-              <button onClick={resetFilters} className="text-[10px] uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
+              <button onClick={resetFilters} className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-black transition-colors cursor-pointer">
                 Reset
               </button>
             </div>
 
             <div className="space-y-6">
               <div>
-                <label className="block text-[10px] uppercase tracking-widest text-zinc-500 mb-2">Brand</label>
-                <select value={brandFilter} onChange={(e) => setBrandFilter(e.target.value)} className="w-full rounded-xl border border-white/5 bg-[#2B2D31] text-white px-3 py-3 text-xs uppercase tracking-wider outline-none focus:border-indigo-500 transition-colors">
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Brand</label>
+                <select value={brandFilter} onChange={(e) => setBrandFilter(e.target.value)} className="w-full rounded-2xl border border-zinc-200 bg-white text-black px-4 py-3 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-black transition-colors shadow-sm cursor-pointer">
                   <option value="all">All Brands</option>
                   {brands.map((brand) => <option key={brand} value={brand}>{brand}</option>)}
                 </select>
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase tracking-widest text-zinc-500 mb-2">RAM</label>
-                <select className="w-full rounded-xl border border-white/5 bg-[#2B2D31] text-white px-3 py-3 text-xs uppercase tracking-wider outline-none focus:border-indigo-500 transition-colors"><option>All RAM</option></select>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">RAM</label>
+                <select className="w-full rounded-2xl border border-zinc-200 bg-white text-black px-4 py-3 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-black transition-colors shadow-sm cursor-pointer"><option>All RAM</option></select>
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase tracking-widest text-zinc-500 mb-2">Storage</label>
-                <select className="w-full rounded-xl border border-white/5 bg-[#2B2D31] text-white px-3 py-3 text-xs uppercase tracking-wider outline-none focus:border-indigo-500 transition-colors"><option>All Storage</option></select>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Storage</label>
+                <select className="w-full rounded-2xl border border-zinc-200 bg-white text-black px-4 py-3 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-black transition-colors shadow-sm cursor-pointer"><option>All Storage</option></select>
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase tracking-widest text-zinc-500 mb-2">Processor</label>
-                <select className="w-full rounded-xl border border-white/5 bg-[#2B2D31] text-white px-3 py-3 text-xs uppercase tracking-wider outline-none focus:border-indigo-500 transition-colors"><option>All Processors</option></select>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Processor</label>
+                <select className="w-full rounded-2xl border border-zinc-200 bg-white text-black px-4 py-3 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-black transition-colors shadow-sm cursor-pointer"><option>All Processors</option></select>
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase tracking-widest text-zinc-500 mb-2">Display</label>
-                <select className="w-full rounded-xl border border-white/5 bg-[#2B2D31] text-white px-3 py-3 text-xs uppercase tracking-wider outline-none focus:border-indigo-500 transition-colors"><option>All Displays</option></select>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Display</label>
+                <select className="w-full rounded-2xl border border-zinc-200 bg-white text-black px-4 py-3 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-black transition-colors shadow-sm cursor-pointer"><option>All Displays</option></select>
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase tracking-widest text-zinc-500 mb-2">Battery</label>
-                <select className="w-full rounded-xl border border-white/5 bg-[#2B2D31] text-white px-3 py-3 text-xs uppercase tracking-wider outline-none focus:border-indigo-500 transition-colors"><option>All Batteries</option></select>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Battery</label>
+                <select className="w-full rounded-2xl border border-zinc-200 bg-white text-black px-4 py-3 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-black transition-colors shadow-sm cursor-pointer"><option>All Batteries</option></select>
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase tracking-widest text-zinc-500 mb-2">Price</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-2">Price</label>
                 <div className="grid grid-cols-1 gap-2">
                   {priceBands.map((band) => (
                     <button
                       key={band.id}
                       onClick={() => setPriceBand(band.id)}
-                      className={`rounded-xl border px-3 py-2.5 text-left text-xs transition-all ${
-                        priceBand === band.id ? "border-indigo-500 bg-indigo-500 text-white shadow-md" : "border-white/5 bg-[#2B2D31] text-zinc-400 hover:border-white/30 hover:text-white hover:bg-white/5"
+                      className={`rounded-2xl border px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer ${
+                        priceBand === band.id ? "border-black bg-black text-white shadow-[0_4px_12px_rgba(0,0,0,0.1)]" : "border-zinc-200 bg-white text-zinc-500 hover:border-black hover:text-black shadow-sm"
                       }`}
                     >
                       {band.label}
@@ -215,21 +215,21 @@ export default function ElectronicsPage() {
 
           {/* Product Grid Area */}
           <section>
-            <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center bg-[#1E1F22] p-4 rounded-2xl mb-8 gap-4 border border-white/5 shadow-sm">
-              <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-400 font-medium">
+            <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center mb-8 gap-4">
+              <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
                 <Grid3X3 className="h-4 w-4" />
-                <span className="uppercase tracking-widest">{filteredAndSortedProducts.length} products</span>
+                <span>{filteredAndSortedProducts.length} products</span>
                 {searchQuery && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#2B2D31] border border-white/5 px-3 py-1.5 text-zinc-300">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-3 py-1.5 text-black">
                     Search: &quot;{searchQuery}&quot;
-                    <button onClick={() => setSearchQuery("")} aria-label="Clear search" className="hover:text-red-500 transition-colors"><X className="h-3.5 w-3.5" /></button>
+                    <button onClick={() => setSearchQuery("")} aria-label="Clear search" className="hover:text-rose-600 transition-colors cursor-pointer"><X className="h-3 w-3" /></button>
                   </span>
                 )}
               </div>
 
               <div className="relative flex items-center gap-2">
-                <ArrowUpDown className="h-4 w-4 text-zinc-500" />
-                <select value={sortOption} onChange={(e) => setSortOption(e.target.value as SortOption)} className="rounded-xl border border-white/5 bg-[#2B2D31] text-white px-4 py-2.5 text-xs uppercase tracking-wider font-medium outline-none focus:border-indigo-500 transition-colors">
+                <ArrowUpDown className="h-4 w-4 text-black" />
+                <select value={sortOption} onChange={(e) => setSortOption(e.target.value as SortOption)} className="rounded-2xl border border-zinc-200 bg-white text-black px-4 py-3 text-[10px] font-bold uppercase tracking-widest outline-none focus:border-black transition-colors shadow-sm cursor-pointer">
                   <option value="default">Featured</option>
                   <option value="newest">Newest</option>
                   <option value="price-asc">Price: Low to High</option>
@@ -244,20 +244,20 @@ export default function ElectronicsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="animate-pulse flex flex-col gap-4">
-                    <div className="bg-[#2B2D31] rounded-2xl aspect-[4/5] w-full" />
-                    <div className="h-4 bg-[#2B2D31] w-3/4 rounded" />
-                    <div className="h-4 bg-[#2B2D31] w-1/4 rounded" />
+                    <div className="bg-zinc-100 rounded-3xl aspect-[4/5] w-full" />
+                    <div className="h-4 bg-zinc-100 w-3/4 rounded" />
+                    <div className="h-4 bg-zinc-100 w-1/4 rounded" />
                   </div>
                 ))}
               </div>
             ) : currentProducts.length === 0 ? (
-              <div className="text-center py-20 rounded-2xl border border-white/5 bg-[#1E1F22] flex flex-col items-center justify-center">
-                <div className="bg-[#2B2D31] p-4 rounded-full shadow-sm mb-4">
-                  <RefreshCw className="h-8 w-8 text-zinc-500" />
+              <div className="text-center py-20 rounded-3xl border border-zinc-200 border-dashed bg-zinc-50 flex flex-col items-center justify-center">
+                <div className="bg-white border border-zinc-200 p-4 rounded-full shadow-sm mb-4">
+                  <RefreshCw className="h-8 w-8 text-zinc-400" />
                 </div>
-                <h3 className="text-lg font-serif font-bold text-white mb-2">No products found</h3>
-                <p className="text-zinc-400 mb-6 max-w-sm">We couldn't find any electronics matching your current search and filter selections.</p>
-                <button onClick={resetFilters} className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-500 text-white rounded-xl text-xs uppercase tracking-widest font-semibold hover:bg-indigo-600 transition-colors">
+                <h3 className="text-lg font-sans font-bold tracking-tight text-black mb-2 uppercase">No products found</h3>
+                <p className="text-zinc-500 font-medium mb-6 max-w-sm">We couldn't find any electronics matching your current search and filter selections.</p>
+                <button onClick={resetFilters} className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-zinc-800 transition-colors cursor-pointer shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
                   Clear all filters
                 </button>
               </div>
@@ -278,7 +278,7 @@ export default function ElectronicsPage() {
                 </div>
 
                 {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2 mt-16 pt-8 border-t border-white/5">
+                  <div className="flex justify-center items-center gap-2 mt-16 pt-8 border-t border-zinc-200">
                     {[...Array(totalPages)].map((_, i) => (
                       <button
                         key={i}
@@ -291,8 +291,8 @@ export default function ElectronicsPage() {
                             window.scrollTo({ top: y, behavior: 'smooth' });
                           }
                         }}
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all ${
-                          currentPage === i + 1 ? "bg-indigo-500 text-white shadow-md scale-105" : "bg-[#2B2D31] border border-white/5 text-zinc-400 hover:border-white/30 hover:text-white hover:bg-white/5"
+                        className={`w-10 h-10 rounded-2xl flex items-center justify-center text-[10px] font-bold transition-all cursor-pointer ${
+                          currentPage === i + 1 ? "bg-black text-white shadow-md scale-105" : "bg-white border border-zinc-200 text-zinc-500 hover:border-black hover:text-black"
                         }`}
                       >
                         {i + 1}

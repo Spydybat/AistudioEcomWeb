@@ -69,7 +69,7 @@ function StoreLayout() {
   } = useShop();
 
   return (
-    <div className="min-h-screen bg-[#1E1F22] font-sans text-[#DBDEE1] antialiased flex flex-col justify-between selection:bg-indigo-500/90 selection:text-white relative">
+    <div className="min-h-screen bg-white font-sans text-zinc-900 antialiased flex flex-col justify-between selection:bg-sky-500/30 selection:text-zinc-900 relative">
       <div className="flex-1 flex flex-col">
         <Header
           cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
@@ -115,7 +115,7 @@ function StoreLayout() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-6 left-6 z-50 p-4 max-w-sm bg-[#313338] text-[#DBDEE1] shadow-[0_8px_24px_rgba(0,0,0,0.5)] border border-white/5 flex items-start gap-3 rounded-xl"
+            className="fixed bottom-6 left-6 z-50 p-4 max-w-sm bg-white text-zinc-900 shadow-[0_16px_40px_rgba(0,0,0,0.1)] border border-zinc-100 flex items-start gap-3 rounded-2xl"
           >
             {toast.type === "success" ? (
               <CheckCircle className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
@@ -123,13 +123,13 @@ function StoreLayout() {
               <Info className="h-5 w-5 text-zinc-500 shrink-0 mt-0.5" />
             )}
             <div className="flex-1">
-              <p className="text-xs font-sans tracking-wide leading-relaxed font-normal">
+              <p className="text-xs font-sans tracking-wide leading-relaxed font-medium">
                 {toast.text}
               </p>
             </div>
             <button
               onClick={hideToast}
-              className="text-zinc-400 hover:text-zinc-200 text-xs px-1 normal-case font-mono cursor-pointer"
+              className="text-zinc-400 hover:text-zinc-900 text-xs px-1 normal-case font-mono cursor-pointer transition-colors"
             >
               dismiss
             </button>

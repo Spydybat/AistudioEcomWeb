@@ -37,7 +37,7 @@ export default function ProductSlider({
   if (!products.length) return null;
 
   return (
-    <section className={`py-24 overflow-hidden ${bgWhite ? "bg-[#1E1F22]" : "bg-[#111214]"}`}>
+    <section className={`py-24 overflow-hidden ${bgWhite ? "bg-white" : "bg-zinc-50"}`}>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -48,11 +48,11 @@ export default function ProductSlider({
             viewport={{ once: true }}
           >
             {subtitle && (
-              <p className="text-[10px] font-mono tracking-[0.4em] uppercase text-zinc-500 mb-3">
+              <p className="text-[10px] font-sans font-bold tracking-widest uppercase text-zinc-500 mb-3">
                 {subtitle}
               </p>
             )}
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-white uppercase">
+            <h2 className="text-3xl sm:text-4xl font-sans font-bold tracking-tight text-black uppercase">
               {title}
             </h2>
           </motion.div>
@@ -61,13 +61,13 @@ export default function ProductSlider({
           <div className="hidden sm:flex items-center gap-3">
             <button 
               onClick={() => slide("left")}
-              className="p-4 rounded-full border border-white/5 bg-[#2B2D31] hover:border-indigo-500 transition-colors text-zinc-400 hover:text-white cursor-pointer"
+              className="p-4 rounded-full border border-zinc-200 bg-white hover:border-black hover:bg-zinc-50 transition-colors text-zinc-600 hover:text-black shadow-sm cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4" />
             </button>
             <button 
               onClick={() => slide("right")}
-              className="p-4 rounded-full border border-white/5 bg-[#2B2D31] hover:border-indigo-500 transition-colors text-zinc-400 hover:text-white cursor-pointer"
+              className="p-4 rounded-full border border-zinc-200 bg-white hover:border-black hover:bg-zinc-50 transition-colors text-zinc-600 hover:text-black shadow-sm cursor-pointer"
             >
               <ArrowRight className="h-4 w-4" />
             </button>

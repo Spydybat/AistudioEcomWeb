@@ -23,15 +23,15 @@ export default function FAQAccordion({ faqs }: FAQAccordionProps) {
       {faqs.map((faq, idx) => {
         const isOpen = openIndex === idx;
         return (
-          <div key={idx} className="border-b border-neutral-200 pb-4">
+          <div key={idx} className="border-b border-zinc-200 pb-4">
             <button
               onClick={() => toggle(idx)}
               className="w-full flex items-center justify-between py-4 text-left cursor-pointer group"
             >
-              <span className="font-serif text-lg text-white group-hover:text-zinc-300 transition-colors">
+              <span className="font-sans font-bold text-lg text-black group-hover:text-zinc-500 transition-colors tracking-tight">
                 {faq.question}
               </span>
-              <span className="text-zinc-400 group-hover:text-white transition-colors">
+              <span className="text-zinc-400 group-hover:text-black transition-colors">
                 {isOpen ? <Minus className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
               </span>
             </button>
@@ -44,7 +44,7 @@ export default function FAQAccordion({ faqs }: FAQAccordionProps) {
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <p className="text-zinc-300 font-light leading-relaxed pb-4 pr-12">
+                  <p className="text-zinc-600 font-medium leading-relaxed pb-4 pr-12 text-sm">
                     {faq.answer}
                   </p>
                 </motion.div>

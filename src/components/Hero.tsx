@@ -78,7 +78,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
   };
 
   return (
-    <div className="relative h-[65vh] sm:h-[80vh] w-full overflow-hidden bg-[#111214] text-white">
+    <div className="relative h-[65vh] sm:h-[80vh] w-full overflow-hidden bg-white text-white">
       {/* Background Slides */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -160,7 +160,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
             <button
               id={`cta-btn-${activeSlide.id}`}
               onClick={() => handleCta(activeSlide.category)}
-              className="px-8 sm:px-10 py-4 bg-indigo-500 text-white hover:bg-indigo-600 font-semibold tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-3 rounded-full shadow-[0_4px_14px_rgba(88,101,242,0.5)] hover:scale-105 cursor-pointer"
+              className="px-8 sm:px-10 py-4 bg-white text-black hover:bg-zinc-100 font-bold tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-3 rounded-full shadow-[0_4px_14px_rgba(0,0,0,0.1)] hover:scale-105 cursor-pointer"
             >
               <span>{activeSlide.ctaText}</span>
               <ArrowRight className="h-4 w-4" />
@@ -168,7 +168,7 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
 
             <button
               onClick={onExploreClick}
-              className="px-8 sm:px-10 py-4 glass-dark text-white hover:bg-[#313338]/50 font-medium tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-2 rounded-full shadow-xl hover:scale-105 cursor-pointer"
+              className="px-8 sm:px-10 py-4 bg-black/20 backdrop-blur-md text-white border border-white/30 hover:bg-black/40 font-bold tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-2 rounded-full shadow-xl hover:scale-105 cursor-pointer"
             >
               <span>View All Products</span>
             </button>
@@ -180,14 +180,14 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
       <div className="absolute bottom-6 sm:bottom-10 right-4 sm:right-10 z-20 flex space-x-3">
         <button
           onClick={handlePrev}
-          className="p-3 sm:p-4 rounded-full glass-dark text-zinc-300 hover:text-white hover:bg-[#313338]/80 hover:scale-110 transition-all cursor-pointer shadow-lg border border-white/5"
+          className="p-3 sm:p-4 rounded-full bg-black/20 backdrop-blur-md text-white hover:bg-black/40 hover:scale-110 transition-all cursor-pointer shadow-lg border border-white/30"
           title="Previous marketplace slide"
         >
           <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
         <button
           onClick={handleNext}
-          className="p-3 sm:p-4 rounded-full glass-dark text-zinc-300 hover:text-white hover:bg-[#313338]/80 hover:scale-110 transition-all cursor-pointer shadow-lg border border-white/5"
+          className="p-3 sm:p-4 rounded-full bg-black/20 backdrop-blur-md text-white hover:bg-black/40 hover:scale-110 transition-all cursor-pointer shadow-lg border border-white/30"
           title="Next marketplace slide"
         >
           <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -205,12 +205,12 @@ export default function Hero({ onExploreClick, onFilterCategory }: HeroProps) {
           >
             <span
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                idx === currentIndex ? "w-8 bg-indigo-500" : "w-1.5 bg-zinc-600 group-hover:bg-zinc-400"
+                idx === currentIndex ? "w-8 bg-white" : "w-1.5 bg-white/40 group-hover:bg-white/70"
               }`}
             />
           </button>
         ))}
-        <span className="text-[10px] font-mono tracking-widest text-zinc-400 ml-2">
+        <span className="text-[10px] font-sans font-bold tracking-widest text-zinc-200 ml-2">
           0{currentIndex + 1} / 0{HERO_SLIDES.length}
         </span>
       </div>

@@ -316,24 +316,24 @@ export default function BundleBuilderPage() {
   const deliveryEstimate = "Arrives in 3-5 business days";
 
   return (
-    <div className="flex-1 bg-[#111214]">
+    <div className="flex-1 bg-white">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header Breadcrumbs & Title */}
-        <nav className="flex text-xs uppercase tracking-widest text-zinc-400 mb-6 font-mono">
-          <Link to="/" className="hover:text-white transition-colors">Home</Link>
+        <nav className="flex text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-6">
+          <Link to="/" className="hover:text-black cursor-pointer transition-colors">Home</Link>
           <span className="mx-2">/</span>
-          <span className="text-zinc-100">Bundle Builder</span>
+          <span className="text-black">Bundle Builder</span>
         </nav>
 
         <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.45em] text-zinc-400">Universal Configuration</p>
-            <h1 className="mt-3 text-4xl sm:text-5xl font-serif font-semibold text-white">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Universal Configuration</p>
+            <h1 className="mt-3 text-4xl sm:text-5xl font-sans font-bold tracking-tight uppercase text-black">
               Bundle Builder
             </h1>
           </div>
-          <div className="flex items-center gap-3 rounded-full border border-white/5 bg-[#2B2D31]/70 px-4 py-2 text-xs uppercase tracking-[0.3em] text-zinc-400 shadow-sm backdrop-blur-md">
-            <Sparkles className="h-4 w-4 text-zinc-300" />
+          <div className="flex items-center gap-3 rounded-full border border-zinc-200 bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500 shadow-sm backdrop-blur-md">
+            <Sparkles className="h-4 w-4 text-black" />
             Curate collections across all categories
           </div>
         </div>
@@ -341,17 +341,17 @@ export default function BundleBuilderPage() {
         {/* Multi-Bundle Tabs */}
         <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
           {bundles.map((bundle) => (
-            <div key={bundle.id} className={`flex items-center rounded-t-xl border-x border-t transition-colors ${activeBundleId === bundle.id ? "bg-[#1E1F22] border-white/5 text-white" : "bg-[#111214] border-transparent text-zinc-400 hover:bg-white/5"}`}>
+            <div key={bundle.id} className={`flex items-center rounded-t-2xl border transition-colors ${activeBundleId === bundle.id ? "bg-zinc-50 border-zinc-200 text-black shadow-sm" : "bg-white border-transparent text-zinc-500 hover:bg-zinc-50 hover:border-zinc-200"}`}>
               <button
                 onClick={() => setActiveBundleId(bundle.id)}
-                className="px-5 py-3 text-xs font-semibold uppercase tracking-wider"
+                className="px-5 py-3 text-[10px] font-bold uppercase tracking-widest cursor-pointer"
               >
                 {bundle.name}
               </button>
               {bundles.length > 1 && (
                 <button
                   onClick={() => handleDeleteBundle(bundle.id)}
-                  className="pr-4 pl-1 text-zinc-400 hover:text-red-500"
+                  className="pr-4 pl-1 text-zinc-400 hover:text-red-500 cursor-pointer"
                 >
                   <X className="h-3 w-3" />
                 </button>
@@ -360,7 +360,7 @@ export default function BundleBuilderPage() {
           ))}
           <button
             onClick={handleCreateBundle}
-            className="flex items-center gap-2 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-400 hover:text-white transition-colors"
+            className="flex items-center gap-2 px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-black transition-colors cursor-pointer"
           >
             <Plus className="h-4 w-4" /> New Bundle
           </button>
@@ -370,7 +370,7 @@ export default function BundleBuilderPage() {
           {/* Main Catalog View */}
           <div className="space-y-6 min-w-0">
             {/* Search & Filter */}
-            <div className="bg-[#1E1F22] rounded-3xl border border-white/5 p-4 sm:p-5 flex flex-col sm:flex-row gap-4 items-center z-10 relative">
+            <div className="bg-zinc-50 rounded-3xl border border-zinc-200 p-4 sm:p-5 flex flex-col sm:flex-row gap-4 items-center z-10 relative">
               <div className="relative flex-1 w-full">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
                 <input
@@ -378,13 +378,13 @@ export default function BundleBuilderPage() {
                   placeholder="Search products to add..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#2B2D31] text-white placeholder-zinc-500 pl-12 pr-4 py-3 text-sm rounded-xl border border-white/5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                  className="w-full bg-white text-black font-medium placeholder-zinc-400 pl-12 pr-4 py-3.5 text-sm rounded-2xl border border-zinc-200 focus:outline-none focus:border-black transition-all shadow-sm"
                 />
               </div>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full sm:w-auto bg-[#2B2D31] text-white py-3 px-4 text-xs uppercase tracking-wider rounded-xl border border-white/5 focus:outline-none transition-all cursor-pointer"
+                className="w-full sm:w-auto bg-white text-black py-3.5 px-4 text-[10px] font-bold uppercase tracking-widest rounded-2xl border border-zinc-200 focus:outline-none focus:border-black transition-all shadow-sm cursor-pointer"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -394,8 +394,8 @@ export default function BundleBuilderPage() {
 
             {/* Product Grid */}
             {filteredProducts.length === 0 ? (
-              <div className="text-center py-24 bg-[#1E1F22] rounded-3xl border border-white/5 border-dashed">
-                <p className="text-zinc-400">No products found matching your criteria.</p>
+              <div className="text-center py-24 bg-zinc-50 rounded-3xl border border-zinc-200 border-dashed">
+                <p className="text-zinc-500 font-medium">No products found matching your criteria.</p>
               </div>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -409,8 +409,8 @@ export default function BundleBuilderPage() {
                       onToggleWishlist={handleToggleWishlist}
                     />
                     {/* Visual overlay indicating this goes to bundle */}
-                    <div className="absolute top-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
-                      <span className="bg-indigo-500 text-white text-xs px-3 py-1 rounded-full uppercase tracking-widest shadow-xl font-medium">
+                    <div className="absolute top-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20">
+                      <span className="bg-black text-white text-[10px] font-bold px-4 py-2 rounded-full uppercase tracking-widest shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
                         Add to Bundle
                       </span>
                     </div>
@@ -422,12 +422,12 @@ export default function BundleBuilderPage() {
 
           {/* Sticky Sidebar: The Bundle */}
           <aside className="xl:sticky xl:top-28 self-start">
-            <div className="rounded-3xl p-6 sm:p-7 shadow-sm border border-white/5 bg-[#1E1F22]">
+            <div className="rounded-3xl p-6 sm:p-7 shadow-sm border border-zinc-200 bg-zinc-50">
               
               {/* Bundle Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex-1">
-                  <p className="text-xs uppercase tracking-[0.4em] text-white mb-1">Your Bundle</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">Your Bundle</p>
                   {isEditingName ? (
                     <div className="flex items-center gap-2">
                       <input
@@ -436,38 +436,38 @@ export default function BundleBuilderPage() {
                         value={tempName}
                         onChange={(e) => setTempName(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleRenameSubmit()}
-                        className="text-2xl font-serif font-semibold text-white bg-transparent border-b border-zinc-500 focus:outline-none w-full"
+                        className="text-xl font-sans font-bold tracking-tight text-black uppercase bg-transparent border-b border-black focus:outline-none w-full"
                       />
-                      <button onClick={handleRenameSubmit} className="p-1 rounded bg-[#2B2D31] hover:bg-white/10 text-green-500"><Check className="h-4 w-4" /></button>
+                      <button onClick={handleRenameSubmit} className="p-1.5 rounded-full bg-black text-white hover:bg-zinc-800 transition-colors cursor-pointer"><Check className="h-4 w-4" /></button>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2 group cursor-pointer" onClick={() => { setTempName(activeBundle.name); setIsEditingName(true); }}>
-                      <h2 className="text-2xl font-serif font-semibold text-white group-hover:text-zinc-300 transition-colors">{activeBundle.name}</h2>
-                      <Edit2 className="h-3 w-3 text-zinc-600 group-hover:text-zinc-400 transition-colors" />
+                      <h2 className="text-xl font-sans font-bold tracking-tight text-black uppercase group-hover:text-zinc-600 transition-colors">{activeBundle.name}</h2>
+                      <Edit2 className="h-3 w-3 text-zinc-400 group-hover:text-black transition-colors" />
                     </div>
                   )}
                 </div>
                 <div className="flex flex-col items-end gap-2 ml-4">
-                  <span className="rounded-full bg-indigo-500 px-3 py-1 text-xs uppercase tracking-[0.3em] text-white whitespace-nowrap">
+                  <span className="rounded-full bg-black px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white whitespace-nowrap shadow-sm">
                     {itemCount} Items
                   </span>
-                  <div className="flex items-center gap-1">
-                    <button onClick={handleShareBundle} className="p-1.5 text-zinc-400 hover:bg-[#2B2D31] hover:text-white rounded-full transition-colors" title="Share Bundle"><LinkIcon className="h-3.5 w-3.5" /></button>
-                    <button onClick={handleExportJSON} className="p-1.5 text-zinc-400 hover:bg-[#2B2D31] hover:text-white rounded-full transition-colors" title="Export as JSON"><Download className="h-3.5 w-3.5" /></button>
-                    <button onClick={handleClearBundle} className="p-1.5 text-zinc-400 hover:bg-red-500/10 hover:text-red-500 rounded-full transition-colors" title="Clear Bundle"><Trash2 className="h-3.5 w-3.5" /></button>
+                  <div className="flex items-center gap-1 mt-1">
+                    <button onClick={handleShareBundle} className="p-1.5 text-zinc-400 hover:bg-white hover:text-black hover:shadow-sm rounded-full transition-all cursor-pointer" title="Share Bundle"><LinkIcon className="h-4 w-4" /></button>
+                    <button onClick={handleExportJSON} className="p-1.5 text-zinc-400 hover:bg-white hover:text-black hover:shadow-sm rounded-full transition-all cursor-pointer" title="Export as JSON"><Download className="h-4 w-4" /></button>
+                    <button onClick={handleClearBundle} className="p-1.5 text-zinc-400 hover:bg-rose-50 hover:text-rose-600 hover:shadow-sm rounded-full transition-all cursor-pointer" title="Clear Bundle"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 </div>
               </div>
 
               {/* Bundle Items List (Drag and Drop) */}
-              <div className="min-h-[200px] max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="min-h-[200px] max-h-[50vh] overflow-y-auto pr-2 no-scrollbar">
                 {activeBundle.items.length === 0 ? (
-                  <div className="h-full flex flex-col items-center justify-center text-center py-12 px-4 border-2 border-dashed border-white/5 rounded-2xl bg-[#111214]">
-                    <div className="h-12 w-12 rounded-full bg-[#2B2D31] flex items-center justify-center shadow-sm mb-3">
-                      <ShoppingBag className="h-5 w-5 text-zinc-600" />
+                  <div className="h-full flex flex-col items-center justify-center text-center py-12 px-4 border-2 border-dashed border-zinc-200 rounded-2xl bg-white">
+                    <div className="h-12 w-12 rounded-full bg-zinc-50 border border-zinc-200 flex items-center justify-center shadow-sm mb-3">
+                      <ShoppingBag className="h-5 w-5 text-zinc-400" />
                     </div>
-                    <p className="text-sm text-zinc-400 font-medium">Your bundle is empty</p>
-                    <p className="text-xs text-zinc-400 mt-1 max-w-[200px]">Search and add products from the catalog to build your custom collection.</p>
+                    <p className="text-sm text-black font-bold">Your bundle is empty</p>
+                    <p className="text-xs text-zinc-500 font-medium mt-1 max-w-[200px]">Search and add products from the catalog to build your custom collection.</p>
                   </div>
                 ) : (
                   <Reorder.Group 
@@ -487,26 +487,26 @@ export default function BundleBuilderPage() {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95, height: 0 }}
-                            className={`rounded-2xl border bg-[#2B2D31] p-3 shadow-sm relative group cursor-grab active:cursor-grabbing ${isOutOfStock ? "border-red-500/30 bg-red-500/10" : "border-white/5"}`}
+                            className={`rounded-2xl border bg-white p-3 shadow-sm relative group cursor-grab active:cursor-grabbing ${isOutOfStock ? "border-rose-200 bg-rose-50" : "border-zinc-200"}`}
                           >
                             <div className="flex gap-3">
                               {/* Drag Handle */}
-                              <div className="flex items-center text-zinc-600 cursor-grab active:cursor-grabbing hover:text-zinc-400">
+                              <div className="flex items-center text-zinc-400 cursor-grab active:cursor-grabbing hover:text-black">
                                 <GripVertical className="h-4 w-4" />
                               </div>
                               
                               {/* Thumbnail */}
-                              <img src={item?.product?.images?.[0] ?? ""} alt={item.product.name} className="h-16 w-16 rounded-xl object-cover border border-white/5 bg-[#111214]" />
+                              <img src={item?.product?.images?.[0] ?? ""} alt={item.product.name} className="h-16 w-16 rounded-xl object-cover border border-zinc-200 bg-zinc-50" />
                               
                               {/* Details */}
                               <div className="flex-1 min-w-0">
                                 <div className="flex justify-between items-start gap-2">
-                                  <h4 className="text-xs font-semibold text-white truncate leading-tight">{item.product.name}</h4>
-                                  <button onClick={() => handleRemoveItem(item.id)} className="text-zinc-400 hover:text-red-500 p-0.5 rounded transition-colors shrink-0">
+                                  <h4 className="text-sm font-bold text-black truncate leading-tight">{item.product.name}</h4>
+                                  <button onClick={() => handleRemoveItem(item.id)} className="text-zinc-400 hover:text-rose-600 p-1 rounded-full hover:bg-rose-50 transition-colors shrink-0 cursor-pointer">
                                     <X className="h-3.5 w-3.5" />
                                   </button>
                                 </div>
-                                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1 text-xs text-zinc-300">
+                                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
                                   <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full border border-black/10" style={{ backgroundColor: item.color.hex }} /> {item.color.name}</span>
                                   <span>&bull;</span>
                                   <span>{item.size}</span>
@@ -514,23 +514,23 @@ export default function BundleBuilderPage() {
                                 
                                 <div className="flex items-center justify-between mt-3">
                                   {/* Qty Controls */}
-                                  <div className="flex items-center gap-3 bg-[#111214] border border-white/5 rounded-lg px-2 py-1">
-                                    <button onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)} className="text-zinc-400 hover:text-white disabled:opacity-30" disabled={item.quantity <= 1}><Minus className="h-3 w-3" /></button>
-                                    <span className="text-white text-xs font-medium min-w-[12px] text-center">{item.quantity}</span>
-                                    <button onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)} className="text-zinc-400 hover:text-white disabled:opacity-30"><Plus className="h-3 w-3" /></button>
+                                  <div className="flex items-center gap-3 bg-zinc-50 border border-zinc-200 rounded-lg px-2 py-1">
+                                    <button onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)} className="text-zinc-500 hover:text-black disabled:opacity-30 cursor-pointer" disabled={item.quantity <= 1}><Minus className="h-3 w-3" /></button>
+                                    <span className="text-black text-xs font-bold min-w-[12px] text-center">{item.quantity}</span>
+                                    <button onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)} className="text-zinc-500 hover:text-black disabled:opacity-30 cursor-pointer"><Plus className="h-3 w-3" /></button>
                                   </div>
 
                                   <div className="flex flex-col items-end">
-                                    <span className="text-xs font-semibold text-white">{formatPrice(item.product.price * item.quantity)}</span>
+                                    <span className="text-sm font-bold text-black">{formatPrice(item.product.price * item.quantity)}</span>
                                     {item.product.originalPrice && (
-                                      <span className="text-[10px] text-zinc-400 line-through">{formatPrice(item.product.originalPrice * item.quantity)}</span>
+                                      <span className="text-[10px] text-zinc-500 line-through">{formatPrice(item.product.originalPrice * item.quantity)}</span>
                                     )}
                                   </div>
                                 </div>
                                 
                                 {/* Stock Warning */}
                                 {isOutOfStock && (
-                                  <div className="mt-2 text-xs text-red-400 flex items-center gap-1 font-medium bg-red-500/10 p-1.5 rounded-md">
+                                  <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-rose-600 flex items-center gap-1 bg-rose-50 border border-rose-200 p-1.5 rounded-md">
                                     <AlertCircle className="h-3 w-3" />
                                     Only {item.product.stock} in stock
                                   </div>
@@ -540,8 +540,8 @@ export default function BundleBuilderPage() {
                             
                             {/* Hover Actions */}
                             <div className="absolute top-full left-0 right-0 mt-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex justify-end">
-                              <button onClick={() => handleMoveToWishlist(item)} className="bg-[#2B2D31] border border-white/5 shadow-md rounded-full px-3 py-1.5 text-[10px] uppercase tracking-widest flex items-center gap-1.5 hover:border-white/30 hover:text-white text-zinc-400 font-medium transition-colors">
-                                <Heart className="h-3 w-3" /> Move to Wishlist
+                              <button onClick={() => handleMoveToWishlist(item)} className="bg-white border border-zinc-200 shadow-md rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 hover:border-black hover:text-black text-zinc-500 transition-colors cursor-pointer">
+                                <Heart className="h-3.5 w-3.5" /> Move to Wishlist
                               </button>
                             </div>
                           </Reorder.Item>
@@ -553,38 +553,38 @@ export default function BundleBuilderPage() {
               </div>
 
               {/* Financials & Checkout */}
-              <div className="mt-6 pt-6 border-t border-white/5">
-                <div className="space-y-2 mb-6">
-                  <div className="flex items-center justify-between text-xs text-zinc-400">
+              <div className="mt-6 pt-6 border-t border-zinc-200">
+                <div className="space-y-3 mb-6 text-sm font-medium">
+                  <div className="flex items-center justify-between text-zinc-500">
                     <span>Original Value</span>
-                    <span>{formatPrice(originalTotal)}</span>
+                    <span className="text-black font-bold">{formatPrice(originalTotal)}</span>
                   </div>
                   {savings > 0 && (
-                    <div className="flex items-center justify-between text-xs text-emerald-400 font-medium">
+                    <div className="flex items-center justify-between text-emerald-600 font-bold">
                       <span>Bundle Savings</span>
                       <span>-{formatPrice(savings)}</span>
                     </div>
                   )}
-                  <div className="flex items-center justify-between text-xs text-zinc-400">
+                  <div className="flex items-center justify-between text-zinc-500">
                     <span>Estimated Shipping</span>
-                    <span>{estimatedShipping}</span>
+                    <span className="text-black font-bold">{estimatedShipping}</span>
                   </div>
-                  <div className="flex items-center justify-between text-sm pt-2 border-t border-white/5">
-                    <span className="font-medium text-white">Subtotal</span>
-                    <span className="text-xl font-serif font-bold text-white">{formatPrice(subtotal)}</span>
+                  <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-black">Subtotal</span>
+                    <span className="text-2xl font-sans font-bold text-black">{formatPrice(subtotal)}</span>
                   </div>
-                  <div className="text-xs text-zinc-400 text-right mt-1">{deliveryEstimate}</div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 text-right mt-1">{deliveryEstimate}</div>
                 </div>
 
                 <button
                   onClick={handleAddAllToCart}
                   disabled={activeBundle.items.length === 0}
-                  className={`w-full inline-flex items-center justify-center gap-2 rounded-xl py-3.5 text-xs uppercase tracking-[0.2em] font-semibold transition-all duration-300 ${
+                  className={`w-full inline-flex items-center justify-center gap-2 rounded-full py-4 text-[10px] sm:text-xs uppercase tracking-widest font-bold transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer hover:-translate-y-0.5 ${
                     activeBundle.items.length === 0
-                      ? "bg-[#2B2D31] text-zinc-600 cursor-not-allowed"
+                      ? "bg-zinc-200 text-zinc-400 cursor-not-allowed hover:translate-y-0"
                       : !allInStock 
-                        ? "bg-red-500/10 text-red-400 border border-red-500/20"
-                        : "bg-indigo-500 text-white hover:bg-indigo-600 hover:shadow-[0_4px_14px_rgba(88,101,242,0.4)]"
+                        ? "bg-rose-50 text-rose-600 border border-rose-200"
+                        : "bg-black text-white hover:bg-zinc-800"
                   }`}
                 >
                   <ShoppingBag className="h-4 w-4" />
@@ -597,10 +597,10 @@ export default function BundleBuilderPage() {
 
         {/* Frequently Bought Together Section */}
         {fbtProducts.length > 0 && (
-          <div className="mt-20 pt-16 border-t border-white/5">
+          <div className="mt-20 pt-16 border-t border-zinc-200">
             <div className="mb-8">
-              <h3 className="text-2xl font-serif font-semibold text-white">Frequently Bought Together</h3>
-              <p className="text-sm text-zinc-400 mt-2">Customers who created similar bundles also added these items.</p>
+              <h3 className="text-2xl font-sans font-bold tracking-tight uppercase text-black">Frequently Bought Together</h3>
+              <p className="text-sm font-medium text-zinc-500 mt-2">Customers who created similar bundles also added these items.</p>
             </div>
             <ProductSlider 
               title="" 

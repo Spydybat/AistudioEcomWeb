@@ -22,28 +22,28 @@ export default function CartSummary({
   const total = subtotal + shippingCost;
 
   return (
-    <div className="bg-[#111214] border border-white/5 p-6 rounded-xl space-y-4">
-      <h2 className="text-sm font-mono uppercase tracking-widest text-white font-semibold">
+    <div className="bg-zinc-50 border border-zinc-200 p-6 rounded-2xl space-y-4 shadow-sm">
+      <h2 className="text-sm font-sans uppercase tracking-widest text-black font-bold">
         Order Summary
       </h2>
 
-      <div className="space-y-3 text-sm">
-        <div className="flex justify-between text-zinc-400">
+      <div className="space-y-3 text-sm font-medium">
+        <div className="flex justify-between text-zinc-500">
           <span>Subtotal ({cartItems.reduce((s, i) => s + i.quantity, 0)} items)</span>
-          <span>{formatPrice(subtotal)}</span>
+          <span className="text-black">{formatPrice(subtotal)}</span>
         </div>
-        <div className="flex justify-between text-zinc-400">
+        <div className="flex justify-between text-zinc-500">
           <span>Shipping</span>
-          <span>{shippingCost === 0 ? "Complimentary" : formatPrice(shippingCost)}</span>
+          <span className="text-black">{shippingCost === 0 ? "Complimentary" : formatPrice(shippingCost)}</span>
         </div>
         {subtotal < FREE_SHIPPING_THRESHOLD && subtotal > 0 && (
           <p className="text-xs text-zinc-500">
             Add {formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} more for free shipping
           </p>
         )}
-        <div className="border-t border-white/10 pt-3 flex justify-between items-baseline">
-          <span className="font-semibold uppercase tracking-wider text-white">Total</span>
-          <span className="text-2xl font-serif font-bold text-white">{formatPrice(total)}</span>
+        <div className="border-t border-zinc-200 pt-4 flex justify-between items-baseline">
+          <span className="text-xs font-bold uppercase tracking-widest text-black">Total</span>
+          <span className="text-xl font-sans font-bold text-black">{formatPrice(total)}</span>
         </div>
       </div>
 
@@ -51,14 +51,14 @@ export default function CartSummary({
         onCheckout ? (
           <button
             onClick={onCheckout}
-            className="w-full block text-center bg-indigo-500 text-white px-8 py-4 rounded-full text-xs uppercase tracking-widest hover:bg-indigo-600 transition-colors cursor-pointer"
+            className="w-full block text-center bg-black text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 cursor-pointer mt-2"
           >
             {checkoutLabel}
           </button>
         ) : (
           <Link
             to="/checkout"
-            className="w-full block text-center bg-indigo-500 text-white px-8 py-4 rounded-full text-xs uppercase tracking-widest hover:bg-indigo-600 transition-colors"
+            className="w-full block text-center bg-black text-white px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 mt-2"
           >
             {checkoutLabel}
           </Link>

@@ -89,21 +89,21 @@ export default function AuthModal() {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md z-50"
           >
-            <div className="glass-dark border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-indigo-500" />
+            <div className="bg-white border border-zinc-100 rounded-3xl p-6 sm:p-8 shadow-[0_32px_80px_rgba(0,0,0,0.15)] relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-black" />
               
               <button
                 onClick={() => setIsAuthModalOpen(false)}
-                className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors"
+                className="absolute top-4 right-4 p-2 text-zinc-500 hover:text-black bg-zinc-50 hover:bg-zinc-100 rounded-full transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-serif text-white mb-2 uppercase tracking-widest">
+                <h2 className="text-2xl font-sans font-bold text-black mb-2 tracking-tight uppercase">
                   {isLogin ? "Welcome Back" : "Create Account"}
                 </h2>
-                <p className="text-zinc-400 text-sm">
+                <p className="text-zinc-500 text-sm font-medium">
                   {isLogin
                     ? "Enter your details to access your account."
                     : "Join us to save your wishlist and cart."}
@@ -113,8 +113,8 @@ export default function AuthModal() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {!isLogin && (
                   <>
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-medium text-zinc-300 uppercase tracking-wider pl-1">
+                    <div className="space-y-1.5 text-left">
+                      <label className="text-xs font-semibold text-zinc-600 uppercase tracking-wider pl-1">
                         Full Name
                       </label>
                       <div className="relative">
@@ -123,14 +123,14 @@ export default function AuthModal() {
                           type="text"
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
-                          className="w-full bg-[#1E1F22]/80 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all"
+                          className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl py-3 pl-10 pr-4 text-zinc-900 focus:outline-none focus:border-black focus:ring-1 focus:ring-black/20 transition-all font-medium"
                           placeholder="John Doe"
                           required={!isLogin}
                         />
                       </div>
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-medium text-zinc-300 uppercase tracking-wider pl-1">
+                    <div className="space-y-1.5 text-left">
+                      <label className="text-xs font-semibold text-zinc-600 uppercase tracking-wider pl-1">
                         Phone (Optional)
                       </label>
                       <div className="relative">
@@ -139,15 +139,15 @@ export default function AuthModal() {
                           type="tel"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
-                          className="w-full bg-[#1E1F22]/80 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all"
+                          className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl py-3 pl-10 pr-4 text-zinc-900 focus:outline-none focus:border-black focus:ring-1 focus:ring-black/20 transition-all font-medium"
                           placeholder="+1 (555) 000-0000"
                         />
                       </div>
                     </div>
                   </>
                 )}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-zinc-300 uppercase tracking-wider pl-1">
+                <div className="space-y-1.5 text-left">
+                  <label className="text-xs font-semibold text-zinc-600 uppercase tracking-wider pl-1">
                     Email Address
                   </label>
                   <div className="relative">
@@ -156,15 +156,15 @@ export default function AuthModal() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-[#1E1F22]/80 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all"
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl py-3 pl-10 pr-4 text-zinc-900 focus:outline-none focus:border-black focus:ring-1 focus:ring-black/20 transition-all font-medium"
                       placeholder="you@example.com"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-zinc-300 uppercase tracking-wider pl-1">
+                <div className="space-y-1.5 text-left">
+                  <label className="text-xs font-semibold text-zinc-600 uppercase tracking-wider pl-1">
                     Password
                   </label>
                   <div className="relative">
@@ -173,7 +173,7 @@ export default function AuthModal() {
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-[#1E1F22]/80 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-white focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all"
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-2xl py-3 pl-10 pr-4 text-zinc-900 focus:outline-none focus:border-black focus:ring-1 focus:ring-black/20 transition-all font-medium"
                       placeholder="••••••••"
                       required
                     />
@@ -183,7 +183,7 @@ export default function AuthModal() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-3 rounded-xl transition-colors flex items-center justify-center gap-2 mt-6 disabled:opacity-70"
+                  className="w-full bg-black hover:bg-zinc-800 text-white font-semibold tracking-widest text-[10px] uppercase py-4 rounded-full transition-colors flex items-center justify-center gap-2 mt-6 shadow-sm disabled:opacity-70 cursor-pointer"
                 >
                   {loading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -203,7 +203,7 @@ export default function AuthModal() {
                 <button
                   type="button"
                   onClick={() => setIsLogin(!isLogin)}
-                  className="text-sm text-zinc-400 hover:text-white transition-colors"
+                  className="text-sm font-semibold text-zinc-500 hover:text-black transition-colors cursor-pointer"
                 >
                   {isLogin
                     ? "Don't have an account? Sign up"
