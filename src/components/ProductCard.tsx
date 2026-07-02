@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Product, ProductColor } from "../types";
 import { motion } from "motion/react";
 import { useCurrency } from "../context/CurrencyContext";
+import { useShop } from "../context/ShopContext";
 
 interface ProductCardProps {
   product: Product;
@@ -25,6 +26,14 @@ export default function ProductCard({
   const [isHovered, setIsHovered] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const { formatPrice } = useCurrency();
+  const { cart } = useShop();
+
+  const isInCart = cart.some(
+    (item) =>
+      item.product?.id === product.id &&
+      item.selectedSize === selectedSize &&
+      item.selectedColor?.name === selectedColor.name
+  );
   const navigate = useNavigate();
   const discountPercent = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -227,17 +236,17 @@ export default function ProductCard({
         {/* Primary Action Button: Add to Bag */}
         <div className="mt-auto pt-4">
           <button
-            onClick={handleQuickAdd}
-            disabled={isAdding}
-            className={`w-full py-3 text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 transition-all duration-300 rounded-xl cursor-pointer ${
-              isAdding
-                ? "bg-zinc-200 text-zinc-500 cursor-not-allowed"
-                : "bg-black text-white hover:bg-zinc-800 hover:shadow-sm hover:-translate-y-0.5"
+            onClick={isInCart ? undefined : handleQuickAdd}
+            disabled={isAdding || isInCart}
+            className={`w-full py-3 text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 transition-all duration-300 rounded-xl ${
+              isAdding || isInCart
+                ? "bg-zinc-100 text-zinc-400 cursor-not-allowed border border-zinc-200"
+                : "bg-black text-white hover:bg-zinc-800 hover:shadow-sm hover:-translate-y-0.5 cursor-pointer"
             }`}
             id={`add-to-bag-${product.id}`}
           >
             <ShoppingBag className="h-4 w-4" />
-            <span>{isAdding ? "Adding..." : "Add To Cart"}</span>
+            <span>{isAdding ? "Adding..." : isInCart ? "In Cart" : "Add To Cart"}</span>
           </button>
           <button
             onClick={() => navigate(`/product/${product.id}`)}
