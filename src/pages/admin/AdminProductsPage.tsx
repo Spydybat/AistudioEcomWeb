@@ -352,16 +352,16 @@ export default function AdminProductsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-black">
             Products
           </h1>
-          <p className="text-zinc-400 text-sm mt-1">
+          <p className="text-zinc-600 text-sm mt-1">
             {PRODUCTS.length} products in catalog
           </p>
         </div>
         <button
           onClick={openAddModal}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-black text-white hover:bg-zinc-800 text-black rounded-lg transition-colors text-sm font-medium"
         >
           <Plus className="h-4 w-4" />
           Add Product
@@ -370,19 +370,19 @@ export default function AdminProductsPage() {
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-600" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search products..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#1E1F22] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500 placeholder-zinc-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500 placeholder-zinc-500"
           />
         </div>
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="px-4 py-2.5 bg-[#1E1F22] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+          className="px-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
         >
           {CATEGORIES.map((cat) => (
             <option key={cat.id} value={cat.id}>
@@ -404,42 +404,42 @@ export default function AdminProductsPage() {
         ]}
       >
         {filtered.map((product) => (
-          <tr key={product.id} className="hover:bg-[#2B2D31] transition-colors">
+          <tr key={product.id} className="hover:bg-zinc-100 transition-colors">
             <td className="px-4 sm:px-6 py-3">
               <div className="flex items-center gap-3">
                 <img
                   src={product?.images?.[0] || product?.thumbnail || ""}
                   alt={product.name}
-                  className="w-10 h-10 rounded-lg object-cover border border-white/5"
+                  className="w-10 h-10 rounded-lg object-cover border border-zinc-200"
                   referrerPolicy="no-referrer"
                 />
                 <div>
-                  <p className="text-sm font-medium text-white line-clamp-1">
+                  <p className="text-sm font-medium text-black line-clamp-1">
                     {product.name}
                   </p>
                   {product.badge && (
-                    <span className="text-[10px] font-mono text-zinc-500 uppercase">
+                    <span className="text-[10px] font-mono text-zinc-600 uppercase">
                       {product.badge}
                     </span>
                   )}
                 </div>
               </div>
             </td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400 capitalize">
+            <td className="px-4 sm:px-6 py-3 text-zinc-600 capitalize">
               {product.category || "uncategorized"}
             </td>
-            <td className="px-4 sm:px-6 py-3 font-medium text-white">
+            <td className="px-4 sm:px-6 py-3 font-medium text-black">
               ${product.price}
               {product.originalPrice && (
-                <span className="text-zinc-500 line-through ml-1 text-xs">
+                <span className="text-zinc-600 line-through ml-1 text-xs">
                   ${product.originalPrice}
                 </span>
               )}
             </td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400">
+            <td className="px-4 sm:px-6 py-3 text-zinc-600">
               {product.rating ?? "0"}
             </td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400">
+            <td className="px-4 sm:px-6 py-3 text-zinc-600">
               {product.reviews ?? "0"}
             </td>
             <td className="px-4 sm:px-6 py-3">
@@ -451,7 +451,7 @@ export default function AdminProductsPage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => openEditModal(product)}
-                  className="p-1.5 text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-md transition-colors"
+                  className="p-1.5 text-zinc-600 hover:text-black bg-zinc-100 hover:bg-zinc-200 rounded-md transition-colors"
                 >
                   <Edit2 className="h-4 w-4" />
                 </button>
@@ -468,7 +468,7 @@ export default function AdminProductsPage() {
       </DataTable>
 
       {filtered.length === 0 && (
-        <p className="text-center text-zinc-500 py-8">
+        <p className="text-center text-zinc-600 py-8">
           No products match your search.
         </p>
       )}
@@ -476,21 +476,21 @@ export default function AdminProductsPage() {
       {/* Add/Edit Product Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 overflow-y-auto">
-          <div className="bg-[#1E1F22] border border-white/10 rounded-xl w-full max-w-lg overflow-hidden my-8">
-            <div className="flex items-center justify-between p-4 border-b border-white/5">
-              <h2 className="text-lg font-medium text-white">
+          <div className="bg-white border border-zinc-300 rounded-2xl w-full max-w-lg overflow-hidden my-8">
+            <div className="flex items-center justify-between p-4 border-b border-zinc-200">
+              <h2 className="text-lg font-medium text-black">
                 {editingProduct ? "Edit Product" : "Add Product"}
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-zinc-400 hover:text-white transition-colors"
+                className="text-zinc-600 hover:text-black transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-4 space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Name
                 </label>
                 <input
@@ -500,13 +500,13 @@ export default function AdminProductsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-zinc-300 mb-1">
+                  <label className="block text-sm font-medium text-zinc-700 mb-1">
                     Price
                   </label>
                   <input
@@ -517,11 +517,11 @@ export default function AdminProductsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, price: e.target.value })
                     }
-                    className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-zinc-300 mb-1">
+                  <label className="block text-sm font-medium text-zinc-700 mb-1">
                     Stock
                   </label>
                   <input
@@ -531,14 +531,14 @@ export default function AdminProductsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, stock: e.target.value })
                     }
-                    className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-zinc-300 mb-1">
+                  <label className="block text-sm font-medium text-zinc-700 mb-1">
                     Category
                   </label>
                   <select
@@ -547,7 +547,7 @@ export default function AdminProductsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, category_id: e.target.value })
                     }
-                    className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                   >
                     <option value="" disabled>Select a category</option>
                     {rawCategories.map((cat) => (
@@ -558,7 +558,7 @@ export default function AdminProductsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-zinc-300 mb-1">
+                  <label className="block text-sm font-medium text-zinc-700 mb-1">
                     Brand
                   </label>
                   <select
@@ -567,7 +567,7 @@ export default function AdminProductsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, brand_id: e.target.value })
                     }
-                    className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                   >
                     <option value="" disabled>Select a brand</option>
                     {rawBrands.map((brand) => (
@@ -580,7 +580,7 @@ export default function AdminProductsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Primary Image URL
                 </label>
                 <input
@@ -590,12 +590,12 @@ export default function AdminProductsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, thumbnail: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Description
                 </label>
                 <textarea
@@ -604,13 +604,13 @@ export default function AdminProductsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               {/* Product Details Section */}
-              <div className="pt-2 border-t border-white/5">
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
+              <div className="pt-2 border-t border-zinc-200">
+                <label className="block text-sm font-medium text-zinc-700 mb-2">
                   Product Details
                 </label>
                 <div className="space-y-2">
@@ -621,7 +621,7 @@ export default function AdminProductsPage() {
                         value={detail}
                         onChange={(e) => handleDetailChange(index, e.target.value)}
                         placeholder={`Detail line ${index + 1}`}
-                        className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                        className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                       />
                       <button
                         type="button"
@@ -636,7 +636,7 @@ export default function AdminProductsPage() {
                 <button
                   type="button"
                   onClick={handleAddDetail}
-                  className="mt-3 flex items-center gap-1 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                  className="mt-3 flex items-center gap-1 text-sm text-black hover:text-indigo-300 transition-colors"
                 >
                   <Plus className="h-4 w-4" />
                   Add Detail Line
@@ -644,8 +644,8 @@ export default function AdminProductsPage() {
               </div>
               
               {/* Specifications Section */}
-              <div className="pt-2 border-t border-white/5">
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
+              <div className="pt-2 border-t border-zinc-200">
+                <label className="block text-sm font-medium text-zinc-700 mb-2">
                   Specifications
                 </label>
                 <div className="space-y-2">
@@ -656,14 +656,14 @@ export default function AdminProductsPage() {
                         value={spec.key}
                         onChange={(e) => handleSpecChange(index, "key", e.target.value)}
                         placeholder="e.g. Material"
-                        className="w-1/3 px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                        className="w-1/3 px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                       />
                       <input
                         type="text"
                         value={spec.value}
                         onChange={(e) => handleSpecChange(index, "value", e.target.value)}
                         placeholder="e.g. Organic Cotton"
-                        className="flex-1 px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                        className="flex-1 px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                       />
                       <button
                         type="button"
@@ -678,7 +678,7 @@ export default function AdminProductsPage() {
                 <button
                   type="button"
                   onClick={handleAddSpec}
-                  className="mt-3 flex items-center gap-1 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                  className="mt-3 flex items-center gap-1 text-sm text-black hover:text-indigo-300 transition-colors"
                 >
                   <Plus className="h-4 w-4" />
                   Add Specification
@@ -686,8 +686,8 @@ export default function AdminProductsPage() {
               </div>
               
               {/* Colors Section */}
-              <div className="pt-2 border-t border-white/5">
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
+              <div className="pt-2 border-t border-zinc-200">
+                <label className="block text-sm font-medium text-zinc-700 mb-2">
                   Colors
                 </label>
                 <div className="space-y-2">
@@ -698,7 +698,7 @@ export default function AdminProductsPage() {
                         value={color.name}
                         onChange={(e) => handleColorChange(index, "name", e.target.value)}
                         placeholder="e.g. Obsidian Black"
-                        className="flex-1 px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                        className="flex-1 px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                       />
                       <div className="relative">
                         <input
@@ -713,7 +713,7 @@ export default function AdminProductsPage() {
                         value={color.hex}
                         onChange={(e) => handleColorChange(index, "hex", e.target.value)}
                         placeholder="#000000"
-                        className="w-24 px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500 font-mono uppercase"
+                        className="w-24 px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500 font-mono uppercase"
                       />
                       <button
                         type="button"
@@ -728,7 +728,7 @@ export default function AdminProductsPage() {
                 <button
                   type="button"
                   onClick={handleAddColor}
-                  className="mt-3 flex items-center gap-1 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                  className="mt-3 flex items-center gap-1 text-sm text-black hover:text-indigo-300 transition-colors"
                 >
                   <Plus className="h-4 w-4" />
                   Add Color
@@ -737,8 +737,8 @@ export default function AdminProductsPage() {
 
               {/* Sizes Section */}
               {isApparelCategory && (
-                <div className="pt-2 border-t border-white/5">
-                  <label className="block text-sm font-medium text-zinc-300 mb-2">
+                <div className="pt-2 border-t border-zinc-200">
+                  <label className="block text-sm font-medium text-zinc-700 mb-2">
                     Sizes
                   </label>
                   <div className="space-y-2">
@@ -749,7 +749,7 @@ export default function AdminProductsPage() {
                           value={size}
                           onChange={(e) => handleSizeChange(index, e.target.value)}
                           placeholder="e.g. XL"
-                          className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500 uppercase"
+                          className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500 uppercase"
                         />
                         <button
                           type="button"
@@ -764,7 +764,7 @@ export default function AdminProductsPage() {
                   <button
                     type="button"
                     onClick={handleAddSize}
-                    className="mt-3 flex items-center gap-1 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                    className="mt-3 flex items-center gap-1 text-sm text-black hover:text-indigo-300 transition-colors"
                   >
                     <Plus className="h-4 w-4" />
                     Add Size
@@ -772,17 +772,17 @@ export default function AdminProductsPage() {
                 </div>
               )}
 
-              <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-white/5">
+              <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-zinc-200">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:text-black bg-zinc-100 hover:bg-zinc-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-black bg-black text-white hover:bg-zinc-800 transition-colors"
                 >
                   {editingProduct ? "Save Changes" : "Create Product"}
                 </button>
@@ -795,25 +795,25 @@ export default function AdminProductsPage() {
       {/* Delete Confirmation Modal for Product */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-          <div className="bg-[#1E1F22] border border-white/10 rounded-xl w-full max-w-sm overflow-hidden p-6 text-center">
+          <div className="bg-white border border-zinc-300 rounded-2xl w-full max-w-sm overflow-hidden p-6 text-center">
             <Trash2 className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">
+            <h2 className="text-xl font-semibold text-black mb-2">
               Delete Product?
             </h2>
-            <p className="text-zinc-400 text-sm mb-6">
+            <p className="text-zinc-600 text-sm mb-6">
               Are you sure you want to delete "{editingProduct?.name}"? This
               action cannot be undone.
             </p>
             <div className="flex justify-center gap-3">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:text-black bg-zinc-100 hover:bg-zinc-200 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-black bg-red-600 hover:bg-red-700 transition-colors"
               >
                 Delete
               </button>

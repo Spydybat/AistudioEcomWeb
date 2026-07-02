@@ -125,16 +125,16 @@ export default function AdminBrandsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-black">
             Brands
           </h1>
-          <p className="text-zinc-400 text-sm mt-1">
+          <p className="text-zinc-600 text-sm mt-1">
             {BRANDS.length} brands total
           </p>
         </div>
         <button
           onClick={openAddModal}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-black text-white hover:bg-zinc-800 text-black rounded-lg transition-colors text-sm font-medium"
         >
           <Plus className="h-4 w-4" />
           Add Brand
@@ -143,13 +143,13 @@ export default function AdminBrandsPage() {
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-600" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search brands..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#1E1F22] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500 placeholder-zinc-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500 placeholder-zinc-500"
           />
         </div>
       </div>
@@ -164,38 +164,38 @@ export default function AdminBrandsPage() {
         ]}
       >
         {filtered.map((brand) => (
-          <tr key={brand.id} className="hover:bg-[#2B2D31] transition-colors">
+          <tr key={brand.id} className="hover:bg-zinc-100 transition-colors">
             <td className="px-4 sm:px-6 py-3">
               <div className="flex items-center gap-3">
                 {brand.image && (
                   <img
                     src={brand.image}
                     alt={brand.name}
-                    className="w-10 h-10 rounded-lg object-cover border border-white/5"
+                    className="w-10 h-10 rounded-lg object-cover border border-zinc-200"
                     referrerPolicy="no-referrer"
                   />
                 )}
                 <div>
-                  <p className="text-sm font-medium text-white line-clamp-1">
+                  <p className="text-sm font-medium text-black line-clamp-1">
                     {brand.name}
                   </p>
                 </div>
               </div>
             </td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400">
+            <td className="px-4 sm:px-6 py-3 text-zinc-600">
               {brand.slug}
             </td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400 line-clamp-1">
+            <td className="px-4 sm:px-6 py-3 text-zinc-600 line-clamp-1">
               {brand.tagline || "-"}
             </td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400 text-sm">
+            <td className="px-4 sm:px-6 py-3 text-zinc-600 text-sm">
               {new Date(brand.created_at).toLocaleDateString()}
             </td>
             <td className="px-4 sm:px-6 py-3">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => openEditModal(brand)}
-                  className="p-1.5 text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-md transition-colors"
+                  className="p-1.5 text-zinc-600 hover:text-black bg-zinc-100 hover:bg-zinc-200 rounded-md transition-colors"
                 >
                   <Edit2 className="h-4 w-4" />
                 </button>
@@ -212,7 +212,7 @@ export default function AdminBrandsPage() {
       </DataTable>
 
       {filtered.length === 0 && (
-        <p className="text-center text-zinc-500 py-8">
+        <p className="text-center text-zinc-600 py-8">
           No brands match your search.
         </p>
       )}
@@ -220,21 +220,21 @@ export default function AdminBrandsPage() {
       {/* Add/Edit Brand Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 overflow-y-auto">
-          <div className="bg-[#1E1F22] border border-white/10 rounded-xl w-full max-w-lg overflow-hidden my-8">
-            <div className="flex items-center justify-between p-4 border-b border-white/5">
-              <h2 className="text-lg font-medium text-white">
+          <div className="bg-white border border-zinc-300 rounded-2xl w-full max-w-lg overflow-hidden my-8">
+            <div className="flex items-center justify-between p-4 border-b border-zinc-200">
+              <h2 className="text-lg font-medium text-black">
                 {editingBrand ? "Edit Brand" : "Add Brand"}
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-zinc-400 hover:text-white transition-colors"
+                className="text-zinc-600 hover:text-black transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-4 space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Name
                 </label>
                 <input
@@ -244,12 +244,12 @@ export default function AdminBrandsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Slug (optional)
                 </label>
                 <input
@@ -259,12 +259,12 @@ export default function AdminBrandsPage() {
                     setFormData({ ...formData, slug: e.target.value })
                   }
                   placeholder="Auto-generated if left blank"
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Tagline
                 </label>
                 <input
@@ -273,12 +273,12 @@ export default function AdminBrandsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, tagline: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Image URL
                 </label>
                 <input
@@ -288,21 +288,21 @@ export default function AdminBrandsPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, image: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-white/5">
+              <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-zinc-200">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:text-black bg-zinc-100 hover:bg-zinc-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-black bg-black text-white hover:bg-zinc-800 transition-colors"
                 >
                   {editingBrand ? "Save Changes" : "Create Brand"}
                 </button>
@@ -315,24 +315,24 @@ export default function AdminBrandsPage() {
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-          <div className="bg-[#1E1F22] border border-white/10 rounded-xl w-full max-w-sm overflow-hidden p-6 text-center">
+          <div className="bg-white border border-zinc-300 rounded-2xl w-full max-w-sm overflow-hidden p-6 text-center">
             <Trash2 className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">
+            <h2 className="text-xl font-semibold text-black mb-2">
               Delete Brand?
             </h2>
-            <p className="text-zinc-400 text-sm mb-6">
+            <p className="text-zinc-600 text-sm mb-6">
               Are you sure you want to delete &quot;{editingBrand?.name}&quot;? This action cannot be undone.
             </p>
             <div className="flex justify-center gap-3">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:text-black bg-zinc-100 hover:bg-zinc-200 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-black bg-red-500 hover:bg-red-600 transition-colors"
               >
                 Delete
               </button>

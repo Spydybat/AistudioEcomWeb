@@ -129,16 +129,16 @@ export default function AdminCategoriesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-black">
             Categories
           </h1>
-          <p className="text-zinc-400 text-sm mt-1">
+          <p className="text-zinc-600 text-sm mt-1">
             {CATEGORIES.length} categories total
           </p>
         </div>
         <button
           onClick={openAddModal}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-black text-white hover:bg-zinc-800 text-black rounded-lg transition-colors text-sm font-medium"
         >
           <Plus className="h-4 w-4" />
           Add Category
@@ -147,13 +147,13 @@ export default function AdminCategoriesPage() {
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-600" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search categories..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#1E1F22] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500 placeholder-zinc-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500 placeholder-zinc-500"
           />
         </div>
       </div>
@@ -168,45 +168,45 @@ export default function AdminCategoriesPage() {
         ]}
       >
         {filtered.map((category) => (
-          <tr key={category.id} className="hover:bg-[#2B2D31] transition-colors">
+          <tr key={category.id} className="hover:bg-zinc-100 transition-colors">
             <td className="px-4 sm:px-6 py-3">
               <div className="flex items-center gap-3">
                 {category.image && (
                   <img
                     src={category.image}
                     alt={category.name}
-                    className="w-10 h-10 rounded-lg object-cover border border-white/5"
+                    className="w-10 h-10 rounded-lg object-cover border border-zinc-200"
                     referrerPolicy="no-referrer"
                   />
                 )}
                 <div>
-                  <p className="text-sm font-medium text-white line-clamp-1">
+                  <p className="text-sm font-medium text-black line-clamp-1">
                     {category.name}
                   </p>
                   {category.description && (
-                    <p className="text-xs text-zinc-400 line-clamp-1">
+                    <p className="text-xs text-zinc-600 line-clamp-1">
                       {category.description}
                     </p>
                   )}
                 </div>
               </div>
             </td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400">
+            <td className="px-4 sm:px-6 py-3 text-zinc-600">
               {category.slug}
             </td>
             <td className="px-4 sm:px-6 py-3">
-              <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider ${category.featured ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-zinc-500/10 text-zinc-400 border border-zinc-500/20'}`}>
+              <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider ${category.featured ? 'bg-zinc-100 text-black border border-indigo-500/20' : 'bg-zinc-500/10 text-zinc-600 border border-zinc-500/20'}`}>
                 {category.featured ? "Yes" : "No"}
               </span>
             </td>
-            <td className="px-4 sm:px-6 py-3 text-zinc-400 text-sm">
+            <td className="px-4 sm:px-6 py-3 text-zinc-600 text-sm">
               {new Date(category.created_at).toLocaleDateString()}
             </td>
             <td className="px-4 sm:px-6 py-3">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => openEditModal(category)}
-                  className="p-1.5 text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-md transition-colors"
+                  className="p-1.5 text-zinc-600 hover:text-black bg-zinc-100 hover:bg-zinc-200 rounded-md transition-colors"
                 >
                   <Edit2 className="h-4 w-4" />
                 </button>
@@ -223,7 +223,7 @@ export default function AdminCategoriesPage() {
       </DataTable>
 
       {filtered.length === 0 && (
-        <p className="text-center text-zinc-500 py-8">
+        <p className="text-center text-zinc-600 py-8">
           No categories match your search.
         </p>
       )}
@@ -231,21 +231,21 @@ export default function AdminCategoriesPage() {
       {/* Add/Edit Category Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 overflow-y-auto">
-          <div className="bg-[#1E1F22] border border-white/10 rounded-xl w-full max-w-lg overflow-hidden my-8">
-            <div className="flex items-center justify-between p-4 border-b border-white/5">
-              <h2 className="text-lg font-medium text-white">
+          <div className="bg-white border border-zinc-300 rounded-2xl w-full max-w-lg overflow-hidden my-8">
+            <div className="flex items-center justify-between p-4 border-b border-zinc-200">
+              <h2 className="text-lg font-medium text-black">
                 {editingCategory ? "Edit Category" : "Add Category"}
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-zinc-400 hover:text-white transition-colors"
+                className="text-zinc-600 hover:text-black transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-4 space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Name
                 </label>
                 <input
@@ -255,12 +255,12 @@ export default function AdminCategoriesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Slug (optional)
                 </label>
                 <input
@@ -270,12 +270,12 @@ export default function AdminCategoriesPage() {
                     setFormData({ ...formData, slug: e.target.value })
                   }
                   placeholder="Auto-generated if left blank"
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Description
                 </label>
                 <textarea
@@ -284,12 +284,12 @@ export default function AdminCategoriesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Image URL
                 </label>
                 <input
@@ -299,7 +299,7 @@ export default function AdminCategoriesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, image: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#111214] border border-white/5 rounded-lg text-sm text-white focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-lg text-sm text-black focus:outline-none focus:border-indigo-500"
                 />
               </div>
 
@@ -311,24 +311,24 @@ export default function AdminCategoriesPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, featured: e.target.checked })
                   }
-                  className="w-4 h-4 rounded border-white/10 bg-[#111214] text-indigo-600 focus:ring-indigo-500 focus:ring-offset-[#1E1F22]"
+                  className="w-4 h-4 rounded border-zinc-300 bg-zinc-50 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-[white]"
                 />
-                <label htmlFor="featured" className="text-sm font-medium text-zinc-300">
+                <label htmlFor="featured" className="text-sm font-medium text-zinc-700">
                   Featured Category
                 </label>
               </div>
 
-              <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-white/5">
+              <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-zinc-200">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:text-black bg-zinc-100 hover:bg-zinc-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-black bg-black text-white hover:bg-zinc-800 transition-colors"
                 >
                   {editingCategory ? "Save Changes" : "Create Category"}
                 </button>
@@ -341,24 +341,24 @@ export default function AdminCategoriesPage() {
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-          <div className="bg-[#1E1F22] border border-white/10 rounded-xl w-full max-w-sm overflow-hidden p-6 text-center">
+          <div className="bg-white border border-zinc-300 rounded-2xl w-full max-w-sm overflow-hidden p-6 text-center">
             <Trash2 className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-white mb-2">
+            <h2 className="text-xl font-semibold text-black mb-2">
               Delete Category?
             </h2>
-            <p className="text-zinc-400 text-sm mb-6">
+            <p className="text-zinc-600 text-sm mb-6">
               Are you sure you want to delete &quot;{editingCategory?.name}&quot;? This action cannot be undone.
             </p>
             <div className="flex justify-center gap-3">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:text-black bg-zinc-100 hover:bg-zinc-200 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-red-500 hover:bg-red-600 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-black bg-red-500 hover:bg-red-600 transition-colors"
               >
                 Delete
               </button>

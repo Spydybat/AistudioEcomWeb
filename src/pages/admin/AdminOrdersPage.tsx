@@ -60,10 +60,10 @@ export default function AdminOrdersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-black">
           Orders
         </h1>
-        <p className="text-zinc-400 text-sm mt-1">
+        <p className="text-zinc-600 text-sm mt-1">
           {ORDERS.length} total orders
         </p>
       </div>
@@ -82,8 +82,8 @@ export default function AdminOrdersPage() {
             onClick={() => setStatusFilter(status)}
             className={`px-4 py-2 text-xs uppercase tracking-wider rounded-lg transition-colors cursor-pointer ${
               statusFilter === status
-                ? "bg-indigo-500 text-white"
-                : "bg-[#1E1F22] border border-white/5 text-zinc-400 hover:text-white hover:border-white/20"
+                ? "bg-black text-white"
+                : "bg-white border border-zinc-200 text-zinc-600 hover:text-black hover:border-zinc-400"
             }`}
           >
             {status}
@@ -92,8 +92,8 @@ export default function AdminOrdersPage() {
       </div>
 
       {ORDERS.length === 0 ? (
-        <div className="bg-[#1E1F22] border border-white/5 rounded-xl p-12 text-center">
-          <p className="text-zinc-400">No orders found.</p>
+        <div className="bg-white border border-zinc-200 rounded-2xl p-12 text-center">
+          <p className="text-zinc-600">No orders found.</p>
         </div>
       ) : (
         <DataTable
@@ -111,27 +111,27 @@ export default function AdminOrdersPage() {
           {filtered.map((order) => (
             <tr
               key={order.id}
-              className="hover:bg-[#2B2D31] transition-colors"
+              className="hover:bg-zinc-100 transition-colors"
             >
-              <td className="px-4 sm:px-6 py-3 font-mono text-xs text-white">
+              <td className="px-4 sm:px-6 py-3 font-mono text-xs text-black">
                 {order.order_number || order.id.slice(0, 8).toUpperCase()}
               </td>
-              <td className="px-4 sm:px-6 py-3 text-white">
+              <td className="px-4 sm:px-6 py-3 text-black">
                 {order.customer_name}
               </td>
-              <td className="px-4 sm:px-6 py-3 text-zinc-400 text-xs">
+              <td className="px-4 sm:px-6 py-3 text-zinc-600 text-xs">
                 {order.email}
               </td>
-              <td className="px-4 sm:px-6 py-3 text-zinc-400">
+              <td className="px-4 sm:px-6 py-3 text-zinc-600">
                 {order.order_items?.reduce(
                   (acc: number, item: any) => acc + item.quantity,
                   0
                 ) || 0}
               </td>
-              <td className="px-4 sm:px-6 py-3 font-medium text-white">
+              <td className="px-4 sm:px-6 py-3 font-medium text-black">
                 ${order.total?.toFixed(2) || "0.00"}
               </td>
-              <td className="px-4 sm:px-6 py-3 text-zinc-400 text-xs">
+              <td className="px-4 sm:px-6 py-3 text-zinc-600 text-xs">
                 {new Date(order.created_at).toLocaleDateString()}
               </td>
               <td className="px-4 sm:px-6 py-3">
@@ -146,7 +146,7 @@ export default function AdminOrdersPage() {
               <td className="px-4 sm:px-6 py-3">
                 <button
                   onClick={() => setSelectedOrder(order)}
-                  className="p-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                  className="p-2 text-zinc-600 hover:text-black hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
                   title="View Details"
                 >
                   <Eye className="h-4 w-4" />
@@ -160,19 +160,19 @@ export default function AdminOrdersPage() {
       {/* Order Details Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 overflow-y-auto">
-          <div className="bg-[#1E1F22] border border-white/10 rounded-xl w-full max-w-3xl overflow-hidden my-8">
-            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-white/5">
+          <div className="bg-white border border-zinc-300 rounded-2xl w-full max-w-3xl overflow-hidden my-8">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-zinc-200">
               <div>
-                <h3 className="text-lg font-serif font-bold text-white">
+                <h3 className="text-lg font-serif font-bold text-black">
                   Order Details
                 </h3>
-                <p className="text-zinc-400 font-mono text-xs mt-1">
+                <p className="text-zinc-600 font-mono text-xs mt-1">
                   {selectedOrder.order_number || selectedOrder.id}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="p-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                className="p-2 text-zinc-600 hover:text-black hover:bg-zinc-100 rounded-lg transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -181,14 +181,14 @@ export default function AdminOrdersPage() {
             <div className="p-4 sm:p-6 space-y-8">
               {/* Top Meta Data */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-white/5 rounded-lg p-4">
-                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-mono mb-1">
+                <div className="bg-zinc-100 rounded-lg p-4">
+                  <p className="text-xs text-zinc-600 uppercase tracking-wider font-mono mb-1">
                     Order Status
                   </p>
                   <select
                     value={selectedOrder.status || "pending"}
                     onChange={(e) => handleStatusChange(e.target.value)}
-                    className="w-full bg-[#1E1F22] border border-white/10 rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-white border border-zinc-300 rounded px-2 py-1 text-sm text-black focus:outline-none focus:border-indigo-500"
                   >
                     <option value="pending">Pending</option>
                     <option value="processing">Processing</option>
@@ -197,24 +197,24 @@ export default function AdminOrdersPage() {
                     <option value="cancelled">Cancelled</option>
                   </select>
                 </div>
-                <div className="bg-white/5 rounded-lg p-4">
-                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-mono mb-1">
+                <div className="bg-zinc-100 rounded-lg p-4">
+                  <p className="text-xs text-zinc-600 uppercase tracking-wider font-mono mb-1">
                     Payment Status
                   </p>
-                  <p className="text-sm font-medium text-white capitalize">
+                  <p className="text-sm font-medium text-black capitalize">
                     {selectedOrder.payment_status || "N/A"}
                   </p>
                 </div>
-                <div className="bg-white/5 rounded-lg p-4">
-                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-mono mb-1">
+                <div className="bg-zinc-100 rounded-lg p-4">
+                  <p className="text-xs text-zinc-600 uppercase tracking-wider font-mono mb-1">
                     Order Date
                   </p>
-                  <p className="text-sm font-medium text-white">
+                  <p className="text-sm font-medium text-black">
                     {new Date(selectedOrder.created_at).toLocaleDateString()}
                   </p>
                 </div>
-                <div className="bg-white/5 rounded-lg p-4">
-                  <p className="text-xs text-zinc-500 uppercase tracking-wider font-mono mb-1">
+                <div className="bg-zinc-100 rounded-lg p-4">
+                  <p className="text-xs text-zinc-600 uppercase tracking-wider font-mono mb-1">
                     Total Amount
                   </p>
                   <p className="text-sm font-medium text-emerald-400">
@@ -226,29 +226,29 @@ export default function AdminOrdersPage() {
               {/* Customer & Shipping */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="text-sm font-bold text-white mb-3">
+                  <h4 className="text-sm font-bold text-black mb-3">
                     Customer Information
                   </h4>
-                  <div className="space-y-2 text-sm text-zinc-400">
+                  <div className="space-y-2 text-sm text-zinc-600">
                     <p>
-                      <strong className="text-white">Name:</strong>{" "}
+                      <strong className="text-black">Name:</strong>{" "}
                       {selectedOrder.customer_name || "N/A"}
                     </p>
                     <p>
-                      <strong className="text-white">Email:</strong>{" "}
+                      <strong className="text-black">Email:</strong>{" "}
                       {selectedOrder.email || "N/A"}
                     </p>
                     <p>
-                      <strong className="text-white">Phone:</strong>{" "}
+                      <strong className="text-black">Phone:</strong>{" "}
                       {selectedOrder.phone || "N/A"}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white mb-3">
+                  <h4 className="text-sm font-bold text-black mb-3">
                     Shipping Address
                   </h4>
-                  <div className="space-y-1 text-sm text-zinc-400">
+                  <div className="space-y-1 text-sm text-zinc-600">
                     <p>{selectedOrder.address || "N/A"}</p>
                     <p>
                       {selectedOrder.city
@@ -264,12 +264,12 @@ export default function AdminOrdersPage() {
 
               {/* Line Items */}
               <div>
-                <h4 className="text-sm font-bold text-white mb-4">
+                <h4 className="text-sm font-bold text-black mb-4">
                   Ordered Products
                 </h4>
-                <div className="border border-white/5 rounded-lg overflow-hidden">
+                <div className="border border-zinc-200 rounded-lg overflow-hidden">
                   <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="bg-[#2B2D31] text-zinc-400 font-mono text-[10px] uppercase tracking-wider">
+                    <thead className="bg-zinc-100 text-zinc-600 font-mono text-[10px] uppercase tracking-wider">
                       <tr>
                         <th className="px-4 py-3 font-medium">Product</th>
                         <th className="px-4 py-3 font-medium">Unit Price</th>
@@ -279,19 +279,19 @@ export default function AdminOrdersPage() {
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-zinc-200">
                       {selectedOrder.order_items?.map((item: any) => (
-                        <tr key={item.id} className="hover:bg-white/5">
-                          <td className="px-4 py-3 text-white">
+                        <tr key={item.id} className="hover:bg-zinc-100">
+                          <td className="px-4 py-3 text-black">
                             {item.products?.name || "Unknown Product"}
                           </td>
-                          <td className="px-4 py-3 text-zinc-400">
+                          <td className="px-4 py-3 text-zinc-600">
                             ${item.price?.toFixed(2) || "0.00"}
                           </td>
-                          <td className="px-4 py-3 text-zinc-400">
+                          <td className="px-4 py-3 text-zinc-600">
                             {item.quantity}
                           </td>
-                          <td className="px-4 py-3 text-white text-right">
+                          <td className="px-4 py-3 text-black text-right">
                             ${((item.price || 0) * (item.quantity || 0)).toFixed(
                               2
                             )}
@@ -303,7 +303,7 @@ export default function AdminOrdersPage() {
                         <tr>
                           <td
                             colSpan={4}
-                            className="px-4 py-6 text-center text-zinc-500"
+                            className="px-4 py-6 text-center text-zinc-600"
                           >
                             No products found for this order.
                           </td>
