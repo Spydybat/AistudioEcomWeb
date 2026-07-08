@@ -21,7 +21,41 @@ import MarketplaceShowcase from "../components/MarketplaceShowcase";
 
 export default function HomePage() {
   const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
-  useEffect(() => { fetchProducts().then(setPRODUCTS); }, []);
+
+  useEffect(() => { 
+    fetchProducts().then(setPRODUCTS); 
+    
+    // Connect to deployed backend using the environment variable
+    const apiUrl = import.meta.env.VITE_API_URL;
+    if (apiUrl) {
+      fetch(`${apiUrl}/api/test`)
+        .then(async res => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then(data => {
+          console.log("✅ Backend Connected Successfully\nBackend Response:", data.message);
+        })
+        .catch(err => {
+          console.error("❌ Backend Connection Failed\nError Details:", err);
+          
+          let suggestion = "";
+          if (err instanceof TypeError && err.message.includes("Failed to fetch") || err.message.includes("NetworkError")) {
+             suggestion = "Possible causes: \n1. CORS issue: Check if backend allows requests from this origin.\n2. Incorrect API URL: Verify VITE_API_URL points to the correct Render deployment URL.\n3. Backend is down or still spinning up on Render.";
+          } else if (err.message && err.message.includes("HTTP error!")) {
+             suggestion = "Possible cause: The endpoint might be incorrect or missing. Check if /api/test exists on the backend.";
+          } else {
+             suggestion = "Possible causes: Environment variables are not loaded, or fetch configuration is incorrect.";
+          }
+          console.info("💡 Diagnostic Suggestion: \n" + suggestion);
+        });
+    } else {
+      console.error("❌ Backend Connection Failed\nError Details: VITE_API_URL is undefined.");
+      console.info("💡 Diagnostic Suggestion: \nMake sure VITE_API_URL is defined in your .env file.");
+    }
+  }, []);
   const { 
     wishlist, 
     searchQuery, 
@@ -47,8 +81,6 @@ export default function HomePage() {
 
   return (
     <div>
-
-
       <Hero 
         onExploreClick={handleScrollToSection} 
         onFilterCategory={setSelectedCategory} 
