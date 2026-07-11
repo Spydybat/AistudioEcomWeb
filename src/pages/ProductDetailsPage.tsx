@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { CheckCircle, GitCompare, Heart, RotateCcw, Share2, ShieldCheck, ShoppingBag, Star, Truck } from "lucide-react";
 import { fetchProducts, getCategoryName, getProductsByIds, getRelatedProducts, LOCAL_PRODUCTS } from "../data/products";
 import { Product } from "../types";
@@ -40,6 +40,11 @@ export default function ProductDetailsPage() {
   const { id } = useParams();
   const { wishlist, handleAddToCart, handleToggleWishlist, setIsCartOpen, showToast } = useShop();
   const { formatPrice } = useCurrency();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [id]);
   
   const activeProducts = PRODUCTS.length > 0 ? PRODUCTS : LOCAL_PRODUCTS;
   const product = activeProducts.find((item) => item.id === id || item.slug === id || String(item.id) === String(id));
@@ -103,10 +108,13 @@ export default function ProductDetailsPage() {
 
   const handleBuyNow = () => {
     if (!selectedColor || !selectedSize) return;
-    for (let i = 0; i < quantity; i++) {
-      handleAddToCart(product, selectedSize, selectedColor);
-    }
-    setIsCartOpen(true);
+    const buyNowItem = {
+      product: product,
+      quantity: quantity,
+      selectedSize: selectedSize,
+      selectedColor: selectedColor
+    };
+    navigate('/checkout', { state: { buyNowItem } });
   };
 
   const handleShare = async () => {

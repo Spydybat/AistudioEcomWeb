@@ -1,24 +1,290 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { CreditCard, ShieldCheck, ShoppingBag, Truck, Lock, ChevronLeft, HelpCircle } from "lucide-react";
 import { useShop } from "../context/ShopContext";
 import { useCurrency } from "../context/CurrencyContext";
 import EmptyState from "../components/ui/EmptyState";
+import { supabase } from "../supabaseClient";
+
+const loadRazorpaySDK = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if ((window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 
 export default function CheckoutPage() {
-  const { cart } = useShop();
-  const { formatPrice } = useCurrency();
+  const { cart, user, handleClearCart, showToast } = useShop();
+  const { formatPrice, convertPrice, activeRegion, selectedRegionId, setSelectedRegionId } = useCurrency();
   const navigate = useNavigate();
 
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
-  const [paymentMethod, setPaymentMethod] = useState<"credit-card" | "paypal" | "afterpay">("credit-card");
+  
+  const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
-  const subtotal = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  
+  const [zipCode, setZipCode] = useState("");
+  const [billingZipCode, setBillingZipCode] = useState("");
+  const [zipTouched, setZipTouched] = useState(false);
+  const [billingZipTouched, setBillingZipTouched] = useState(false);
+
+  const getZipValidationRules = (countryCode: string) => {
+    switch (countryCode) {
+      case "IN": return { type: "numeric", exact: 6, max: 6, format: /^\d{6}$/ };
+      case "US": return { type: "numeric", exact: 5, max: 5, format: /^\d{5}$/ };
+      case "EU": return { type: "numeric", max: 10, format: /^\d{1,10}$/ };
+      case "GB": return { type: "alphanumeric", max: 8, format: /^[A-Za-z0-9\s]{1,8}$/ };
+      case "JP": return { type: "numeric", exact: 7, max: 7, format: /^\d{7}$/ };
+      case "CA": return { type: "alphanumeric", max: 7, format: /^[A-Za-z0-9\s]{1,7}$/ };
+      case "AU": return { type: "numeric", exact: 4, max: 4, format: /^\d{4}$/ };
+      default: return { type: "numeric", max: 10, format: /^\d+$/ };
+    }
+  };
+
+  const getZipErrorMessage = (countryCode: string) => {
+    switch (countryCode) {
+      case "IN": return "Must be exactly 6 digits";
+      case "US": return "Must be exactly 5 digits";
+      case "EU": return "Maximum 10 digits";
+      case "GB": return "Maximum 8 characters";
+      case "JP": return "Must be exactly 7 digits";
+      case "CA": return "Maximum 7 characters";
+      case "AU": return "Must be exactly 4 digits";
+      default: return "Invalid ZIP / Postal Code";
+    }
+  };
+
+  const isValidZip = (code: string, countryCode: string) => {
+    const rules = getZipValidationRules(countryCode);
+    const val = rules.type === "numeric" ? code.replace(/\s/g, "") : code.trim();
+    if (!val) return false;
+    if (rules.exact && val.length !== rules.exact) return false;
+    return rules.format.test(val);
+  };
+
+  const handleZipChange = (e: React.ChangeEvent<HTMLInputElement>, isBilling: boolean) => {
+    let value = e.target.value;
+    const rules = getZipValidationRules(selectedRegionId);
+    
+    if (rules.type === "numeric") {
+      value = value.replace(/\D/g, "");
+    } else {
+      value = value.replace(/[^A-Za-z0-9\s]/g, "");
+    }
+
+    if (value.length > rules.max) {
+      value = value.slice(0, rules.max);
+    }
+
+    if (isBilling) {
+      setBillingZipCode(value);
+    } else {
+      setZipCode(value);
+    }
+  };
+
+  const [phoneTouched, setPhoneTouched] = useState(false);
+
+  const getPhoneValidationRules = (countryCode: string) => {
+    switch (countryCode) {
+      case "IN": return { exact: 10, max: 10, msg: "Must be exactly 10 digits" };
+      case "US": return { exact: 10, max: 10, msg: "Must be exactly 10 digits" };
+      case "CA": return { exact: 10, max: 10, msg: "Must be exactly 10 digits" };
+      case "AU": return { exact: 9, max: 9, msg: "Must be exactly 9 digits" };
+      case "JP": return { min: 10, max: 11, msg: "Must be 10-11 digits" };
+      case "GB": return { min: 1, max: 10, msg: "Must be up to 10 digits" };
+      case "EU": return { min: 1, max: 12, msg: "Must be up to 12 digits" };
+      default: return { min: 1, max: 15, msg: "Invalid phone number" };
+    }
+  };
+
+  const isValidPhone = (number: string, countryCode: string) => {
+    const rules = getPhoneValidationRules(countryCode);
+    if (!number) return false;
+    if (rules.exact && number.length !== rules.exact) return false;
+    if (rules.min && number.length < rules.min) return false;
+    if (rules.max && number.length > rules.max) return false;
+    return true;
+  };
+
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, "");
+    const maxDigits = getPhoneValidationRules(selectedRegionId).max;
+    if (value.length > maxDigits) {
+      value = value.slice(0, maxDigits);
+    }
+    setPhoneNumber(value);
+  };
+
+  const COUNTRY_OPTIONS = [
+    { id: "IN", label: "🇮🇳 India (INR ₹)" },
+    { id: "US", label: "🇺🇸 United States (USD $)" },
+    { id: "EU", label: "🇪🇺 Europe (EUR €)" },
+    { id: "GB", label: "🇬🇧 United Kingdom (GBP £)" },
+    { id: "JP", label: "🇯🇵 Japan (JPY ¥)" },
+    { id: "CA", label: "🇨🇦 Canada (CAD $)" },
+    { id: "AU", label: "🇦🇺 Australia (AUD $)" }
+  ];
+
+  const location = useLocation();
+  const buyNowItem = location.state?.buyNowItem;
+  
+  const checkoutItems = buyNowItem ? [buyNowItem] : cart;
+
+  const subtotal = checkoutItems.reduce((acc: any, item: any) => acc + item.product.price * item.quantity, 0);
   const shipping = subtotal > 200 ? 0 : 15;
   const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  const discount = 0; // Assuming no discount implemented yet
+  const totalCost = subtotal + shipping + tax - discount;
+  const total = totalCost;
 
-  if (cart.length === 0) {
+  const handleTriggerCheckout = async () => {
+    setIsProcessingCheckout(true);
+    setCheckoutError(null);
+    
+    try {
+      if (!isValidPhone(phoneNumber, selectedRegionId)) {
+        setPhoneTouched(true);
+        throw new Error(`Phone Number: ${getPhoneValidationRules(selectedRegionId).msg}`);
+      }
+
+      if (!isValidZip(zipCode, selectedRegionId)) {
+         setZipTouched(true);
+         throw new Error(`Shipping ZIP / Postal Code: ${getZipErrorMessage(selectedRegionId)}.`);
+      }
+      if (!billingSameAsShipping && !isValidZip(billingZipCode, selectedRegionId)) {
+         setBillingZipTouched(true);
+         throw new Error(`Billing ZIP / Postal Code: ${getZipErrorMessage(selectedRegionId)}.`);
+      }
+      // Step 1: Create Order via Razorpay (Backend)
+      const { paymentService } = await import('../services/paymentService');
+      
+      const finalPayableAmount = convertPrice(totalCost);
+      // Ensure we send the EXACT amount that matches what the UI would show (rounded to 2 decimals)
+      const exactAmountToSend = activeRegion.currency === 'JPY' ? Math.round(finalPayableAmount) : Math.round(finalPayableAmount * 100) / 100;
+      const currency = activeRegion.currency;
+      
+      const rpOrder = await paymentService.createOrder(exactAmountToSend, currency);
+      
+      if (!rpOrder.success) {
+         throw new Error(rpOrder.message || "Failed to create payment order");
+      }
+
+      // Step 2: Open Razorpay Checkout Modal
+      await loadRazorpaySDK();
+      
+      if (!(window as any).Razorpay) {
+        throw new Error("Razorpay SDK failed to load.");
+      }
+
+      const options = {
+        key: rpOrder.key_id,
+        amount: rpOrder.amount,
+        currency: rpOrder.currency,
+        name: "Premium Clothing",
+        description: "Purchase Checkout",
+        order_id: rpOrder.order_id,
+        handler: async function (response: any) {
+           try {
+             setIsProcessingCheckout(true);
+             // Step 3: Verify Payment on Backend
+             const verifyRes = await paymentService.verifyPayment({
+               razorpay_order_id: response.razorpay_order_id,
+               razorpay_payment_id: response.razorpay_payment_id,
+               razorpay_signature: response.razorpay_signature
+             });
+
+             if (!verifyRes.success) {
+                setCheckoutError("Payment verification failed!");
+                setIsProcessingCheckout(false);
+                return;
+             }
+
+             // Step 4: Existing Order Creation Logic (Only after successful payment)
+             const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
+             const { data: orderData, error: orderError } = await supabase
+               .from('orders')
+               .insert([{
+                 profile_id: user?.id,
+                 order_number: orderNumber,
+                 total: totalCost,
+                 status: 'pending',
+                 payment_status: 'paid', // Update to paid since razorpay verified
+                 payment_method: JSON.stringify({
+                   method: 'razorpay',
+                   order_id: response.razorpay_order_id,
+                   payment_id: response.razorpay_payment_id,
+                   signature: response.razorpay_signature
+                 }),
+                 customer_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Guest',
+                 email: user?.email || 'guest@example.com'
+               }])
+               .select()
+               .single();
+
+             if (orderError) throw new Error(orderError.message);
+
+             const orderId = orderData.id;
+
+             const orderItemsToInsert = checkoutItems.map((item: any) => ({
+               order_id: orderId,
+               product_id: item.product.id,
+               quantity: item.quantity,
+               price: item.product.price
+             }));
+
+             const { error: itemsError } = await supabase
+               .from('order_items')
+               .insert(orderItemsToInsert);
+
+             if (itemsError) throw new Error(itemsError.message);
+
+             if (!buyNowItem) {
+               handleClearCart();
+             }
+             showToast("Order Placed Successfully!");
+             navigate('/profile/orders'); // Or to a success page
+           } catch (err: any) {
+             console.error("Order completion error:", err);
+             setCheckoutError(err.message || "Failed to complete order after payment.");
+           } finally {
+             setIsProcessingCheckout(false);
+           }
+        },
+        prefill: {
+          name: user?.user_metadata?.full_name || "",
+          email: user?.email || "",
+        },
+        theme: {
+          color: "#000000"
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        setCheckoutError(response.error.description || "Payment failed");
+        setIsProcessingCheckout(false);
+      });
+      rzp.open();
+      
+    } catch (error: any) {
+      console.error('Checkout error:', error);
+      setCheckoutError(error.message || "An unexpected error occurred.");
+      setIsProcessingCheckout(false);
+    }
+  };
+
+  if (checkoutItems.length === 0) {
     return (
       <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full flex flex-col justify-center">
         <EmptyState
@@ -73,10 +339,43 @@ export default function CheckoutPage() {
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Last Name</label>
                   <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="Last Name" />
                 </div>
-                <div className="space-y-2 md:col-span-2">
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Phone Number</label>
-                  <input type="tel" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="Phone Number" />
-                </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Phone Number</label>
+                    <div className={`flex bg-zinc-50 border rounded-xl overflow-hidden transition-colors ${phoneTouched && !isValidPhone(phoneNumber, selectedRegionId) ? 'border-red-500' : 'border-zinc-200 focus-within:border-black'}`}>
+                      <div className="relative">
+                        <select 
+                          value={selectedRegionId} 
+                          onChange={(e) => setSelectedRegionId(e.target.value)}
+                          className="h-full bg-zinc-100 border-r border-zinc-200 pl-4 pr-8 py-3.5 text-sm font-medium text-black focus:outline-none cursor-pointer appearance-none"
+                        >
+                          <option value="IN">+91</option>
+                          <option value="US">+1</option>
+                          <option value="EU">+33</option>
+                          <option value="GB">+44</option>
+                          <option value="JP">+81</option>
+                          <option value="CA">+1</option>
+                          <option value="AU">+61</option>
+                        </select>
+                        <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                          <svg className="h-3 w-3 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
+                      </div>
+                      <input 
+                        type="tel" 
+                        inputMode="numeric" 
+                        value={phoneNumber} 
+                        onChange={handlePhoneNumberChange} 
+                        onBlur={() => setPhoneTouched(true)}
+                        className="flex-1 bg-transparent px-4 py-3.5 text-sm font-medium text-black focus:outline-none" 
+                        placeholder="Phone Number" 
+                      />
+                    </div>
+                    {phoneTouched && !isValidPhone(phoneNumber, selectedRegionId) && (
+                      <p className="text-xs text-red-500 mt-1">{getPhoneValidationRules(selectedRegionId).msg}</p>
+                    )}
+                  </div>
               </div>
             </section>
 
@@ -96,22 +395,35 @@ export default function CheckoutPage() {
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">City</label>
                   <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="City" />
                 </div>
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Country / Region</label>
-                  <select className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors appearance-none cursor-pointer">
-                    <option>United States</option>
-                    <option>Canada</option>
-                    <option>United Kingdom</option>
-                    <option>Australia</option>
-                  </select>
-                </div>
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Country / Region</label>
+                    <select 
+                      value={selectedRegionId} 
+                      onChange={(e) => setSelectedRegionId(e.target.value)}
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors appearance-none cursor-pointer"
+                    >
+                      {COUNTRY_OPTIONS.map(opt => (
+                        <option key={opt.id} value={opt.id}>{opt.label}</option>
+                      ))}
+                    </select>
+                  </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">State / Province</label>
                   <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="State / Province" />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">ZIP / Postal Code</label>
-                  <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="ZIP / Postal Code" />
+                  <input 
+                    type="text" 
+                    value={zipCode}
+                    onChange={(e) => handleZipChange(e, false)}
+                    onBlur={() => setZipTouched(true)}
+                    className={`w-full bg-zinc-50 border rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors ${zipTouched && !isValidZip(zipCode, selectedRegionId) ? 'border-red-500' : 'border-zinc-200'}`} 
+                    placeholder="ZIP / Postal Code" 
+                  />
+                  {zipTouched && !isValidZip(zipCode, selectedRegionId) && (
+                    <p className="text-xs text-red-500 mt-1">{getZipErrorMessage(selectedRegionId)}</p>
+                  )}
                 </div>
               </div>
             </section>
@@ -141,7 +453,17 @@ export default function CheckoutPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">ZIP / Postal Code</label>
-                    <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="ZIP / Postal Code" />
+                    <input 
+                      type="text" 
+                      value={billingZipCode}
+                      onChange={(e) => handleZipChange(e, true)}
+                      onBlur={() => setBillingZipTouched(true)}
+                      className={`w-full bg-zinc-50 border rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors ${billingZipTouched && !isValidZip(billingZipCode, selectedRegionId) ? 'border-red-500' : 'border-zinc-200'}`} 
+                      placeholder="ZIP / Postal Code" 
+                    />
+                    {billingZipTouched && !isValidZip(billingZipCode, selectedRegionId) && (
+                      <p className="text-xs text-red-500 mt-1">{getZipErrorMessage(selectedRegionId)}</p>
+                    )}
                   </div>
                 </div>
               )}
@@ -150,80 +472,43 @@ export default function CheckoutPage() {
             {/* Payment Method */}
             <section>
               <h2 className="text-xl font-sans font-bold tracking-tight text-black mb-6 uppercase flex items-center justify-between">
-                <span>4. Payment Method</span>
+                <span>4. Secure Payment</span>
                 <div className="flex items-center gap-1">
-                  <Lock className="h-3 w-3 text-zinc-400" />
-                  <span className="text-[10px] font-bold tracking-widest text-zinc-400">Encrypted</span>
+                  <Lock className="h-3 w-3 text-emerald-600" />
+                  <span className="text-[10px] font-bold tracking-widest text-emerald-600">Encrypted</span>
                 </div>
               </h2>
               
-              <div className="space-y-3">
-                {/* Credit Card Option */}
-                <div className={`border rounded-2xl overflow-hidden transition-all ${paymentMethod === "credit-card" ? "border-black shadow-sm" : "border-zinc-200"}`}>
-                  <label className={`flex items-center gap-3 p-4 cursor-pointer transition-colors ${paymentMethod === "credit-card" ? "bg-zinc-50" : "bg-white hover:bg-zinc-50/50"}`}>
-                    <input 
-                      type="radio" 
-                      name="payment_method" 
-                      checked={paymentMethod === "credit-card"}
-                      onChange={() => setPaymentMethod("credit-card")}
-                      className="w-4 h-4 accent-black cursor-pointer" 
-                    />
-                    <div className="flex-1 flex items-center justify-between">
-                      <span className="text-sm font-bold text-black">Credit Card</span>
-                      <CreditCard className="h-5 w-5 text-zinc-400" />
-                    </div>
-                  </label>
+              <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-6 sm:p-8">
+                <div className="flex flex-col items-center text-center space-y-4">
+                  <Lock className="h-8 w-8 text-black mb-2" />
+                  <h3 className="text-lg font-bold text-black">Your payment will be processed securely through Razorpay.</h3>
                   
-                  {paymentMethod === "credit-card" && (
-                    <div className="p-5 border-t border-zinc-200 bg-white space-y-5 animate-slideIn">
-                      <div className="space-y-2">
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Card Number</label>
-                        <div className="relative">
-                          <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 pl-11 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors font-mono" placeholder="0000 0000 0000 0000" />
-                          <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-5">
-                        <div className="space-y-2">
-                          <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Expiration Date</label>
-                          <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors font-mono" placeholder="MM/YY" />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-zinc-500">
-                            Security Code
-                            <HelpCircle className="h-3.5 w-3.5 cursor-pointer text-zinc-400 hover:text-black" />
-                          </label>
-                          <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors font-mono" placeholder="CVC" />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Name on Card</label>
-                        <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="Full Name" />
-                      </div>
-                    </div>
-                  )}
-                </div>
+                  <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm font-medium text-zinc-600 mt-4 mb-6">
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-emerald-500" /> Credit Cards
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-emerald-500" /> Debit Cards
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-emerald-500" /> UPI
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-emerald-500" /> Net Banking
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-emerald-500" /> Wallets
+                    </span>
+                  </div>
 
-                {/* PayPal Option */}
-                <div className={`border rounded-2xl overflow-hidden transition-all ${paymentMethod === "paypal" ? "border-black shadow-sm" : "border-zinc-200"}`}>
-                  <label className={`flex items-center gap-3 p-4 cursor-pointer transition-colors ${paymentMethod === "paypal" ? "bg-zinc-50" : "bg-white hover:bg-zinc-50/50"}`}>
-                    <input 
-                      type="radio" 
-                      name="payment_method" 
-                      checked={paymentMethod === "paypal"}
-                      onChange={() => setPaymentMethod("paypal")}
-                      className="w-4 h-4 accent-black cursor-pointer" 
-                    />
-                    <div className="flex-1 flex items-center justify-between">
-                      <span className="text-sm font-bold text-black">PayPal</span>
-                      <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded tracking-widest uppercase">PayPal</span>
-                    </div>
-                  </label>
-                  {paymentMethod === "paypal" && (
-                    <div className="p-6 border-t border-zinc-200 text-center animate-slideIn">
-                      <p className="text-sm text-zinc-500 font-medium">You will be redirected to PayPal to complete your purchase securely.</p>
-                    </div>
-                  )}
+                  <button 
+                    onClick={handleTriggerCheckout}
+                    disabled={isProcessingCheckout}
+                    className="mt-6 w-full max-w-sm flex items-center justify-center gap-2 bg-black text-white px-8 py-4 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isProcessingCheckout ? "Processing..." : "Pay Securely with Razorpay"}
+                  </button>
                 </div>
               </div>
             </section>
@@ -236,7 +521,7 @@ export default function CheckoutPage() {
               <h2 className="text-lg font-sans font-bold tracking-tight text-black mb-6 uppercase">Order Summary</h2>
               
               <div className="space-y-4 max-h-[40vh] overflow-y-auto no-scrollbar pr-2 mb-6">
-                {cart.map((item, index) => (
+                {checkoutItems.map((item: any, index: number) => (
                   <div key={index} className="flex gap-4">
                     <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 bg-white border border-zinc-200 rounded-xl overflow-hidden">
                       <img src={item.product.images?.[0]} alt={item.product.name} className="w-full h-full object-cover" />
@@ -285,9 +570,18 @@ export default function CheckoutPage() {
                 <span className="text-2xl font-sans font-bold text-black">{formatPrice(total)}</span>
               </div>
 
-              <button className="w-full flex items-center justify-center gap-2 bg-black text-white px-8 py-4 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 cursor-pointer">
-                {paymentMethod === "paypal" ? "Continue to PayPal" : "Complete Order"}
+              <button 
+                onClick={handleTriggerCheckout}
+                disabled={isProcessingCheckout}
+                className="w-full flex items-center justify-center gap-2 bg-black text-white px-8 py-4 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                {isProcessingCheckout ? "Processing..." : "Pay Securely with Razorpay"}
               </button>
+
+              {checkoutError && (
+                <div className="mt-4 p-3 bg-red-50 text-red-500 text-xs text-center border border-red-100 rounded-xl">
+                  {checkoutError}
+                </div>
+              )}
 
               <div className="mt-6 flex items-center justify-center gap-4 text-zinc-400">
                 <ShieldCheck className="h-5 w-5" />

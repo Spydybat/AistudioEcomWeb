@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Outlet, useParams } from "react-router-dom";
 import { CheckCircle, Info } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useShop } from "./context/ShopContext";
@@ -47,6 +47,11 @@ function ScrollToTop() {
     window.scrollTo(0, 0);
   }, [pathname]);
   return null;
+}
+
+function ProductDetailsWrapper() {
+  const { id } = useParams();
+  return <ProductDetailsPage key={id} />;
 }
 
 function StoreLayout() {
@@ -184,7 +189,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/electronics" element={<ElectronicsPage />} />
-          <Route path="/product/:id" element={<ProductDetailsPage />} />
+          <Route path="/product/:id" element={<ProductDetailsWrapper />} />
           <Route path="/brand/:brandId" element={<BrandPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />

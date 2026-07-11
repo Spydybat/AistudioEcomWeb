@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ChevronDown, Heart, Menu, Search, ShoppingBag, User, X, Sun, Moon, LogOut, Shield } from "lucide-react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
@@ -69,6 +70,7 @@ export default function Header({
       if (e.key === "Escape") {
         setIsProfileOpen(false);
         setIsSearchOpen(false);
+        setIsRegionOpen(false);
       }
     };
     const handleClickOutside = (e: MouseEvent) => {
@@ -81,15 +83,29 @@ export default function Header({
       }
     };
 
-    if (isProfileOpen || isSearchOpen) {
+    const handleScrollOrResize = () => {
+      if (isRegionOpen) {
+        setIsRegionOpen(false);
+      }
+    };
+
+    if (isProfileOpen || isSearchOpen || isRegionOpen) {
       document.addEventListener("keydown", handleKeyDown);
       document.addEventListener("mousedown", handleClickOutside);
+      
+      if (isRegionOpen) {
+        window.addEventListener("scroll", handleScrollOrResize, { passive: true });
+        window.addEventListener("resize", handleScrollOrResize, { passive: true });
+      }
     }
+    
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScrollOrResize);
+      window.removeEventListener("resize", handleScrollOrResize);
     };
-  }, [isProfileOpen, isSearchOpen]);
+  }, [isProfileOpen, isSearchOpen, isRegionOpen]);
 
   const handleRegionSelect = (regionId: string) => {
     setSelectedRegionId(regionId);
@@ -97,10 +113,17 @@ export default function Header({
     setIsMobileMenuOpen(false);
   };
 
-  const toggleRegion = () => {
+  const [regionCoords, setRegionCoords] = useState({ top: 0, right: 0 });
+
+  const toggleRegion = (e: React.MouseEvent) => {
     if (!isRegionOpen) {
       setIsSearchOpen(false);
       setIsMegaMenuOpen(false);
+      const rect = e.currentTarget.getBoundingClientRect();
+      setRegionCoords({
+        top: rect.bottom,
+        right: window.innerWidth - rect.right
+      });
     }
     setIsRegionOpen((open) => !open);
   };
@@ -152,37 +175,81 @@ export default function Header({
     navigate("/products");
   };
 
-  const renderRegionDropdown = () => (
-    <AnimatePresence>
-      {isRegionOpen && (
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setIsRegionOpen(false)} />
+  const renderRegionDropdown = (isMobile = false) => {
+    const dropdownMenu = (
+      <div className="py-2">
+        {REGIONS.map((region) => (
+          <button
+            key={region.id}
+            onClick={() => handleRegionSelect(region.id)}
+            className={`w-full text-left px-4 py-2.5 text-xs flex items-center gap-3 hover:bg-zinc-50 hover:text-black transition-colors ${
+              selectedRegionId === region.id ? "bg-zinc-100 text-black font-semibold" : "text-zinc-600"
+            }`}
+          >
+            <span className="text-sm">{region.flag}</span>
+            <span className="font-medium">{region.name}</span>
+            <span className="ml-auto opacity-60 font-mono">{region.currency}</span>
+          </button>
+        ))}
+      </div>
+    );
+
+    if (isMobile) {
+      return (
+        <AnimatePresence>
+          {isRegionOpen && (
+            <motion.div
+              key="overlay-mobile"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-transparent"
+              onClick={() => setIsRegionOpen(false)}
+            />
+          )}
+          {isRegionOpen && (
+            <motion.div
+              key="menu-mobile"
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              className="absolute top-full right-0 lg:right-2 mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.1)] z-50 overflow-hidden"
+            >
+              {dropdownMenu}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      );
+    }
+
+    return createPortal(
+      <AnimatePresence>
+        {isRegionOpen && (
           <motion.div
+            key="overlay-desktop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-transparent"
+            onClick={() => setIsRegionOpen(false)}
+          />
+        )}
+        {isRegionOpen && (
+          <motion.div
+            key="menu-desktop"
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className="absolute top-full right-0 lg:right-2 mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.1)] z-50 overflow-hidden"
+            style={{ position: 'fixed', top: regionCoords.top + 8, right: regionCoords.right }}
+            className="z-[110] mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.1)] overflow-hidden"
           >
-            <div className="py-2">
-              {REGIONS.map((region) => (
-                <button
-                  key={region.id}
-                  onClick={() => handleRegionSelect(region.id)}
-                  className={`w-full text-left px-4 py-2.5 text-xs flex items-center gap-3 hover:bg-zinc-50 hover:text-black transition-colors ${
-                    selectedRegionId === region.id ? "bg-zinc-100 text-black font-semibold" : "text-zinc-600"
-                  }`}
-                >
-                  <span className="text-sm">{region.flag}</span>
-                  <span className="font-medium">{region.name}</span>
-                  <span className="ml-auto opacity-60 font-mono">{region.currency}</span>
-                </button>
-              ))}
-            </div>
+            {dropdownMenu}
           </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-  );
+        )}
+      </AnimatePresence>,
+      document.body
+    );
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-xl border-b border-zinc-100 transition-all duration-300">
@@ -250,7 +317,7 @@ export default function Header({
               <ChevronDown className="h-3 w-3 opacity-70" />
             </button>
 
-            {!isMobileMenuOpen && renderRegionDropdown()}
+            {!isMobileMenuOpen && renderRegionDropdown(false)}
           </div>
 
           <button
@@ -497,7 +564,7 @@ export default function Header({
                       </span>
                     </div>
                   </button>
-                  {isMobileMenuOpen && renderRegionDropdown()}
+                  {isMobileMenuOpen && renderRegionDropdown(true)}
                 </div>
 
                 <div className="flex gap-4">

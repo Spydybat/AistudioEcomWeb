@@ -25,6 +25,7 @@ interface CurrencyContextType {
   setSelectedRegionId: (id: string) => void;
   activeRegion: typeof REGIONS[0];
   formatPrice: (priceInUsd: number) => string;
+  convertPrice: (priceInUsd: number) => number;
 }
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
@@ -41,32 +42,43 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
 
   const activeRegion = REGIONS.find((r) => r.id === selectedRegionId) || REGIONS[0];
 
-  const formatPrice = (priceInUsd: number) => {
+  const convertPrice = (priceInUsd: number) => {
     const rate = EXCHANGE_RATES[activeRegion.currency] || 1;
     const converted = priceInUsd * rate;
+    
+    if (activeRegion.currency === "JPY") {
+      return Math.round(converted);
+    }
+    
+    // Exact rounding to 2 decimal places to guarantee display matches math
+    return Math.round(converted * 100) / 100;
+  };
+
+  const formatPrice = (priceInUsd: number) => {
+    const rounded = convertPrice(priceInUsd);
 
     // Special case for JPY (no decimals)
     if (activeRegion.currency === "JPY") {
-      return `${activeRegion.symbol}${Math.round(converted).toLocaleString()}`;
+      return `${activeRegion.symbol}${rounded.toLocaleString()}`;
     }
 
     // Special case for INR (Indian number formatting)
     if (activeRegion.currency === "INR") {
-      return `${activeRegion.symbol}${converted.toLocaleString("en-IN", {
+      return `${activeRegion.symbol}${rounded.toLocaleString("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`;
     }
 
     // Default formatting
-    return `${activeRegion.symbol}${converted.toLocaleString(undefined, {
+    return `${activeRegion.symbol}${rounded.toLocaleString(undefined, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}`;
   };
 
   return (
-    <CurrencyContext.Provider value={{ selectedRegionId, setSelectedRegionId, activeRegion, formatPrice }}>
+    <CurrencyContext.Provider value={{ selectedRegionId, setSelectedRegionId, activeRegion, formatPrice, convertPrice }}>
       {children}
     </CurrencyContext.Provider>
   );

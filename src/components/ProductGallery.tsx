@@ -10,17 +10,6 @@ interface ProductGalleryProps {
 export default function ProductGallery({ images, productName }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-  const [isHovering, setIsHovering] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!imgRef.current) return;
-    const { left, top, width, height } = imgRef.current.getBoundingClientRect();
-    const x = ((e.clientX - left) / width) * 100;
-    const y = ((e.clientY - top) / height) * 100;
-    setMousePosition({ x, y });
-  };
 
   return (
     <div className="flex flex-col-reverse md:flex-row gap-4 md:gap-6 lg:sticky lg:top-24 items-start">
@@ -31,7 +20,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
             key={idx}
             onClick={() => setActiveIndex(idx)}
             className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
-              activeIndex === idx ? "border-black shadow-md scale-[1.02]" : "border-transparent opacity-60 hover:opacity-100"
+              activeIndex === idx ? "border-black shadow-md scale-[1.02]" : "border-transparent"
             }`}
           >
             <img src={img} alt={`${productName} thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
@@ -47,25 +36,15 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
           <Maximize2 className="h-5 w-5" />
         </button>
 
-        <div 
-          className="w-full h-full cursor-crosshair overflow-hidden"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-          onMouseMove={handleMouseMove}
-        >
+        <div className="w-full h-full overflow-hidden">
           <motion.img
-            ref={imgRef}
             key={activeIndex}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
             src={images[activeIndex]}
             alt={productName}
-            className="w-full h-full object-cover origin-center transition-transform duration-200 ease-out"
-            style={{
-              transformOrigin: `${mousePosition.x}% ${mousePosition.y}%`,
-              transform: isHovering ? "scale(1.8)" : "scale(1)"
-            }}
+            className="w-full h-full object-cover origin-center"
           />
         </div>
       </div>
@@ -101,7 +80,7 @@ export default function ProductGallery({ images, productName }: ProductGalleryPr
                   key={idx}
                   onClick={() => setActiveIndex(idx)}
                   className={`relative w-16 h-20 rounded-xl overflow-hidden transition-all ${
-                    activeIndex === idx ? "ring-2 ring-black scale-110 shadow-md" : "opacity-60 hover:opacity-100"
+                    activeIndex === idx ? "ring-2 ring-black scale-110 shadow-md" : ""
                   }`}
                 >
                   <img src={img} className="w-full h-full object-cover" />

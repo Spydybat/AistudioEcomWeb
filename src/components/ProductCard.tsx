@@ -23,7 +23,7 @@ export default function ProductCard({
 }: ProductCardProps) {
   const [selectedColor, setSelectedColor] = useState<ProductColor>(product?.colors?.[0] ?? { name: "Default", hex: "#000" });
   const [selectedSize, setSelectedSize] = useState<string>(product?.sizes?.[1] ?? product?.sizes?.[0] ?? "Default");
-  const [isHovered, setIsHovered] = useState(false);
+
   const [isAdding, setIsAdding] = useState(false);
   const { formatPrice } = useCurrency();
   const { cart } = useShop();
@@ -52,8 +52,6 @@ export default function ProductCard({
   return (
     <div
       className="group flex flex-col h-full bg-white rounded-2xl border border-zinc-200 p-3 sm:p-4 relative transition-all duration-500 hover:shadow-xl hover:-translate-y-1 hover:border-black select-none"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       
       {/* Visual Badge overlay */}
@@ -96,9 +94,7 @@ export default function ProductCard({
             <img
               src={imageUrl}
               alt={product.name}
-              className={`w-full h-full object-cover object-center transition-all duration-700 ${
-                isHovered && product?.images?.[1] ? "opacity-0 scale-102" : "opacity-100 scale-100"
-              }`}
+              className="w-full h-full object-cover object-center"
               referrerPolicy="no-referrer"
             />
           ) : (
@@ -108,26 +104,14 @@ export default function ProductCard({
           );
         })()}
 
-        {/* Hover/Detail Alternate Image */}
-        {product?.images?.[1] && (
-          <img
-            src={product?.images?.[1]}
-            alt={`${product.name} alternate view`}
-            className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-700 ${
-              isHovered ? "opacity-100 scale-100" : "opacity-0 scale-102"
-            }`}
-            referrerPolicy="no-referrer"
-          />
-        )}
-
-        {/* Hover Action Overlay */}
-        <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4 backdrop-blur-[2px]">
+        {/* Action Overlay - Static visibility without blur or transition */}
+        <div className="absolute inset-0 flex items-end justify-center pb-4 pointer-events-none">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onOpenQuickView(product);
             }}
-            className="px-6 py-2.5 bg-white/90 text-black hover:bg-black hover:text-white font-bold tracking-widest text-xs uppercase transition-all duration-300 flex items-center gap-2 rounded-full shadow-sm hover:scale-105 cursor-pointer border border-zinc-200 backdrop-blur-md"
+            className="pointer-events-auto px-6 py-2.5 bg-white text-black font-bold tracking-widest text-xs uppercase flex items-center gap-2 rounded-full shadow-md cursor-pointer border border-zinc-200"
             id={`quick-view-${product.id}`}
           >
             <Eye className="h-4 w-4" />

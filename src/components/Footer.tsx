@@ -159,8 +159,8 @@ export default function Footer() {
               <ShieldCheck className="h-4 w-4" />
               Secure Verification
             </span>
-            <div className="flex gap-2 ml-4">
-              {["AMEX", "VISA", "MC", "APPLE", "PAYPAL"].map((p) => (
+            <div className="flex gap-2 ml-4 flex-wrap">
+              {["UPI", "Cards", "EMI", "Net Banking", "Wallets", "Pay Later"].map((p) => (
                 <span key={p} className="px-2 py-1 border border-zinc-200 text-zinc-500 text-[9px] bg-zinc-50 rounded uppercase font-bold select-none cursor-default">
                   {p}
                 </span>

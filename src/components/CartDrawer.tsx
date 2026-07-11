@@ -76,59 +76,105 @@ export default function CartDrawer({
     setCheckoutError(null);
     
     try {
-      // Step 1: Insert one row into the orders table.
-      const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
-      const { data: orderData, error: orderError } = await supabase
-        .from('orders')
-        .insert([{
-          profile_id: user?.id,
-          order_number: orderNumber,
-          total: totalCost,
-          status: 'pending',
-          payment_status: 'pending',
-          customer_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Guest',
-          email: user?.email || 'guest@example.com'
-        }])
-        .select()
-        .single();
-
-      console.log('Supabase orders response:', { data: orderData, error: orderError });
-
-      if (orderError) {
-        throw new Error(orderError.message || JSON.stringify(orderError));
-      }
-
-      // Step 2: Retrieve the new order ID.
-      const orderId = orderData.id;
-
-      // Step 3: Insert every cart item into order_items
-      const orderItemsToInsert = cartItems.map(item => ({
-        order_id: orderId,
-        product_id: item.product.id,
-        quantity: item.quantity,
-        price: item.product.price
-      }));
-
-      const { data: itemsData, error: itemsError } = await supabase
-        .from('order_items')
-        .insert(orderItemsToInsert)
-        .select();
-
-      console.log('Supabase order_items response:', { data: itemsData, error: itemsError });
-
-      if (itemsError) {
-        throw new Error(itemsError.message || JSON.stringify(itemsError));
-      }
-
-      // Step 4: Only after BOTH inserts succeed, clear the cart.
-      onClearCart();
+      // Step 1: Create Order via Razorpay (Backend)
+      const { paymentService } = await import('../services/paymentService');
+      const rpOrder = await paymentService.createOrder(totalCost, "INR");
       
-      // Step 5: Only then display success
-      setIsCheckoutSuccess(true);
+      if (!rpOrder.success) {
+         throw new Error(rpOrder.message || "Failed to create payment order");
+      }
+
+      // Step 2: Open Razorpay Checkout Modal
+      const options = {
+        key: rpOrder.key_id,
+        amount: rpOrder.amount,
+        currency: rpOrder.currency,
+        name: "Premium Clothing",
+        description: "Purchase Checkout",
+        order_id: rpOrder.order_id,
+        handler: async function (response: any) {
+           try {
+             setIsProcessingCheckout(true);
+             // Step 3: Verify Payment on Backend
+             const verifyRes = await paymentService.verifyPayment({
+               razorpay_order_id: response.razorpay_order_id,
+               razorpay_payment_id: response.razorpay_payment_id,
+               razorpay_signature: response.razorpay_signature
+             });
+
+             if (!verifyRes.success) {
+                setCheckoutError("Payment verification failed!");
+                setIsProcessingCheckout(false);
+                return;
+             }
+
+             // Step 4: Existing Order Creation Logic (Only after successful payment)
+             const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
+             const { data: orderData, error: orderError } = await supabase
+               .from('orders')
+               .insert([{
+                 profile_id: user?.id,
+                 order_number: orderNumber,
+                 total: totalCost,
+                 status: 'pending',
+                 payment_status: 'paid', // Update to paid since razorpay verified
+                 payment_method: JSON.stringify({
+                   method: 'razorpay',
+                   order_id: response.razorpay_order_id,
+                   payment_id: response.razorpay_payment_id,
+                   signature: response.razorpay_signature
+                 }),
+                 customer_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Guest',
+                 email: user?.email || 'guest@example.com'
+               }])
+               .select()
+               .single();
+
+             if (orderError) throw new Error(orderError.message);
+
+             const orderId = orderData.id;
+
+             const orderItemsToInsert = cartItems.map(item => ({
+               order_id: orderId,
+               product_id: item.product.id,
+               quantity: item.quantity,
+               price: item.product.price
+             }));
+
+             const { error: itemsError } = await supabase
+               .from('order_items')
+               .insert(orderItemsToInsert);
+
+             if (itemsError) throw new Error(itemsError.message);
+
+             onClearCart();
+             setIsCheckoutSuccess(true);
+           } catch (err: any) {
+             console.error("Order completion error:", err);
+             setCheckoutError(err.message || "Failed to complete order after payment.");
+           } finally {
+             setIsProcessingCheckout(false);
+           }
+        },
+        prefill: {
+          name: user?.user_metadata?.full_name || "",
+          email: user?.email || "",
+        },
+        theme: {
+          color: "#000000"
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        setCheckoutError(response.error.description || "Payment failed");
+        setIsProcessingCheckout(false);
+      });
+      rzp.open();
+      
     } catch (error: any) {
       console.error('Checkout error:', error);
       setCheckoutError(error.message || "An unexpected error occurred.");
-    } finally {
       setIsProcessingCheckout(false);
     }
   };
