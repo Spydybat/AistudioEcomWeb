@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
+import React, { useState, useEffect, useRef } from "react";
+import PortalDropdown from "./ui/PortalDropdown";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ChevronDown, Heart, Menu, Search, ShoppingBag, User, X, Sun, Moon, LogOut, Shield } from "lucide-react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
@@ -68,44 +68,26 @@ export default function Header({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setIsProfileOpen(false);
         setIsSearchOpen(false);
-        setIsRegionOpen(false);
       }
     };
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (!target.closest("#profile-menu-container")) {
-        setIsProfileOpen(false);
-      }
       if (!target.closest("#search-panel-container") && !target.closest("#search-trigger")) {
         setIsSearchOpen(false);
       }
     };
 
-    const handleScrollOrResize = () => {
-      if (isRegionOpen) {
-        setIsRegionOpen(false);
-      }
-    };
-
-    if (isProfileOpen || isSearchOpen || isRegionOpen) {
+    if (isSearchOpen) {
       document.addEventListener("keydown", handleKeyDown);
       document.addEventListener("mousedown", handleClickOutside);
-      
-      if (isRegionOpen) {
-        window.addEventListener("scroll", handleScrollOrResize, { passive: true });
-        window.addEventListener("resize", handleScrollOrResize, { passive: true });
-      }
     }
     
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", handleScrollOrResize);
-      window.removeEventListener("resize", handleScrollOrResize);
     };
-  }, [isProfileOpen, isSearchOpen, isRegionOpen]);
+  }, [isSearchOpen]);
 
   const handleRegionSelect = (regionId: string) => {
     setSelectedRegionId(regionId);
@@ -113,20 +95,8 @@ export default function Header({
     setIsMobileMenuOpen(false);
   };
 
-  const [regionCoords, setRegionCoords] = useState({ top: 0, right: 0 });
-
-  const toggleRegion = (e: React.MouseEvent) => {
-    if (!isRegionOpen) {
-      setIsSearchOpen(false);
-      setIsMegaMenuOpen(false);
-      const rect = e.currentTarget.getBoundingClientRect();
-      setRegionCoords({
-        top: rect.bottom,
-        right: window.innerWidth - rect.right
-      });
-    }
-    setIsRegionOpen((open) => !open);
-  };
+  const regionTriggerRef = useRef<HTMLButtonElement>(null);
+  const profileTriggerRef = useRef<HTMLButtonElement>(null);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -182,72 +152,76 @@ export default function Header({
           <button
             key={region.id}
             onClick={() => handleRegionSelect(region.id)}
-            className={`w-full text-left px-4 py-2.5 text-xs flex items-center gap-3 hover:bg-zinc-50 hover:text-black transition-colors ${
-              selectedRegionId === region.id ? "bg-zinc-100 text-black font-semibold" : "text-zinc-600"
-            }`}
+            className="w-full text-left px-4 py-2 hover:bg-zinc-50 transition-colors flex items-center justify-between group"
           >
-            <span className="text-sm">{region.flag}</span>
-            <span className="font-medium">{region.name}</span>
-            <span className="ml-auto opacity-60 font-mono">{region.currency}</span>
+            <div>
+              <p className="text-sm font-medium text-black">{region.name}</p>
+              <p className="text-xs text-zinc-500 mt-0.5">{region.flag} • {region.currency}</p>
+            </div>
+            {selectedRegionId === region.id && (
+              <div className="h-2 w-2 rounded-full bg-emerald-500" />
+            )}
           </button>
         ))}
       </div>
     );
 
-    if (isMobile) {
-      return (
-        <AnimatePresence>
-          {isRegionOpen && (
-            <motion.div
-              key="overlay-mobile"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 bg-transparent"
-              onClick={() => setIsRegionOpen(false)}
-            />
-          )}
-          {isRegionOpen && (
-            <motion.div
-              key="menu-mobile"
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute top-full right-0 lg:right-2 mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.1)] z-50 overflow-hidden"
-            >
-              {dropdownMenu}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      );
-    }
+    return (
+      <PortalDropdown
+        isOpen={isRegionOpen}
+        onClose={() => setIsRegionOpen(false)}
+        triggerRef={regionTriggerRef}
+        isMobile={isMobile}
+      >
+        {dropdownMenu}
+      </PortalDropdown>
+    );
+  };
 
-    return createPortal(
-      <AnimatePresence>
-        {isRegionOpen && (
-          <motion.div
-            key="overlay-desktop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-transparent"
-            onClick={() => setIsRegionOpen(false)}
-          />
-        )}
-        {isRegionOpen && (
-          <motion.div
-            key="menu-desktop"
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            style={{ position: 'fixed', top: regionCoords.top + 8, right: regionCoords.right }}
-            className="z-[110] mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.1)] overflow-hidden"
-          >
-            {dropdownMenu}
-          </motion.div>
-        )}
-      </AnimatePresence>,
-      document.body
+  const renderProfileDropdown = (isMobile = false) => {
+    const dropdownMenu = (
+      <div className="py-2">
+        <div className="px-4 py-3 border-b border-zinc-100">
+          <p className="text-xs font-bold text-black truncate">
+            {user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Profile"}
+          </p>
+          <p className="text-[10px] text-zinc-500 truncate mt-0.5">{user?.email}</p>
+        </div>
+        <Link
+          to="/profile"
+          onClick={() => setIsProfileOpen(false)}
+          className="block px-4 py-2 text-sm text-zinc-600 hover:text-black hover:bg-zinc-50 transition-colors"
+        >
+          Profile
+        </Link>
+        <Link
+          to="/my-orders"
+          onClick={() => setIsProfileOpen(false)}
+          className="block px-4 py-2 text-sm text-zinc-600 hover:text-black hover:bg-zinc-50 transition-colors"
+        >
+          My Orders
+        </Link>
+        <button
+          onClick={() => {
+            setIsProfileOpen(false);
+            handleLogout();
+          }}
+          className="w-full text-left px-4 py-2 text-sm text-red-500 hover:text-red-600 hover:bg-zinc-50 transition-colors"
+        >
+          Logout
+        </button>
+      </div>
+    );
+
+    return (
+      <PortalDropdown
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        triggerRef={profileTriggerRef}
+        isMobile={isMobile}
+      >
+        {dropdownMenu}
+      </PortalDropdown>
     );
   };
 
@@ -309,11 +283,18 @@ export default function Header({
         <div className="flex items-center space-x-1.5 sm:space-x-5 text-zinc-500">
           <div className="relative">
             <button
-              onClick={toggleRegion}
+              ref={regionTriggerRef}
+              onClick={() => {
+                if (!isRegionOpen) {
+                  setIsSearchOpen(false);
+                  setIsMegaMenuOpen(false);
+                }
+                setIsRegionOpen(!isRegionOpen);
+              }}
               className="hidden lg:flex items-center text-xs text-zinc-600 font-medium gap-1.5 mr-2 bg-zinc-50 border border-zinc-200 px-3 py-1.5 rounded-full hover:text-black hover:bg-zinc-100 transition-all cursor-pointer"
             >
-              <span>{activeRegion.flag}</span>
-              <span>{activeRegion.id} ({activeRegion.symbol})</span>
+              <span>{activeRegion?.flag}</span>
+              <span>{activeRegion?.id} ({activeRegion?.symbol})</span>
               <ChevronDown className="h-3 w-3 opacity-70" />
             </button>
 
@@ -352,11 +333,14 @@ export default function Header({
           {user ? (
             <div className="relative" id="profile-menu-container">
               <button
+                ref={profileTriggerRef}
                 onClick={() => {
+                  if (!isProfileOpen) {
+                    setIsSearchOpen(false);
+                    setIsMegaMenuOpen(false);
+                    setIsRegionOpen(false);
+                  }
                   setIsProfileOpen(!isProfileOpen);
-                  setIsMegaMenuOpen(false);
-                  setIsRegionOpen(false);
-                  setIsSearchOpen(false);
                 }}
                 className="flex items-center gap-2 px-3 py-2 rounded-full hover:bg-zinc-100 text-sky-500 hover:text-sky-600 transition-colors"
                 title="Profile Menu"
@@ -365,41 +349,7 @@ export default function Header({
                 <User className="h-5 w-5 sm:hidden" />
                 <ChevronDown className="h-4 w-4 hidden sm:block" />
               </button>
-              <AnimatePresence>
-                {isProfileOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 bg-white border border-zinc-100 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.1)] py-2 z-50"
-                  >
-                    <Link
-                      to="/profile"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="block px-4 py-2 text-sm text-zinc-600 hover:text-black hover:bg-zinc-50 transition-colors"
-                    >
-                      Profile
-                    </Link>
-                    <Link
-                      to="/my-orders"
-                      onClick={() => setIsProfileOpen(false)}
-                      className="block px-4 py-2 text-sm text-zinc-600 hover:text-black hover:bg-zinc-50 transition-colors"
-                    >
-                      My Orders
-                    </Link>
-                    <button
-                      onClick={() => {
-                        setIsProfileOpen(false);
-                        handleLogout();
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-red-500 hover:text-red-600 hover:bg-zinc-50 transition-colors"
-                    >
-                      Logout
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {!isMobileMenuOpen && renderProfileDropdown(false)}
             </div>
           ) : (
             <button
@@ -551,7 +501,14 @@ export default function Header({
               <div className="pt-6 flex flex-col gap-4">
                 <div className="relative w-full">
                   <button 
-                    onClick={toggleRegion}
+                    ref={regionTriggerRef}
+                    onClick={() => {
+                      if (!isRegionOpen) {
+                        setIsSearchOpen(false);
+                        setIsMegaMenuOpen(false);
+                      }
+                      setIsRegionOpen(!isRegionOpen);
+                    }}
                     className="flex items-center w-full p-4 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 rounded-2xl transition-all group cursor-pointer"
                   >
                     <div className="flex flex-col items-start gap-1">

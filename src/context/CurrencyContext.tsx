@@ -25,6 +25,8 @@ interface CurrencyContextType {
   setSelectedRegionId: (id: string) => void;
   activeRegion: typeof REGIONS[0];
   formatPrice: (priceInUsd: number) => string;
+  formatConvertedPrice: (convertedAmount: number) => string;
+  formatOrderCurrency: (amount: number, currencyCode: string) => string;
   convertPrice: (priceInUsd: number) => number;
 }
 
@@ -77,8 +79,46 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     })}`;
   };
 
+  const formatConvertedPrice = (convertedAmount: number) => {
+    if (activeRegion.currency === "JPY") {
+      return `${activeRegion.symbol}${Math.round(convertedAmount).toLocaleString()}`;
+    }
+
+    if (activeRegion.currency === "INR") {
+      return `${activeRegion.symbol}${convertedAmount.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
+    }
+
+    return `${activeRegion.symbol}${convertedAmount.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
+
+  const formatOrderCurrency = (amount: number, currencyCode: string) => {
+    const region = REGIONS.find((r) => r.currency === currencyCode) || REGIONS[0];
+    
+    if (region.currency === "JPY") {
+      return `${region.symbol}${Math.round(amount).toLocaleString()}`;
+    }
+
+    if (region.currency === "INR") {
+      return `${region.symbol}${amount.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
+    }
+
+    return `${region.symbol}${amount.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
+
   return (
-    <CurrencyContext.Provider value={{ selectedRegionId, setSelectedRegionId, activeRegion, formatPrice, convertPrice }}>
+    <CurrencyContext.Provider value={{ selectedRegionId, setSelectedRegionId, activeRegion, formatPrice, formatConvertedPrice, formatOrderCurrency, convertPrice }}>
       {children}
     </CurrencyContext.Provider>
   );

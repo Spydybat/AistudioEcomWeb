@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "motion/react";
 
 export default function MyOrdersPage() {
   const { user } = useShop();
-  const { formatPrice } = useCurrency();
+  const { formatOrderCurrency } = useCurrency();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -79,7 +79,7 @@ export default function MyOrdersPage() {
         </div>
       ) : orders.length === 0 ? (
         <EmptyState
-          icon={ShoppingBag}
+          icon={<ShoppingBag className="h-7 w-7" />}
           title="No orders yet"
           description="You haven't placed any orders yet. Discover our premium collection."
           actionLabel="Explore Marketplace"
@@ -107,7 +107,7 @@ export default function MyOrdersPage() {
                       {new Date(order.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 text-black font-bold">
-                      {formatPrice(order.total)}
+                      {formatOrderCurrency(order.total, order.currency_code)}
                     </td>
                     <td className="px-6 py-4">
                       <span className="capitalize text-zinc-600 font-medium">{order.payment_status}</span>
@@ -175,7 +175,7 @@ export default function MyOrdersPage() {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold tracking-widest text-zinc-500 uppercase mb-1">Total</p>
-                    <p className="text-sm font-bold text-black">{formatPrice(selectedOrder.total)}</p>
+                    <p className="text-sm font-bold text-black">{formatOrderCurrency(selectedOrder.total, selectedOrder.currency_code)}</p>
                   </div>
                   <div>
                     <p className="text-[10px] font-bold tracking-widest text-zinc-500 uppercase mb-1">Payment</p>
@@ -218,9 +218,9 @@ export default function MyOrdersPage() {
                           <p className="text-xs font-medium text-zinc-500 mt-1 uppercase tracking-widest">Qty: {item.quantity}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm font-medium text-zinc-500">{formatPrice(item.price)}</p>
+                          <p className="text-sm font-medium text-zinc-500">{formatOrderCurrency(item.price, item.currency_code || selectedOrder.currency_code)}</p>
                           <p className="text-sm font-bold text-black mt-1">
-                            {formatPrice(item.price * item.quantity)}
+                            {formatOrderCurrency(item.price * item.quantity, item.currency_code || selectedOrder.currency_code)}
                           </p>
                         </div>
                       </div>

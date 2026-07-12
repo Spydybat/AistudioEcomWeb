@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { X, Eye } from "lucide-react";
 import DataTable from "../../components/admin/DataTable";
 import { supabase } from "../../supabaseClient";
+import { useCurrency } from "../../context/CurrencyContext";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20",
@@ -12,6 +13,7 @@ const statusColors: Record<string, string> = {
 };
 
 export default function AdminOrdersPage() {
+  const { formatOrderCurrency } = useCurrency();
   const [ORDERS, setORDERS] = useState<any[]>([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -129,7 +131,9 @@ export default function AdminOrdersPage() {
                 ) || 0}
               </td>
               <td className="px-4 sm:px-6 py-3 font-medium text-black">
-                ${order.total?.toFixed(2) || "0.00"}
+                {(() => {
+                  return formatOrderCurrency(order.total || 0, order.currency_code);
+                })()}
               </td>
               <td className="px-4 sm:px-6 py-3 text-zinc-600 text-xs">
                 {new Date(order.created_at).toLocaleDateString()}
@@ -218,7 +222,7 @@ export default function AdminOrdersPage() {
                     Total Amount
                   </p>
                   <p className="text-sm font-medium text-emerald-400">
-                    ${selectedOrder.total?.toFixed(2) || "0.00"}
+                    {formatOrderCurrency(selectedOrder.total || 0, selectedOrder.currency_code)}
                   </p>
                 </div>
               </div>
@@ -286,15 +290,13 @@ export default function AdminOrdersPage() {
                             {item.products?.name || "Unknown Product"}
                           </td>
                           <td className="px-4 py-3 text-zinc-600">
-                            ${item.price?.toFixed(2) || "0.00"}
+                            {formatOrderCurrency(item.price || 0, item.currency_code || selectedOrder.currency_code)}
                           </td>
                           <td className="px-4 py-3 text-zinc-600">
                             {item.quantity}
                           </td>
                           <td className="px-4 py-3 text-black text-right">
-                            ${((item.price || 0) * (item.quantity || 0)).toFixed(
-                              2
-                            )}
+                            {formatOrderCurrency((item.price || 0) * (item.quantity || 0), item.currency_code || selectedOrder.currency_code)}
                           </td>
                         </tr>
                       ))}

@@ -4,8 +4,10 @@ import StatCard from "../../components/admin/StatCard";
 import DataTable from "../../components/admin/DataTable";
 import { fetchProducts } from "../../data/products";
 import { fetchOrders, fetchCustomers } from "../../data/adminData";
+import { useCurrency } from "../../context/CurrencyContext";
 
 export default function AdminDashboardPage() {
+  const { formatConvertedPrice } = useCurrency();
   const [PRODUCTS, setPRODUCTS] = useState<any[]>([]);
   const [ORDERS, setORDERS] = useState<any[]>([]);
   const [CUSTOMERS, setCUSTOMERS] = useState<any[]>([]);
@@ -32,7 +34,7 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           label="Total Revenue"
-          value={`$${totalRevenue.toLocaleString()}`}
+          value={formatConvertedPrice(totalRevenue)}
           icon={DollarSign}
           trend="+12.5% from last month"
           trendUp
@@ -70,7 +72,7 @@ export default function AdminDashboardPage() {
               <tr key={order.id} className="hover:bg-zinc-100 transition-colors">
                 <td className="px-4 sm:px-6 py-3 font-mono text-xs text-black">{order.id}</td>
                 <td className="px-4 sm:px-6 py-3 text-zinc-500">{order.customerName}</td>
-                <td className="px-4 sm:px-6 py-3 font-medium text-black">${order.total}</td>
+                <td className="px-4 sm:px-6 py-3 font-medium text-black">{formatConvertedPrice(order.total || 0)}</td>
                 <td className="px-4 sm:px-6 py-3">
                   <span className={`px-2 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider ${statusColors[order.status]}`}>
                     {order.status}

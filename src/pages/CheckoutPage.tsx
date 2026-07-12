@@ -23,7 +23,7 @@ const loadRazorpaySDK = (): Promise<boolean> => {
 
 export default function CheckoutPage() {
   const { cart, user, handleClearCart, showToast } = useShop();
-  const { formatPrice, convertPrice, activeRegion, selectedRegionId, setSelectedRegionId } = useCurrency();
+  const { formatPrice, convertPrice, formatConvertedPrice, activeRegion, selectedRegionId, setSelectedRegionId } = useCurrency();
   const navigate = useNavigate();
 
   const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
@@ -32,6 +32,20 @@ export default function CheckoutPage() {
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState(user?.email || "");
+  const [emailTouched, setEmailTouched] = useState(false);
+  
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  
+  const [firstNameTouched, setFirstNameTouched] = useState(false);
+  const [lastNameTouched, setLastNameTouched] = useState(false);
+  const [addressTouched, setAddressTouched] = useState(false);
+  const [cityTouched, setCityTouched] = useState(false);
+  const [stateTouched, setStateTouched] = useState(false);
   
   const [zipCode, setZipCode] = useState("");
   const [billingZipCode, setBillingZipCode] = useState("");
@@ -117,6 +131,10 @@ export default function CheckoutPage() {
     return true;
   };
 
+  const isValidEmail = (emailVal: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal.trim());
+  };
+
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, "");
     const maxDigits = getPhoneValidationRules(selectedRegionId).max;
@@ -145,14 +163,46 @@ export default function CheckoutPage() {
   const shipping = subtotal > 200 ? 0 : 15;
   const tax = subtotal * 0.08;
   const discount = 0; // Assuming no discount implemented yet
-  const totalCost = subtotal + shipping + tax - discount;
-  const total = totalCost;
+  
+  const convertedSubtotal = convertPrice(subtotal);
+  const convertedShipping = convertPrice(shipping);
+  const convertedTax = convertPrice(tax);
+  const convertedDiscount = convertPrice(discount);
+  
+  // Calculate the base total and convert it to the final payable amount in the active currency
+  const finalCheckoutTotal = convertedSubtotal + convertedShipping + convertedTax - convertedDiscount;
 
   const handleTriggerCheckout = async () => {
     setIsProcessingCheckout(true);
     setCheckoutError(null);
     
     try {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) {
+        throw new Error("Please sign in to complete your purchase.");
+      }
+
+      const trimmedEmail = email.trim();
+      const trimmedFirstName = firstName.trim();
+      const trimmedLastName = lastName.trim();
+      const trimmedAddress = address.trim();
+      const trimmedCity = city.trim();
+      const trimmedState = state.trim();
+
+      if (!trimmedFirstName || !trimmedLastName || !trimmedAddress || !trimmedCity || !trimmedState) {
+        setFirstNameTouched(true);
+        setLastNameTouched(true);
+        setAddressTouched(true);
+        setCityTouched(true);
+        setStateTouched(true);
+        throw new Error("Please fill in all required fields.");
+      }
+
+      if (!isValidEmail(trimmedEmail)) {
+        setEmailTouched(true);
+        throw new Error("Email Address: Invalid email address");
+      }
+
       if (!isValidPhone(phoneNumber, selectedRegionId)) {
         setPhoneTouched(true);
         throw new Error(`Phone Number: ${getPhoneValidationRules(selectedRegionId).msg}`);
@@ -169,12 +219,9 @@ export default function CheckoutPage() {
       // Step 1: Create Order via Razorpay (Backend)
       const { paymentService } = await import('../services/paymentService');
       
-      const finalPayableAmount = convertPrice(totalCost);
-      // Ensure we send the EXACT amount that matches what the UI would show (rounded to 2 decimals)
-      const exactAmountToSend = activeRegion.currency === 'JPY' ? Math.round(finalPayableAmount) : Math.round(finalPayableAmount * 100) / 100;
       const currency = activeRegion.currency;
       
-      const rpOrder = await paymentService.createOrder(exactAmountToSend, currency);
+      const rpOrder = await paymentService.createOrder(finalCheckoutTotal, currency);
       
       if (!rpOrder.success) {
          throw new Error(rpOrder.message || "Failed to create payment order");
@@ -211,13 +258,29 @@ export default function CheckoutPage() {
              }
 
              // Step 4: Existing Order Creation Logic (Only after successful payment)
+             const { data: { user: finalAuthUser } } = await supabase.auth.getUser();
+             if (!finalAuthUser) {
+               throw new Error("Authentication lost. Payment verified, but order creation failed. Please contact support.");
+             }
+
+             const verifiedCheckoutTotal = finalCheckoutTotal;
+             const paidAmount = verifiedCheckoutTotal;
+
+             console.log("Checkout Total:", finalCheckoutTotal);
+             console.log("Razorpay Amount:", finalCheckoutTotal);
+             console.log("Supabase Total Being Inserted:", paidAmount);
+
              const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
              const { data: orderData, error: orderError } = await supabase
                .from('orders')
                .insert([{
-                 profile_id: user?.id,
+                 profile_id: finalAuthUser.id,
                  order_number: orderNumber,
-                 total: totalCost,
+                 total: paidAmount,
+                 subtotal: convertedSubtotal,
+                 shipping: convertedShipping,
+                 tax: convertedTax,
+                 discount: convertedDiscount,
                  status: 'pending',
                  payment_status: 'paid', // Update to paid since razorpay verified
                  payment_method: JSON.stringify({
@@ -226,8 +289,15 @@ export default function CheckoutPage() {
                    payment_id: response.razorpay_payment_id,
                    signature: response.razorpay_signature
                  }),
-                 customer_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Guest',
-                 email: user?.email || 'guest@example.com'
+                 customer_name: `${trimmedFirstName} ${trimmedLastName}`.trim(),
+                 email: trimmedEmail,
+                 phone: phoneNumber,
+                 address: trimmedAddress,
+                 city: trimmedCity,
+                 state: trimmedState,
+                 postal_code: zipCode,
+                 country: selectedRegionId,
+                 currency_code: activeRegion.currency
                }])
                .select()
                .single();
@@ -240,20 +310,25 @@ export default function CheckoutPage() {
                order_id: orderId,
                product_id: item.product.id,
                quantity: item.quantity,
-               price: item.product.price
+               price: convertPrice(item.product.price),
+               currency_code: activeRegion.currency
              }));
 
              const { error: itemsError } = await supabase
                .from('order_items')
                .insert(orderItemsToInsert);
 
-             if (itemsError) throw new Error(itemsError.message);
+             if (itemsError) {
+               // Rollback the order if order_items fail to insert
+               await supabase.from('orders').delete().eq('id', orderId);
+               throw new Error(itemsError.message);
+             }
 
              if (!buyNowItem) {
                handleClearCart();
              }
              showToast("Order Placed Successfully!");
-             navigate('/profile/orders'); // Or to a success page
+             navigate('/my-orders'); // Or to a success page
            } catch (err: any) {
              console.error("Order completion error:", err);
              setCheckoutError(err.message || "Failed to complete order after payment.");
@@ -263,7 +338,7 @@ export default function CheckoutPage() {
         },
         prefill: {
           name: user?.user_metadata?.full_name || "",
-          email: user?.email || "",
+          email: email.trim(),
         },
         theme: {
           color: "#000000"
@@ -329,15 +404,25 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2 md:col-span-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Email Address</label>
-                  <input type="email" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="Enter your email" />
+                  <input 
+                    type="email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onBlur={() => setEmailTouched(true)}
+                    className={`w-full bg-zinc-50 border rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors ${emailTouched && !isValidEmail(email) ? 'border-red-500' : 'border-zinc-200'}`} 
+                    placeholder="Enter your email" 
+                  />
+                  {emailTouched && !isValidEmail(email) && (
+                    <p className="text-xs text-red-500 mt-1">Invalid email address</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">First Name</label>
-                  <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="First Name" />
+                  <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} onBlur={() => setFirstNameTouched(true)} className={`w-full bg-zinc-50 border rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors ${firstNameTouched && !firstName.trim() ? 'border-red-500' : 'border-zinc-200'}`} placeholder="First Name" />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Last Name</label>
-                  <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="Last Name" />
+                  <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} onBlur={() => setLastNameTouched(true)} className={`w-full bg-zinc-50 border rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors ${lastNameTouched && !lastName.trim() ? 'border-red-500' : 'border-zinc-200'}`} placeholder="Last Name" />
                 </div>
                   <div className="space-y-2 md:col-span-2">
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Phone Number</label>
@@ -385,7 +470,7 @@ export default function CheckoutPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="space-y-2 md:col-span-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Street Address</label>
-                  <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="Street Address" />
+                  <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} onBlur={() => setAddressTouched(true)} className={`w-full bg-zinc-50 border rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors ${addressTouched && !address.trim() ? 'border-red-500' : 'border-zinc-200'}`} placeholder="Street Address" />
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Apartment, suite, etc. (optional)</label>
@@ -393,7 +478,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">City</label>
-                  <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="City" />
+                  <input type="text" value={city} onChange={(e) => setCity(e.target.value)} onBlur={() => setCityTouched(true)} className={`w-full bg-zinc-50 border rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors ${cityTouched && !city.trim() ? 'border-red-500' : 'border-zinc-200'}`} placeholder="City" />
                 </div>
                   <div className="space-y-2">
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Country / Region</label>
@@ -409,7 +494,7 @@ export default function CheckoutPage() {
                   </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">State / Province</label>
-                  <input type="text" className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors" placeholder="State / Province" />
+                  <input type="text" value={state} onChange={(e) => setState(e.target.value)} onBlur={() => setStateTouched(true)} className={`w-full bg-zinc-50 border rounded-xl px-4 py-3.5 text-sm font-medium text-black focus:outline-none focus:border-black transition-colors ${stateTouched && !state.trim() ? 'border-red-500' : 'border-zinc-200'}`} placeholder="State / Province" />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold uppercase tracking-widest text-zinc-500">ZIP / Postal Code</label>
@@ -567,7 +652,7 @@ export default function CheckoutPage() {
 
               <div className="flex items-center justify-between pt-6 border-t border-zinc-200 mb-8">
                 <span className="text-sm font-bold uppercase tracking-widest text-black">Total</span>
-                <span className="text-2xl font-sans font-bold text-black">{formatPrice(total)}</span>
+                <span className="text-2xl font-sans font-bold text-black">{formatConvertedPrice(finalCheckoutTotal)}</span>
               </div>
 
               <button 
